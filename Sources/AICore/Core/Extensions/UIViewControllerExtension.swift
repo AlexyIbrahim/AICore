@@ -114,7 +114,7 @@ public extension UIViewController {
     func addBarButtonItem(withTitle title: String? = nil, image: UIImage? = nil, systemItem: UIBarButtonItem.SystemItem? = nil, direction: BarButtonItemDirection, tintColor: UIColor? = nil, _ callback: (() -> ())? = nil) -> UIBarButtonItem {
         var barButtonItem: UIBarButtonItem?
         if title != nil || image != nil {
-            let button = UIButton.init(type: .system)
+            let button = UIButton.init(type: .custom)
             if let tintColor = tintColor {
                 button.tintColor = tintColor
             }
