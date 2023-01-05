@@ -262,7 +262,7 @@ public class AIButton: UIButton {
         //! Initial label text layer
         let labelText = CATextLayer()
         labelText.contentsScale = UIScreen.main.scale
-        labelText.string = self.badgeValue.uppercased()
+        labelText.string = self.badgeValue
         labelText.fontSize = 9.0
         labelText.font = UIFont.systemFont(ofSize: 9)
         labelText.alignmentMode = CATextLayerAlignmentMode.center

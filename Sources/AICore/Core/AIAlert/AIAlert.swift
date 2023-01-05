@@ -13,9 +13,11 @@ public class AIAlert {
    
     public struct AlertTextField {
         let placeholder: String
+        let keyboardType: UIKeyboardType
         
-        public init(placeholder: String) {
+        public init(placeholder: String, keyboardType: UIKeyboardType? = nil) {
             self.placeholder = placeholder
+            self.keyboardType = keyboardType ?? .default
         }
     }
     
@@ -45,6 +47,7 @@ public class AIAlert {
                 for textfield in textFields {
                     alertViewController.addTextField { textfield_temp in
                         textfield_temp.placeholder = textfield.placeholder
+                        textfield_temp.keyboardType = textfield.keyboardType
                     }
                 }
             }
