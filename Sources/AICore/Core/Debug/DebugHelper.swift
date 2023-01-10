@@ -9,34 +9,34 @@ import Foundation
 
 public class DebugHelper {
     public final class func addBreadcrumb(forKey key: String, value: Any?) {
-        CrashlyticsHelper.addBreadcrumb(forKey: key, value: value)
+        FirebaseCrashlyticsHelper.addBreadcrumb(forKey: key, value: value)
     }
     
     public final class func addBreadcrumbs(_ breadcrumbs: [String : Any]) {
-        CrashlyticsHelper.addBreadcrumbs(breadcrumbs)
+        FirebaseCrashlyticsHelper.addBreadcrumbs(breadcrumbs)
     }
     
     public final class func log(_ msg: String) {
-        CrashlyticsHelper.log(msg)
+        FirebaseCrashlyticsHelper.log(msg)
     }
     
     public final class func log(key: String, value: Any) {
-        CrashlyticsHelper.log(key: key, value: value)
+        FirebaseCrashlyticsHelper.log(key: key, value: value)
     }
     
     public final class func log(dictionary: [String: Any]) {
-        CrashlyticsHelper.log(dictionary: dictionary)
+        FirebaseCrashlyticsHelper.log(dictionary: dictionary)
     }
     
     public final class func reportError(_ error: Error?, userInfo: [String: Any]? = nil) {
-        CrashlyticsHelper.reportError(error, userInfo: userInfo)
+        FirebaseCrashlyticsHelper.reportError(error, userInfo: userInfo)
     }
     
     public final class func reportException(_ exception: NSException) {
-        CrashlyticsHelper.reportException(exception)
+        FirebaseCrashlyticsHelper.reportException(exception)
     }
     
     public final class func reportCustomException(name: String, reason: String) {
-        CrashlyticsHelper.reportCustomException(name: name, reason: reason)
+        FirebaseCrashlyticsHelper.reportCustomException(name: name, reason: reason)
     }
 }

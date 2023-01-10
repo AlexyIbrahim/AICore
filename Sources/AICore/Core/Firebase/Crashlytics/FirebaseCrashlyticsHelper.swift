@@ -8,7 +8,7 @@
 import Foundation
 import FirebaseCrashlytics
 
-public class CrashlyticsHelper: NSObject {
+public class FirebaseCrashlyticsHelper: NSObject {
     public final class func initUser(userId: String) {
         if Session.isLoggedIn {
             Crashlytics.crashlytics().setUserID(userId)
