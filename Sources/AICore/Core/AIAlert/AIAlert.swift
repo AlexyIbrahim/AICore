@@ -74,8 +74,8 @@ public class AIAlert {
 
 public extension AIAlert.AlertButton {
     static let okay = AIAlert.AlertButton.init(title: "Okay", style: .default, callback: nil)
-    static let cancel = AIAlert.AlertButton.init(title: "Cancel", style: .default, callback: nil)
-    static let discard = AIAlert.AlertButton.init(title: "Discard", style: .default, callback: nil)
+    static let cancel = AIAlert.AlertButton.init(title: "Cancel", style: .cancel, callback: nil)
+    static let discard = AIAlert.AlertButton.init(title: "Discard", style: .cancel, callback: nil)
     static func yes(callback: ((_ textfields: [UITextField]?) -> ())? = nil) -> AIAlert.AlertButton {
         return AIAlert.AlertButton.init(title: "Yes", style: .default, callback: callback)
     }

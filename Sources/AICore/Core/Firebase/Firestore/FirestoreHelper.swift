@@ -8,8 +8,8 @@
 import Foundation
 import FirebaseFirestore
 
-public class FirebaseHelpers {
-    static let shared = FirebaseHelpers()
+public class FirestoreHelper {
+    static let shared = FirestoreHelper()
     
     public static var db: Firestore!
     

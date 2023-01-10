@@ -6,35 +6,35 @@
 //
 
 import Foundation
-import FirebaseAnalytics
 
 public class AnalyticsHelper {
+    public final class func setUserId(_ userId: String, userProperties: [String: String?]? = nil) {
+        FirebaseAnalyticsHelper.setUserId(userId, userProperties: userProperties
+        )
+    }
+    
+    public final class func setUserProperty(forKey key: String, value: String?) {
+        FirebaseAnalyticsHelper.setUserProperty(forKey: key, value: value)
+    }
+    
     public final class func logEvent(name: String, parameters: [String: Any]? = nil) {
-        Analytics.logEvent(name, parameters: parameters)
+        FirebaseAnalyticsHelper.logEvent(name: name, parameters: parameters)
     }
     
     public final class func logEvent(name: String, item_id: String? = nil, item_name: String, item_type: String? = nil) {
-        logEvent(name: name, parameters: [
-            AnalyticsParameterItemID: "id-\(item_name)",
-            AnalyticsParameterItemName: item_name,
-            AnalyticsParameterContentType: item_type ?? "cont",
-          ])
-        
-        
+        FirebaseAnalyticsHelper.logEvent(name: name, item_id: item_id, item_name: item_name, item_type: item_type)
     }
     
     public final class func logSignUp(method: String) {
-        logEvent(name: AnalyticsEventSignUp, parameters: [AnalyticsParameterMethod: method])
+        FirebaseAnalyticsHelper.logSignUp(method: method)
     }
     
     public final class func logLogin(method: String) {
-        logEvent(name: AnalyticsEventLogin, parameters: [AnalyticsParameterMethod: method])
+        FirebaseAnalyticsHelper.logLogin(method: method)
     }
     
     public final class func logShare(contentId: String, contentType: String, content: String) {
-        logEvent(name: AnalyticsEventShare, parameters: ["content_id": contentId,
-                                                         AnalyticsParameterContentType: contentType,
-                                                         AnalyticsParameterContent: content])
+        FirebaseAnalyticsHelper.logShare(contentId: contentId, contentType: contentType, content: content)
     }
-    
 }
+
