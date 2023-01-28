@@ -66,10 +66,10 @@ public extension MainCoordinator {
         MainCoordinator.shared.navigationController.popViewController(animated: animated ?? true)
     }
     
-    final class func dismissPresentedViewController() {
+    final class func dismissPresentedViewController(_ animated: Bool? = nil) {
         if let viewController = MainCoordinator.shared.presentedViewController  {
             if viewController.isModal {
-                viewController.dismiss(animated: true, completion: nil)
+                viewController.dismiss(animated: animated ?? true, completion: nil)
                 MainCoordinator.shared.presentedViewController = nil
             } else { // clear it, since something is wrong
                 MainCoordinator.shared.presentedViewController = nil

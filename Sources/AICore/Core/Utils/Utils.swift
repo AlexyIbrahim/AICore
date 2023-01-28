@@ -242,85 +242,194 @@ public class Utils {
         }
     }
     
-    public func saveImage(image: UIImage, name: String) -> Bool {
+    public final class func store(image: UIImage,
+                                  fileName: String,
+                                  folderName: String? = nil,
+                                  callback: ((_ isSaved: Bool, _ path: String?, _ fileURL: URL?) -> ())? = nil) {
         guard let data = image.jpegData(compressionQuality: 1) ?? image.pngData() else {
-            return false
+            callback?(false, nil, nil)
+            return
         }
-        guard let directory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) as NSURL else {
-            return false
-        }
-        do {
-            try data.write(to: directory.appendingPathComponent("\(name).png")!)
-            return true
-        } catch {
-            print(error.localizedDescription)
-            return false
-        }
+        store(data: data, fileName: fileName, folderName: folderName, callback: callback)
     }
     
-    public func getSavedImage(named: String) -> UIImage? {
-        if let dir = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) {
-            return UIImage(contentsOfFile: URL(fileURLWithPath: dir.absoluteString).appendingPathComponent(named).path)
+    public final class func store(data: Data,
+                                  fileName: String,
+                                  folderName: String? = nil,
+                                  callback: ((_ isSaved: Bool, _ path: String?, _ fileURL: URL?) -> ())? = nil) {
+        let fileManager = FileManager.default
+        guard let documentsDirectory = fileManager.urls(for: .documentDirectory,
+                                                        in: .userDomainMask).first else {
+            callback?(false, nil, nil)
+            return
         }
-        return nil
-    }
-    
-    public enum StorageType {
-        case userDefaults
-        case fileSystem
-    }
-    
-    public func store(image: UIImage,
-                       forKey key: String,
-                       withStorageType storageType: StorageType) {
-        if let pngRepresentation = image.pngData() {
-            switch storageType {
-            case .fileSystem:
-                if let filePath = filePath(forKey: key) {
-                    do {
-                        guard let data = image.jpegData(compressionQuality: 1) ?? image.pngData() else {
-                            return
-                        }
-                        try data.write(to: filePath,
-                                       options: .atomic)
-                    } catch let err {
-                        print("Saving results in error: ", err)
-                    }
+        var folderURL: URL?
+        if let folderName = folderName {
+            folderURL = documentsDirectory.appendingPathComponent(folderName)
+            if !fileManager.fileExists(atPath: folderURL!.path) {
+                do {
+                    try fileManager.createDirectory(at: folderURL!, withIntermediateDirectories: false, attributes: nil)
+                } catch {
+                    print(error)
+                    callback?(false, nil, nil)
+                    return
                 }
-            case .userDefaults:
-                UserDefaults.standard.set(pngRepresentation,
-                                          forKey: key)
             }
+        }
+        
+        var fileURL: URL!
+        if let folderURL = folderURL {
+            fileURL = folderURL.appendingPathComponent(fileName)
+        } else {
+            fileURL = documentsDirectory.appendingPathComponent(fileName)
+        }
+        
+        do {
+            try data.write(to: fileURL,
+                           options: .atomic)
+            
+            var filePath = ""
+            if let folderName = folderName {
+                filePath = "\(folderName)/\(fileName)"
+            } else {
+                filePath = "\(fileName)"
+            }
+            callback?(true, filePath, fileURL)
+            return
+        } catch {
+            print("Saving results in error: ", error)
+            callback?(false, nil, nil)
+            return
         }
     }
     
-    public func retrieveImage(forKey key: String,
-                               inStorageType storageType: StorageType) -> UIImage? {
-        switch storageType {
-        case .fileSystem:
-            if let filePath = self.filePath(forKey: key),
-               let fileData = FileManager.default.contents(atPath: filePath.path),
-               let image = UIImage(data: fileData) {
-                return image
-            }
-        case .userDefaults:
-            if let imageData = UserDefaults.standard.object(forKey: key) as? Data,
-               let image = UIImage(data: imageData) {
-                return image
-            }
+    public final class func retrieveImage(fileName: String,
+                              folderName: String? = nil) -> UIImage? {
+        let fileManager = FileManager.default
+        guard let documentsDirectory = fileManager.urls(for: .documentDirectory,
+                                                        in: .userDomainMask).first else {
+            return nil
+        }
+        var folderURL: URL?
+        if let folderName = folderName {
+            folderURL = documentsDirectory.appendingPathComponent(folderName)
+        }
+        var fileURL: URL!
+        if let folderURL = folderURL {
+            fileURL = folderURL.appendingPathComponent(fileName)
+        } else {
+            fileURL = documentsDirectory.appendingPathComponent(fileName)
+        }
+        
+        return Utils.retrieveImage(fileURL: fileURL)
+    }
+    
+    public final class func retrieveImage(fileURL: URL) -> UIImage? {
+        let fileManager = FileManager.default
+        
+        if fileManager.fileExists(atPath: fileURL.path),
+           let fileData = FileManager.default.contents(atPath: fileURL.path),
+           let image = UIImage(data: fileData) {
+            return image
         }
         
         return nil
     }
     
-    public func filePath(forKey key: String) -> URL? {
+    public struct LocalImageModel {
+        public let image: UIImage!
+        public let url: URL!
+        
+        public init(image: UIImage!, url: URL!) {
+            self.image = image
+            self.url = url
+        }
+    }
+    
+    public final class func getImages(in folderName: String) -> [LocalImageModel]? {
         let fileManager = FileManager.default
-        guard let documentURL = fileManager.urls(for: .documentDirectory,
-                                                 in: .userDomainMask).first else {
+        guard let documentsDirectory = fileManager.urls(for: .documentDirectory,
+                                                        in: .userDomainMask).first else {
+            return nil
+        }
+        let folderURL: URL = documentsDirectory.appendingPathComponent(folderName)
+        if fileManager.fileExists(atPath: folderURL.path) {
+            do {
+                let fileUrls = try fileManager.contentsOfDirectory(at: folderURL, includingPropertiesForKeys: nil)
+                return fileUrls.compactMap { LocalImageModel.init(image: UIImage(contentsOfFile: $0.path), url: $0)  }
+            } catch {
+                print(error)
+                return nil
+            }
+        }
+        return nil
+    }
+    
+    public final class func getImages(in folderName: String) -> [UIImage]? {
+        let fileManager = FileManager.default
+        guard let documentsDirectory = fileManager.urls(for: .documentDirectory,
+                                                        in: .userDomainMask).first else {
+            return nil
+        }
+        let folderURL: URL = documentsDirectory.appendingPathComponent(folderName)
+        if fileManager.fileExists(atPath: folderURL.path) {
+            do {
+                let fileUrls = try fileManager.contentsOfDirectory(at: folderURL, includingPropertiesForKeys: nil)
+                return fileUrls.compactMap { UIImage(contentsOfFile: $0.path) }
+            } catch {
+                print(error)
+                return nil
+            }
+        }
+        return nil
+    }
+    
+    public final class func deleteImage(fileName: String,
+                            folderName: String? = nil) -> Bool {
+        let fileManager = FileManager.default
+        guard let documentsDirectory = fileManager.urls(for: .documentDirectory,
+                                                        in: .userDomainMask).first else {
+            return false
+        }
+        var folderURL: URL?
+        if let folderName = folderName {
+            folderURL = documentsDirectory.appendingPathComponent(folderName)
+        }
+        var fileURL: URL!
+        if let folderURL = folderURL {
+            fileURL = folderURL.appendingPathComponent(fileName)
+        } else {
+            fileURL = documentsDirectory.appendingPathComponent(fileName)
+        }
+        
+        return Utils.deleteFile(fileURL: fileURL)
+    }
+    
+    public final class func deleteFile(fileURL: URL) -> Bool {
+        let fileManager = FileManager.default
+        
+        if fileManager.fileExists(atPath: fileURL.path) {
+            do {
+                try fileManager.removeItem(at: fileURL)
+                return true
+            } catch {
+                print(error)
+                return false
+            }
+        }
+        
+        return false
+    }
+    
+    public final class func filePath(path: String) -> URL? {
+        let fileManager = FileManager.default
+        guard let documentsDirectory = fileManager.urls(for: .documentDirectory,
+                                                        in: .userDomainMask).first else {
             return nil
         }
         
-        return documentURL.appendingPathComponent(key + ".png")
+        let fileURL: URL! = documentsDirectory.appendingPathComponent(path)
+        return fileURL
     }
     
     public func directoryContents() {
@@ -403,6 +512,21 @@ public class Utils {
                 UIApplication.shared.open(urlDestination)
             }
         }
+    }
+    
+    public final class func arraysAreSimilar(firstArray: [Any], secondArray: [Any]) -> Bool {
+        if firstArray.count != secondArray.count {
+            return false
+        }
+        for i in 0..<firstArray.count {
+            let valueInFirst = firstArray[i]
+            if !secondArray.contains(where: { value in
+                ((value as! String) == (valueInFirst as! String))
+            }) {
+                return false
+            }
+        }
+        return true
     }
 }
 

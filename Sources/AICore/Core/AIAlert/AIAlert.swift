@@ -12,8 +12,8 @@ import UIKit
 public class AIAlert {
    
     public struct AlertTextField {
-        let placeholder: String
-        let keyboardType: UIKeyboardType
+        public let placeholder: String
+        public let keyboardType: UIKeyboardType
         
         public init(placeholder: String, keyboardType: UIKeyboardType? = nil) {
             self.placeholder = placeholder
@@ -22,9 +22,9 @@ public class AIAlert {
     }
     
     public struct AlertButton {
-        let title: String
-        let style: UIAlertAction.Style
-        let callback: ((_ textfields: [UITextField]?) -> ())?
+        public let title: String
+        public let style: UIAlertAction.Style
+        public let callback: ((_ textfields: [UITextField]?) -> ())?
         
         public init(title: String, style: UIAlertAction.Style? = nil, callback: ((_ textfields: [UITextField]?) -> ())? = nil) {
             self.title = title

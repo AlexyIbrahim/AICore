@@ -9,11 +9,14 @@ import Foundation
 
 public enum DateFormateEnum {
     case MMMMddyyyy
+    case ddMMMMyyyyhhmm
     
     var format: String {
         switch self {
         case .MMMMddyyyy:
             return "MMMM dd, yyyy"
+        case .ddMMMMyyyyhhmm:
+            return "dd MMMM yyyy, hh:mm"
         default:
             return "MMMM dd, yyyy"
         }
@@ -35,7 +38,7 @@ public extension Date {
         return dateformat.string(from: self)
     }
     
-    static func fromMillisecondsTimestamp(_ timestamp: Int) -> Date  {
+    static func fromMillisecondsTimestamp(_ timestamp: Int) -> Date {
         return fromMillisecondsTimestamp(Double(timestamp))
     }
     

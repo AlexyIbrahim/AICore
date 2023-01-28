@@ -16,6 +16,11 @@ public extension UIView {
         self.layer.cornerRadius = self.bounds.height / 2
     }
     
+    func makeRounded(cornerRadius: CGFloat? = nil) {
+        self.layer.masksToBounds = true
+        self.layer.cornerRadius = cornerRadius ?? 8
+    }
+    
     var isAnimating: Bool {
         return (self.layer.animationKeys()?.count ?? 0) > 0
     }
@@ -53,6 +58,37 @@ public extension UIView {
             return true
         }
         return false
+    }
+    
+    func hide(animated: Bool? = nil, duration: TimeInterval? = nil) {
+        if animated ?? false {
+            UIView.animate(withDuration: duration ?? 0.3, delay: .zero) {
+                self.alpha = 0
+            } completion: { completed in
+                if completed {
+                    self.isHidden = true
+                }
+            }
+        } else {
+            self.isHidden = true
+        }
+    }
+    
+    func unhide(animated: Bool? = nil) {
+        self.show(animated: animated)
+    }
+    
+    func show(animated: Bool? = nil, duration: TimeInterval? = nil) {
+        if animated ?? false {
+            self.alpha = 0
+            self.isHidden = false
+            UIView.animate(withDuration: duration ?? 0.3, delay: .zero) {
+                self.alpha = 1
+            } completion: { completed in
+            }
+        } else {
+            self.isHidden = false
+        }
     }
     
     func applyBoxConstraints(top: CGFloat, horizontalMargin: CGFloat? = nil, height: CGFloat? = nil, topRelativeView: UIView? = nil) {
