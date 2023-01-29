@@ -20,6 +20,14 @@ public class AIOperationQueue: NSObject {
     
     public let semaphore = DispatchSemaphore(value: 0)
     
+    public var operations: [Operation] {
+        self.operationQueue.operations
+    }
+    
+    public var hasOperations: Bool {
+        self.operations.count > 0
+    }
+    
     public func addOperation(_ operation: Operation) {
         self.semaphore.wait()
         operation.completionBlock = {
@@ -48,6 +56,14 @@ extension AIOperationQueue {
     
     public static var semaphore: DispatchSemaphore {
         AIOperationQueue.shared.semaphore
+    }
+    
+    public static var operations: [Operation] {
+        AIOperationQueue.shared.operations
+    }
+    
+    public static var hasOperations: Bool {
+        AIOperationQueue.shared.hasOperations
     }
     
     public class func addOperation(_ operation: Operation) {
