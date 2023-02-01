@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import Security
+import LocalAuthentication
 
 public protocol KeychainServiceProtocol {
     static var id: String { get }
@@ -44,7 +46,7 @@ public class KeychainService {
         self.key = key
     }
     
-    public func save(text: String) {
+    public func save(text: String) -> Bool {
         delete()
         let textData = text.data(using: .utf8)!
         
@@ -53,20 +55,26 @@ public class KeychainService {
                                     kSecValueData as String: textData]
         let status = SecItemAdd(query as CFDictionary, nil)
         print("Value for key \(key) Added to Keychain: \(status == errSecSuccess)")
+        return status == errSecSuccess
     }
     
     public func read() -> String? {
         let query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
                                     kSecAttrAccount as String: key,
+                                    kSecReturnData as String: true,
                                     kSecMatchLimit as String: kSecMatchLimitOne,
-                                    kSecReturnAttributes as String: true,
-                                    kSecReturnData as String: true]
+                                    kSecReturnAttributes as String: true, //  If you set the value of kSecReturnAttributes to true, the search results will include the attributes of the Keychain item, such as the creation and modification dates, access control information, and metadata
+                                    
+                                    // prompt for the user
+                                    kSecUseAuthenticationContext as String: LAContext()]
         
         var item: CFTypeRef?
         let status = SecItemCopyMatching(query as CFDictionary, &item)
         if status == errSecSuccess {
-            if let existingItem = item as? [String: Any], let textData = existingItem[kSecValueData as String] as? Data, let token = String(data: textData, encoding: .utf8) {
-                return token
+            if let existingItem = item as? [String: Any],
+               let textData = existingItem[kSecValueData as String] as? Data,
+               let text = String(data: textData, encoding: .utf8) {
+                return text
             } else {
                 return nil
             }
