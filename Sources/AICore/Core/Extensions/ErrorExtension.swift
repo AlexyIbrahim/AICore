@@ -7,12 +7,6 @@
 
 import Foundation
 
-enum MyError: Error {
+public enum MyError: Error {
     case error(String)
-}
-
-public extension Error {
-    static func custom(_ description: String) -> Error {
-        return MyError.error(description)
-    }
 }
