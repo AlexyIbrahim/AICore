@@ -21,7 +21,7 @@ public class DebugHelper {
     public final class func log(_ msg: String, filename: String = #file, function : String = #function, line: Int = #line) {
         var finalMsg = msg
         if addCallerInfo {
-            let pretty = "\(URL(fileURLWithPath: filename).lastPathComponent) [#\(line)] \(function))\t-> "
+            let pretty = "\(URL(fileURLWithPath: filename).lastPathComponent) [#\(line)] \(function)\t-> "
             finalMsg = pretty + finalMsg
         }
         FirebaseCrashlyticsHelper.log(finalMsg)
@@ -30,7 +30,7 @@ public class DebugHelper {
     public final class func log(key: String, value: Any, filename: String = #file, function : String = #function, line: Int = #line) {
         var finalMsg = "\(key): \(value)"
         if addCallerInfo {
-            let pretty = "\(URL(fileURLWithPath: filename).lastPathComponent) [#\(line)] \(function))\t-> "
+            let pretty = "\(URL(fileURLWithPath: filename).lastPathComponent) [#\(line)] \(function)\t-> "
             finalMsg = pretty + finalMsg
         }
         
@@ -40,7 +40,7 @@ public class DebugHelper {
     public final class func log(_ dictionary: [String: Any], filename: String = #file, function : String = #function, line: Int = #line) {
         var finalMsg = dictionary.debugDescription
         if addCallerInfo {
-            let pretty = "\(URL(fileURLWithPath: filename).lastPathComponent) [#\(line)] \(function))\t-> "
+            let pretty = "\(URL(fileURLWithPath: filename).lastPathComponent) [#\(line)] \(function)\t-> "
             finalMsg = pretty + finalMsg
         }
         
@@ -50,7 +50,7 @@ public class DebugHelper {
     public final class func log(message: String, dictionary: [String: Any], filename: String = #file, function : String = #function, line: Int = #line) {
         var finalMsg = message
         if addCallerInfo {
-            let pretty = "\(URL(fileURLWithPath: filename).lastPathComponent) [#\(line)] \(function))\t-> "
+            let pretty = "\(URL(fileURLWithPath: filename).lastPathComponent) [#\(line)] \(function)\t-> "
             finalMsg = pretty + finalMsg
         }
         
