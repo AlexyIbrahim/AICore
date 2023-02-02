@@ -8,7 +8,7 @@
 import Foundation
 
 public class DebugHelper {
-    static var addCallerInfo: Bool = false
+    public static var addCallerInfo: Bool = false
     
     public final class func addBreadcrumb(forKey key: String, value: Any?) {
         FirebaseCrashlyticsHelper.addBreadcrumb(forKey: key, value: value)
