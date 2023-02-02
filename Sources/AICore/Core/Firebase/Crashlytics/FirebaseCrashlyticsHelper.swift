@@ -29,11 +29,15 @@ public class FirebaseCrashlyticsHelper: NSObject {
     }
     
     public final class func log(key: String, value: Any) {
-        log("\(key): \(value)")
+        log([key: value])
     }
     
     public final class func log(_ dictionary: [String: Any]) {
         log(dictionary.debugDescription)
+    }
+    
+    public final class func log(message: String, dictionary: [String: Any]) {
+        log("\(message) , data: \(dictionary.debugDescription)")
     }
     
     public final class func reportError(_ error: Error?, userInfo: [String: Any]? = nil) {

@@ -8,6 +8,8 @@
 import Foundation
 
 public class DebugHelper {
+    static var addCallerInfo: Bool = false
+    
     public final class func addBreadcrumb(forKey key: String, value: Any?) {
         FirebaseCrashlyticsHelper.addBreadcrumb(forKey: key, value: value)
     }
@@ -16,16 +18,43 @@ public class DebugHelper {
         FirebaseCrashlyticsHelper.addBreadcrumbs(breadcrumbs)
     }
     
-    public final class func log(_ msg: String) {
-        FirebaseCrashlyticsHelper.log(msg)
+    public final class func log(_ msg: String, filename: String = #file, function : String = #function, line: Int = #line) {
+        var finalMsg = msg
+        if addCallerInfo {
+            let pretty = "\(URL(fileURLWithPath: filename).lastPathComponent) [#\(line)] \(function))\t-> "
+            finalMsg = pretty + finalMsg
+        }
+        FirebaseCrashlyticsHelper.log(finalMsg)
     }
     
-    public final class func log(key: String, value: Any) {
-        FirebaseCrashlyticsHelper.log(key: key, value: value)
+    public final class func log(key: String, value: Any, filename: String = #file, function : String = #function, line: Int = #line) {
+        var finalMsg = "\(key): \(value)"
+        if addCallerInfo {
+            let pretty = "\(URL(fileURLWithPath: filename).lastPathComponent) [#\(line)] \(function))\t-> "
+            finalMsg = pretty + finalMsg
+        }
+        
+        FirebaseCrashlyticsHelper.log(finalMsg)
     }
     
-    public final class func log(_ dictionary: [String: Any]) {
-        FirebaseCrashlyticsHelper.log(dictionary)
+    public final class func log(_ dictionary: [String: Any], filename: String = #file, function : String = #function, line: Int = #line) {
+        var finalMsg = dictionary.debugDescription
+        if addCallerInfo {
+            let pretty = "\(URL(fileURLWithPath: filename).lastPathComponent) [#\(line)] \(function))\t-> "
+            finalMsg = pretty + finalMsg
+        }
+        
+        FirebaseCrashlyticsHelper.log(finalMsg)
+    }
+    
+    public final class func log(message: String, dictionary: [String: Any], filename: String = #file, function : String = #function, line: Int = #line) {
+        var finalMsg = message
+        if addCallerInfo {
+            let pretty = "\(URL(fileURLWithPath: filename).lastPathComponent) [#\(line)] \(function))\t-> "
+            finalMsg = pretty + finalMsg
+        }
+        
+        FirebaseCrashlyticsHelper.log(message: finalMsg, dictionary: dictionary)
     }
     
     public final class func reportError(_ error: Error?, userInfo: [String: Any]? = nil) {
