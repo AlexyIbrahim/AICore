@@ -61,6 +61,10 @@ public class DebugHelper {
         FirebaseCrashlyticsHelper.reportError(error, userInfo: userInfo)
     }
     
+    public final class func reportCustomError(_ name: String, userInfo: [String: Any]? = nil) {
+        FirebaseCrashlyticsHelper.reportCustomError(name, userInfo: userInfo)
+    }
+    
     public final class func reportException(_ exception: NSException) {
         FirebaseCrashlyticsHelper.reportException(exception)
     }
