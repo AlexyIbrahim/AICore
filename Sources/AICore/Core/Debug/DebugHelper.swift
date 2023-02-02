@@ -36,7 +36,7 @@ public class DebugHelper {
         FirebaseCrashlyticsHelper.reportException(exception)
     }
     
-    public final class func reportCustomException(name: String, reason: String) {
+    public final class func reportCustomException(name: String, reason: String? = nil) {
         FirebaseCrashlyticsHelper.reportCustomException(name: name, reason: reason)
     }
 }

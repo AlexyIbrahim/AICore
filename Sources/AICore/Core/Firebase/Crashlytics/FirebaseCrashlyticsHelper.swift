@@ -47,7 +47,7 @@ public class FirebaseCrashlyticsHelper: NSObject {
         Crashlytics.crashlytics().record(exceptionModel: ExceptionModel.init(name: exception.name.rawValue, reason: exception.reason ?? ""))
     }
     
-    public final class func reportCustomException(name: String, reason: String) {
+    public final class func reportCustomException(name: String, reason: String? = nil) {
         reportException(NSException.init(name: NSExceptionName(name), reason: reason))
     }
     
