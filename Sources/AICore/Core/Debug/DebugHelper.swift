@@ -61,8 +61,14 @@ public class DebugHelper {
         FirebaseCrashlyticsHelper.reportError(error, userInfo: userInfo)
     }
     
-    public final class func reportCustomError(_ name: String, userInfo: [String: Any]? = nil) {
-        FirebaseCrashlyticsHelper.reportCustomError(name, userInfo: userInfo)
+    public final class func reportCustomError(_ description: String, userInfo: [String: Any]? = nil, filename: String = #file, function : String = #function, line: Int = #line) {
+        var finalMsg = description
+        if addCallerInfo {
+            let pretty = "\(URL(fileURLWithPath: filename).lastPathComponent) [#\(line)] \(function)\t-> "
+            finalMsg = pretty + finalMsg
+        }
+        
+        FirebaseCrashlyticsHelper.reportCustomError(finalMsg, userInfo: userInfo)
     }
     
     public final class func reportException(_ exception: NSException) {
