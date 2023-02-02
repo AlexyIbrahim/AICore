@@ -50,7 +50,9 @@ public class FirebaseRemoteConfigHelper: RawRepresentable, Equatable {
                 }
             }
           } else {
-              DebugHelper.reportError(error)
+              if let error = error {
+                  DebugHelper.reportError(error)
+              }
               print("Error: \(error?.localizedDescription ?? "No error available.")")
           }
         }
@@ -60,7 +62,9 @@ public class FirebaseRemoteConfigHelper: RawRepresentable, Equatable {
         FirebaseRemoteConfigHelper.remoteConfig.fetchAndActivate { (status, error) -> Void in
           if status == .successFetchedFromRemote {
           } else {
-              DebugHelper.reportError(error)
+              if let error = error {
+                  DebugHelper.reportError(error)
+              }
               print("Error: \(error?.localizedDescription ?? "No error available.")")
           }
         }

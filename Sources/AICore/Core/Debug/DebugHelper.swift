@@ -57,7 +57,7 @@ public class DebugHelper {
         FirebaseCrashlyticsHelper.log(message: finalMsg, dictionary: dictionary)
     }
     
-    public final class func reportError(_ error: Error?, userInfo: [String: Any]? = nil) {
+    public final class func reportError(_ error: Error, userInfo: [String: Any]? = nil) {
         FirebaseCrashlyticsHelper.reportError(error, userInfo: userInfo)
     }
     

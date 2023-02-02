@@ -40,9 +40,12 @@ public class FirebaseCrashlyticsHelper: NSObject {
         log("\(message) , data: \(dictionary.debugDescription)")
     }
     
-    public final class func reportError(_ error: Error?, userInfo: [String: Any]? = nil) {
-        guard let error = error else { return }
+    public final class func reportError(_ error: Error, userInfo: [String: Any]? = nil) {
         Crashlytics.crashlytics().record(error: error, userInfo: userInfo)
+    }
+    
+    public final class func reportCustomError(_ name: String, userInfo: [String: Any]? = nil) {
+        reportError(MyError.error(name), userInfo: userInfo)
     }
     
     public final class func reportException(_ exception: NSException) {
