@@ -12,7 +12,7 @@ enum MyError: Error {
 }
 
 public extension Error {
-    func custom(_ description: String) -> Error {
+    static func custom(_ description: String) -> Error {
         return MyError.error(description)
     }
 }
