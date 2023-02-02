@@ -24,8 +24,8 @@ public class DebugHelper {
         FirebaseCrashlyticsHelper.log(key: key, value: value)
     }
     
-    public final class func log(dictionary: [String: Any]) {
-        FirebaseCrashlyticsHelper.log(dictionary: dictionary)
+    public final class func log(_ dictionary: [String: Any]) {
+        FirebaseCrashlyticsHelper.log(dictionary)
     }
     
     public final class func reportError(_ error: Error?, userInfo: [String: Any]? = nil) {

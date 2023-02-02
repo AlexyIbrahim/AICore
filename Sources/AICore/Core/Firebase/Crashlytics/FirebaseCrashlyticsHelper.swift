@@ -10,9 +10,7 @@ import FirebaseCrashlytics
 
 public class FirebaseCrashlyticsHelper: NSObject {
     public final class func initUser(userId: String) {
-        if Session.isLoggedIn {
-            Crashlytics.crashlytics().setUserID(userId)
-        }
+        Crashlytics.crashlytics().setUserID(userId)
         
         addBreadcrumb(forKey: "appVersion", value: Utils.appVersion())
         addBreadcrumb(forKey: "build", value: Utils.build())
@@ -34,7 +32,7 @@ public class FirebaseCrashlyticsHelper: NSObject {
         log("\(key): \(value)")
     }
     
-    public final class func log(dictionary: [String: Any]) {
+    public final class func log(_ dictionary: [String: Any]) {
         log(dictionary.debugDescription)
     }
     
