@@ -7,6 +7,6 @@
 
 import Foundation
 
-public enum MyError: Error {
+public enum AIError: Error {
     case error(String)
 }

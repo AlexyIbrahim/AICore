@@ -45,7 +45,7 @@ public class FirebaseCrashlyticsHelper: NSObject {
     }
     
     public final class func reportCustomError(_ name: String, userInfo: [String: Any]? = nil) {
-        reportError(MyError.error(name), userInfo: userInfo)
+        reportError(AIError.error(name), userInfo: userInfo)
     }
     
     public final class func reportException(_ exception: NSException) {
