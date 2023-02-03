@@ -115,19 +115,18 @@ public extension UIViewController {
         var barButtonItem: UIBarButtonItem?
         if title != nil || image != nil {
             let button = UIButton.init(type: .custom)
-            if let tintColor = tintColor {
-                button.tintColor = tintColor
-            }
             if let title = title {
+                button.setTitleColor(tintColor, for: .normal)
                 button.setTitle(title, for: .normal)
             } else if let image = image {
+                button.tintColor = tintColor
                 button.setImage(image, for: .normal)
             }
             button.sizeToFit()
             button.on(.touchUpInside) { (sender) in
                 callback?()
             }
-
+            
             barButtonItem = UIBarButtonItem.init(customView: button)
         } else if let systemItem = systemItem {
             barButtonItem = UIBarButtonItem.init(systemItem: systemItem, primaryAction: .init { (v: UIAction) in
