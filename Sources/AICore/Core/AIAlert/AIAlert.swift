@@ -34,36 +34,37 @@ public class AIAlert {
     }
     
     public final class func displayNativeMessage(message: String, withTitle title:String? = nil, style: UIAlertController.Style = .alert, buttons: [AlertButton], textFields: [AlertTextField]? = nil) {
-
-        guard let viewController: UIViewController = Utils.topMostWindowController() else {
-            return
-        }
-
-        let title:String? = ((title != nil) ? title!:nil)
-        let alertViewController = UIAlertController(title: title, message: message, preferredStyle: style)
-
-        if style == .alert {
-            if let textFields = textFields {
-                for textfield in textFields {
-                    alertViewController.addTextField { textfield_temp in
-                        textfield_temp.placeholder = textfield.placeholder
-                        textfield_temp.keyboardType = textfield.keyboardType
+        DispatchQueue.main({
+            guard let viewController: UIViewController = Utils.topMostWindowController() else {
+                return
+            }
+            
+            let title:String? = ((title != nil) ? title!:nil)
+            let alertViewController = UIAlertController(title: title, message: message, preferredStyle: style)
+            
+            if style == .alert {
+                if let textFields = textFields {
+                    for textfield in textFields {
+                        alertViewController.addTextField { textfield_temp in
+                            textfield_temp.placeholder = textfield.placeholder
+                            textfield_temp.keyboardType = textfield.keyboardType
+                        }
                     }
                 }
             }
-        }
-        
-        for alert_button in buttons {
-            alertViewController.addAction(UIAlertAction(title: alert_button.title, style: alert_button.style) { action in
-                alertViewController.dismiss(animated: true, completion: nil)
-                alert_button.callback?(alertViewController.textFields)
-            })
-        }
-
-        alertViewController.popoverPresentationController?.sourceView = viewController.view
-        alertViewController.popoverPresentationController?.sourceRect = viewController.view.bounds
-
-        viewController.present(alertViewController, animated: true, completion: nil)
+            
+            for alert_button in buttons {
+                alertViewController.addAction(UIAlertAction(title: alert_button.title, style: alert_button.style) { action in
+                    alertViewController.dismiss(animated: true, completion: nil)
+                    alert_button.callback?(alertViewController.textFields)
+                })
+            }
+            
+            alertViewController.popoverPresentationController?.sourceView = viewController.view
+            alertViewController.popoverPresentationController?.sourceRect = viewController.view.bounds
+            
+            viewController.present(alertViewController, animated: true, completion: nil)
+        })
     }
     
     public final class func displayNativeMessage(message: String, withTitle title:String? = nil, style: UIAlertController.Style = .alert, buttons: AlertButton..., textFields: AlertTextField?...) {
