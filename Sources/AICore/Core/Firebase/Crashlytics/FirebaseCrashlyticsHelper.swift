@@ -12,6 +12,7 @@ public class FirebaseCrashlyticsHelper: NSObject {
     public final class func initUser(userId: String) {
         Crashlytics.crashlytics().setUserID(userId)
         
+        addBreadcrumb(forKey: "userId", value: userId)
         addBreadcrumb(forKey: "appVersion", value: Utils.appVersion())
         addBreadcrumb(forKey: "build", value: Utils.build())
     }
