@@ -10,13 +10,19 @@ import UIKit
 
 public extension UIViewController {
     func hideKeyboardWhenTappedAround() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard(_:)))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
     }
     
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
+    @objc func dismissKeyboard(_ sender: UITapGestureRecognizer) {
+        let tapLocation = sender.location(in: view)
+        let button = view.hitTest(tapLocation, with: nil) as? UIButton
+        
+        if let _ = button {
+        } else {
+            view.endEditing(true)
+        }
     }
 }
 
