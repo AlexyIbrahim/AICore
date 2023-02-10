@@ -23,9 +23,9 @@ public extension UIViewController {
     @objc func dismissKeyboard(_ sender: UITapGestureRecognizer) {
         if self.dismissKeyboardOnTouch {
             let tapLocation = sender.location(in: view)
-            let button = view.hitTest(tapLocation, with: nil) as? UIButton
+            let control = view.hitTest(tapLocation, with: nil) as? UIControl
             
-            if let _ = button {
+            if let _ = control {
             } else {
                 view.endEditing(true)
             }
