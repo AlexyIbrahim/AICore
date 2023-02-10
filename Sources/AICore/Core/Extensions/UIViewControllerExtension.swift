@@ -10,18 +10,25 @@ import UIKit
 
 public extension UIViewController {
     func hideKeyboardWhenTappedAround() {
+        self.dismissKeyboardOnTouch = true
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard(_:)))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
     }
     
+    func disableKeyboardDismissOnTouch() {
+        self.dismissKeyboardOnTouch = false
+    }
+    
     @objc func dismissKeyboard(_ sender: UITapGestureRecognizer) {
-        let tapLocation = sender.location(in: view)
-        let button = view.hitTest(tapLocation, with: nil) as? UIButton
-        
-        if let _ = button {
-        } else {
-            view.endEditing(true)
+        if self.dismissKeyboardOnTouch {
+            let tapLocation = sender.location(in: view)
+            let button = view.hitTest(tapLocation, with: nil) as? UIButton
+            
+            if let _ = button {
+            } else {
+                view.endEditing(true)
+            }
         }
     }
 }
@@ -179,33 +186,6 @@ public extension UIViewController {
             self.navigationItem.setRightBarButtonItems(nil, animated: animated ?? true)
         }
     }
-    
-    // MARK: -
-    
-    // MARK: EnableKeyboardDismissOnTouch
-    func enableKeyboardDismissOnTouch() {
-        self.dismissKeyboardOnTouch = true
-    }
-    
-    // MARK: -
-    
-    // MARK: DisableKeyboardDismissOnTouch
-    func disableKeyboardDismissOnTouch() {
-        self.dismissKeyboardOnTouch = false
-    }
-    
-    // MARK: -
-    
-    // MARK: Touches Began
-    override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if self.dismissKeyboardOnTouch {
-            self.dismissKeyboard()
-        }
-    }
-    
-    //    func dismissKeyboard() {
-    //        self.view.endEditing(true)
-    //    }
     
     func presentViewControllerFromVisibleViewController(viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)?) {
         if let navigationController = self as? UINavigationController {
