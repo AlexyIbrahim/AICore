@@ -37,6 +37,20 @@ public struct AIColor {
         self.dark = dark ?? color
     }
     
+    public init(_ named: String) {
+        let color: UIColor! = UIColor.init(named: named)!
+        self.resolvedColor = color
+        if #available(iOS 13.0, *) {
+            self = AIColor.init { trait in
+                return color
+            }
+        } else {
+            resolvedColor = color
+        }
+        self.light = color
+        self.dark = color
+    }
+    
     /// Initialize ColorAsset with a dynamic trait
     /// - Parameter dynamic: A block that determines the appropriate color values based on the specified traits.
     /// This block returns a UIColor object and takes a single parameter traits
