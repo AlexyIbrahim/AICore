@@ -19,4 +19,8 @@ public struct AIImage {
     public init(from image: UIImage) {
         resolvedImage = image
     }
+    
+    public init(systemName name: String) {
+        resolvedImage = .init(systemName: name)!
+    }
 }
