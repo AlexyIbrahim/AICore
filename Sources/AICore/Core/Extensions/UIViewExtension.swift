@@ -12,12 +12,10 @@ import SnapKit
 
 public extension UIView {
     func makeCircular() {
-        self.layer.masksToBounds = true
         self.layer.cornerRadius = self.bounds.height / 2
     }
     
     func makeRounded(cornerRadius: CGFloat? = nil) {
-        self.layer.masksToBounds = true
         self.layer.cornerRadius = cornerRadius ?? 8
     }
     
