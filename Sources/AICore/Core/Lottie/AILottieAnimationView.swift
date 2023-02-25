@@ -19,7 +19,7 @@ public class AILottieAnimationInfo {
         case url
     }
     
-    enum AILottieAnimationLocation {
+    public enum AILottieAnimationLocation {
         case dir
         case asset
     }
@@ -36,7 +36,7 @@ public class AILottieAnimationInfo {
         self.url = nil
     }
     
-    convenience init<T: AnyObject>(nameInDir name: String, location: AILottieAnimationLocation, from: T? = nil) {
+    public convenience init<T: AnyObject>(nameInDir name: String, location: AILottieAnimationLocation, from: T? = nil) {
         self.init()
         
         switch location {
@@ -49,7 +49,7 @@ public class AILottieAnimationInfo {
         self.from = from
     }
     
-    convenience init(url: String) {
+    public convenience init(url: String) {
         self.init()
         
         self.source = .url
