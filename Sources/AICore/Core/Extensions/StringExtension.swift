@@ -47,4 +47,18 @@ public extension String {
         let end = index(start, offsetBy: range.upperBound - range.lowerBound)
         return String(self[start ..< end])
     }
+    
+    
+    var initials: String {
+        let words = self.components(separatedBy: " ")
+        var initials = ""
+        
+        for word in words {
+            if let firstChar = word.first {
+                initials.append(String(firstChar).capitalized)
+            }
+        }
+        
+        return initials
+    }
 }
