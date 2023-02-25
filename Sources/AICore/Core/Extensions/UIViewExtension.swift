@@ -37,6 +37,20 @@ public extension UIView {
         self.layer.shadowOffset = offset ?? CGSize(width: 2, height: 2)
         self.layer.shadowRadius = radius ?? 4
     }
+    
+    func addRing(withColor color: UIColor, thickness: CGFloat, padding: CGFloat) -> CAShapeLayer {
+        let ringLayer = CAShapeLayer()
+        let circlePath = UIBezierPath(ovalIn: self.bounds.insetBy(dx: padding, dy: padding))
+        
+        ringLayer.path = circlePath.cgPath
+        ringLayer.fillColor = UIColor.clear.cgColor
+        ringLayer.strokeColor = color.cgColor
+        ringLayer.lineWidth = thickness
+        
+        self.layer.addSublayer(ringLayer)
+        
+        return ringLayer
+    }
 }
 
 // constaint
