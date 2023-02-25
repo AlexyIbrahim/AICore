@@ -251,10 +251,10 @@ public extension AILottieAnimationView {
         }
         
         if let color = color {
-            let keypath = AnimationKeypath(keys: ["**", "Fill", "**", "Color"])
+            let fillKeypath = AnimationKeypath(keypath: "**.Fill 1.Color")
             let colorProvider = ColorValueProvider(color.lottieColorValue)
             
-            lottieAnimationView.setValueProvider(colorProvider, keypath: keypath)
+            lottieAnimationView.setValueProvider(colorProvider, keypath: fillKeypath)
         }
         
         callback?(aiLottieAnimationView)
