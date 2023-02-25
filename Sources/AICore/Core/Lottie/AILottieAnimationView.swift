@@ -62,7 +62,7 @@ public class AILottieAnimationView: UIView {
     public var lottieAnimationView: LottieAnimationView = LottieAnimationView()
     public var lottieAnimation: LottieAnimation!
     
-    public final class func showAnimation(animationInfo: AILottieAnimationInfo,
+    public final class func playAnimation(animationInfo: AILottieAnimationInfo,
                                           inView containingView: UIView,
                                           color: UIColor? = nil,
                                           loopMode: LottieLoopMode? = nil,
@@ -71,7 +71,44 @@ public class AILottieAnimationView: UIView {
                                           animationSpeed: CGFloat? = nil,
                                           duraction:TimeInterval? = nil,
                                           playCompletion: Lottie.LottieCompletionBlock? = nil,
-                                          callback: ((AILottieAnimationView) -> Void)? = nil,
+                                          successCallback: ((AILottieAnimationView) -> Void)? = nil,
+                                          errorCallback: (() -> ())? = nil) {
+        AILottieAnimationView.showAnimation(animationInfo: animationInfo,
+                                            inView: containingView,
+                                            color: color,
+                                            loopMode: loopMode,
+                                            contentMode: contentMode,
+                                            userInteractionEnabled: userInteractionEnabled,
+                                            animationSpeed: animationSpeed,
+                                            successCallback: { aiLottieAnimationView in
+            
+            aiLottieAnimationView.lottieAnimationView.play { finished in
+                playCompletion?(finished)
+            }
+            
+            // duration
+            if let duraction = duraction {
+                if duraction > 0 {
+                    _ = Timer.scheduledTimer(withTimeInterval: duraction, repeats: false) { timer in
+                        timer.invalidate()
+                        DispatchQueue.main.async {
+                            AILottieAnimationView.hide(from: containingView, animated: true)
+                        }
+                    }
+                }
+            }
+        }, errorCallback: errorCallback)
+        
+    }
+    
+    public final class func showAnimation(animationInfo: AILottieAnimationInfo,
+                                          inView containingView: UIView,
+                                          color: UIColor? = nil,
+                                          loopMode: LottieLoopMode? = nil,
+                                          contentMode: UIView.ContentMode? = nil,
+                                          userInteractionEnabled: Bool? = nil,
+                                          animationSpeed: CGFloat? = nil,
+                                          successCallback: ((AILottieAnimationView) -> Void)? = nil,
                                           errorCallback: (() -> ())? = nil) {
         AILottieAnimationView.createAnimation(animationInfo: animationInfo, successCallback: { lottieAnimation in
             AILottieAnimationView.createAIAnimationView(animation: lottieAnimation,
@@ -96,23 +133,7 @@ public class AILottieAnimationView: UIView {
                 }
                 containingView.bringSubviewToFront(aiLottieAnimationView.lottieAnimationView)
                 
-                aiLottieAnimationView.lottieAnimationView.play { finished in
-                    playCompletion?(finished)
-                }
-                
-                // duration
-                if let duraction = duraction {
-                    if duraction > 0 {
-                        _ = Timer.scheduledTimer(withTimeInterval: duraction, repeats: false) { timer in
-                            timer.invalidate()
-                            DispatchQueue.main.async {
-                                AILottieAnimationView.hide(from: containingView, animated: true)
-                            }
-                        }
-                    }
-                }
-                
-                callback?(aiLottieAnimationView)
+                successCallback?(aiLottieAnimationView)
             }
         }, errorCallback: {
             errorCallback?()
