@@ -112,6 +112,7 @@ public class AILottieAnimationView: UIView {
                                           errorCallback: (() -> ())? = nil) {
         AILottieAnimationView.createAnimation(animationInfo: animationInfo, successCallback: { lottieAnimation in
             AILottieAnimationView.createAIAnimationView(animation: lottieAnimation,
+                                                        color: color,
                                                         loopMode: loopMode,
                                                         contentMode: contentMode,
                                                         userInteractionEnabled: userInteractionEnabled,
