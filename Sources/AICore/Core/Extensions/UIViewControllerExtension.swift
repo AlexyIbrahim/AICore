@@ -124,7 +124,7 @@ public extension UIViewController {
     // MARK: -
     
     // MARK: AddRightButton
-    func addBarButtonItem(withTitle title: String? = nil, image: UIImage? = nil, systemItem: UIBarButtonItem.SystemItem? = nil, direction: BarButtonItemDirection, tintColor: UIColor? = nil, _ callback: (() -> ())? = nil) -> UIBarButtonItem {
+    func addBarButtonItem(withTitle title: String? = nil, image: UIImage? = nil, systemItem: UIBarButtonItem.SystemItem? = nil, customView: UIView? = nil, direction: BarButtonItemDirection, tintColor: UIColor? = nil, _ callback: (() -> ())? = nil) -> UIBarButtonItem {
         var barButtonItem: UIBarButtonItem?
         if title != nil || image != nil {
             let button = UIButton.init(type: .custom)
@@ -145,6 +145,8 @@ public extension UIViewController {
             barButtonItem = UIBarButtonItem.init(systemItem: systemItem, primaryAction: .init { (v: UIAction) in
                 callback?()
             })
+        }  else if let customView = customView {
+            barButtonItem = UIBarButtonItem.init(customView: customView)
         }
 
         if barButtonItem == nil {
