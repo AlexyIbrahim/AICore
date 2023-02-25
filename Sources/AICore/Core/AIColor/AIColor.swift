@@ -37,6 +37,25 @@ public struct AIColor {
         self.dark = dark ?? color
     }
     
+    public init(_ colorHex: String, darkHex: String? = nil) {
+        let color: UIColor! = UIColor(hex: colorHex)!
+        let dark: UIColor? = (darkHex != nil) ? UIColor(hex: darkHex!)! : nil
+        
+        self.resolvedColor = color
+        if #available(iOS 13.0, *) {
+            self = AIColor { (trait) -> UIColor in
+                if trait.userInterfaceStyle == .dark {
+                    return dark ?? color
+                }
+                return color
+            }
+        } else {
+            resolvedColor = color
+        }
+        self.light = color
+        self.dark = dark ?? color
+    }
+    
     public init(_ named: String) {
         let color: UIColor! = UIColor.init(named: named)!
         self.resolvedColor = color
