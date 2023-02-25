@@ -59,7 +59,8 @@ public class AILottieAnimationInfo {
 
 public class AILottieAnimationView: UIView {
     //    static let shared = AILottieAnimation()
-    var lottieAnimationView: LottieAnimationView = LottieAnimationView()
+    public var lottieAnimationView: LottieAnimationView = LottieAnimationView()
+    public var lottieAnimation: LottieAnimation!
     
     public final class func showAnimation(animationInfo: AILottieAnimationInfo,
                                           inView containingView: UIView,
@@ -69,17 +70,48 @@ public class AILottieAnimationView: UIView {
                                           animationSpeed: CGFloat? = nil,
                                           duraction:TimeInterval? = nil,
                                           playCompletion: Lottie.LottieCompletionBlock? = nil) {
-        AILottieAnimationView.createAnimation(animationInfo: animationInfo) { animation in
-            let animation: LottieAnimation! = animation
-            AILottieAnimationView.createAIAnimationView(animation: animation,
-                                                        inView: containingView,
+        AILottieAnimationView.createAnimation(animationInfo: animationInfo, successCallback: { lottieAnimation in
+            AILottieAnimationView.createAIAnimationView(animation: lottieAnimation,
                                                         loopMode: loopMode,
                                                         contentMode: contentMode,
                                                         userInteractionEnabled: userInteractionEnabled,
-                                                        animationSpeed: animationSpeed,
-                                                        duraction: duraction,
-                                                        playCompletion: playCompletion)
-        }
+                                                        animationSpeed: animationSpeed) { aiLottieAnimationView in
+                // constraints
+                containingView.addSubview(aiLottieAnimationView)
+                aiLottieAnimationView.snp.makeConstraints { (make) in
+                    make.edges.equalTo(0)
+                    make.centerX.equalToSuperview()
+                    make.centerY.equalToSuperview()
+                }
+                containingView.bringSubviewToFront(aiLottieAnimationView)
+                
+                aiLottieAnimationView.addSubview(aiLottieAnimationView.lottieAnimationView)
+                aiLottieAnimationView.lottieAnimationView.snp.makeConstraints { (make) in
+                    make.edges.equalTo(0)
+                    make.centerX.equalToSuperview()
+                    make.centerY.equalToSuperview()
+                }
+                containingView.bringSubviewToFront(aiLottieAnimationView.lottieAnimationView)
+                
+                aiLottieAnimationView.lottieAnimationView.play { finished in
+                    playCompletion?(finished)
+                }
+                
+                // duration
+                if let duraction = duraction {
+                    if duraction > 0 {
+                        _ = Timer.scheduledTimer(withTimeInterval: duraction, repeats: false) { timer in
+                            timer.invalidate()
+                            DispatchQueue.main.async {
+                                AILottieAnimationView.hide(from: containingView, animated: true)
+                            }
+                        }
+                    }
+                }
+            }
+        }, errorCallback: {
+            
+        })
     }
     
     public final class func hide(from view: UIView, animated:Bool = true) {
@@ -117,56 +149,66 @@ public class AILottieAnimationView: UIView {
 
 public extension AILottieAnimationView {
     final class func createAnimation(animationInfo: AILottieAnimationInfo,
-                                     completion: ((LottieAnimation) -> Void)? = nil) {
+                                     successCallback: ((LottieAnimation) -> Void)? = nil,
+                                     errorCallback: (() -> ())? = nil) {
+        var animation: LottieAnimation?
         switch animationInfo.source {
         case .nameDir:
-            var animation: LottieAnimation!
             if let from = animationInfo.from {
                 let bundle: Bundle = (animationInfo.from != nil) ? Bundle(for: type(of: from)) : Bundle.main
                 animation = LottieAnimation.named(animationInfo.name!, bundle: bundle, animationCache: DefaultAnimationCache.sharedCache)
             } else {
                 animation = LottieAnimation.named(animationInfo.name!, animationCache: DefaultAnimationCache.sharedCache)
             }
-            completion?(animation)
+            if let animation = animation {
+                successCallback?(animation)
+            } else {
+                errorCallback?()
+            }
         case .nameAsset:
-            var animation: LottieAnimation!
             if let from = animationInfo.from {
                 let bundle: Bundle = (animationInfo.from != nil) ? Bundle(for: type(of: from)) : Bundle.main
                 animation = LottieAnimation.asset(animationInfo.name!, bundle: bundle, animationCache: DefaultAnimationCache.sharedCache)
             } else {
                 animation = LottieAnimation.asset(animationInfo.name!, animationCache: DefaultAnimationCache.sharedCache)
             }
-            completion?(animation)
+            if let animation = animation {
+                successCallback?(animation)
+            } else {
+                errorCallback?()
+            }
         case .url:
             if let stringUrl = animationInfo.url {
                 if let url = URL(string: stringUrl) {
                     LottieAnimation.loadedFrom(url: url, closure: { animation in
                         if let animation = animation {
-                            completion?(animation)
+                            successCallback?(animation)
+                        } else {
+                            errorCallback?()
                         }
                     }, animationCache: DefaultAnimationCache.sharedCache)
                 }
             }
         case nil:
-            break
+            errorCallback?()
         case .some(.none):
-            break
+            errorCallback?()
         }
     }
     
     final class func createAIAnimationView(animation: LottieAnimation,
-                                           inView containingView: UIView,
                                            loopMode: LottieLoopMode? = nil,
                                            contentMode: UIView.ContentMode? = nil,
                                            userInteractionEnabled: Bool? = nil,
                                            animationSpeed: CGFloat? = nil,
-                                           duraction:TimeInterval? = nil,
-                                           playCompletion: Lottie.LottieCompletionBlock? = nil) {
+                                           callback: ((AILottieAnimationView) -> Void)? = nil) {
         let aiLottieAnimationView = AILottieAnimationView()
+        aiLottieAnimationView.lottieAnimation = animation
+        
         let lottieAnimationView = aiLottieAnimationView.lottieAnimationView
         
         // animationView customization
-        lottieAnimationView.animation = animation
+        lottieAnimationView.animation = aiLottieAnimationView.lottieAnimation
         if let loopMode = loopMode {
             lottieAnimationView.loopMode = loopMode
         }
@@ -181,45 +223,13 @@ public extension AILottieAnimationView {
             lottieAnimationView.animationSpeed = animationSpeed
         }
         
+        callback?(aiLottieAnimationView)
+        
         //        let colorProvider = ColorValueProvider(UIColor.orange.lottieColorValue)
         ////        let keypath = AnimationKeypath(keys: ["**", "Fill", "**", "Color"])
         //        /// A keypath that finds the color value for all `Fill 1` nodes.
         //        let fillKeypath = AnimationKeypath(keypath: "**.Fill 1.Color")
         //        animationView.setValueProvider(colorProvider, keypath: fillKeypath)
-        
-        // constraints
-        containingView.addSubview(aiLottieAnimationView)
-        aiLottieAnimationView.snp.makeConstraints { (make) in
-            make.edges.equalTo(0)
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview()
-        }
-        containingView.bringSubviewToFront(aiLottieAnimationView)
-        
-        aiLottieAnimationView.addSubview(lottieAnimationView)
-        lottieAnimationView.snp.makeConstraints { (make) in
-            make.edges.equalTo(0)
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview()
-        }
-        containingView.bringSubviewToFront(lottieAnimationView)
-        
-        
-        lottieAnimationView.play { finished in
-            playCompletion?(finished)
-        }
-        
-        // duration
-        if let duraction = duraction {
-            if duraction > 0 {
-                _ = Timer.scheduledTimer(withTimeInterval: duraction, repeats: false) { timer in
-                    timer.invalidate()
-                    DispatchQueue.main.async {
-                        self.hide(from: containingView, animated: true)
-                    }
-                }
-            }
-        }
     }
     
     final class func aiLottieAnimationViews(in view: UIView) -> [AILottieAnimationView] {
