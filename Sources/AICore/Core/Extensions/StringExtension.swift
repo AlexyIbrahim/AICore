@@ -48,7 +48,6 @@ public extension String {
         return String(self[start ..< end])
     }
     
-    
     var initials: String {
         let words = self.components(separatedBy: " ")
         var initials = ""

@@ -11,22 +11,68 @@ import UIKit
 import SnapKit
 
 
+enum AILottieAnimationLocation {
+    case dir
+    case asset
+}
+
+public class AILottieAnimationInfo {
+    enum AILottieAnimationSource {
+        case none
+        case nameDir
+        case nameAsset
+        case url
+    }
+    
+    var source: AILottieAnimationSource!
+    var name: String?
+    var from: AnyObject?
+    var url: String?
+    
+    init() {
+        self.source = AILottieAnimationSource.none
+        self.name = nil
+        self.from = nil
+        self.url = nil
+    }
+    
+    convenience init<T: AnyObject>(nameInDir name: String, from: T? = nil) {
+        self.init()
+        
+        self.source = .nameDir
+        self.name = name
+        self.from = from
+    }
+    
+    convenience init<T: AnyObject>(nameInAsset name: String, from: T? = nil) {
+        self.init()
+        
+        self.source = .nameAsset
+        self.name = name
+        self.from = from
+    }
+    
+    convenience init(url: String) {
+        self.init()
+        
+        self.source = .url
+        self.url = url
+    }
+}
+
 public class AILottieAnimationView: UIView {
     //    static let shared = AILottieAnimation()
-    var animationView: LottieAnimationView = LottieAnimationView()
+    var lottieAnimationView: LottieAnimationView = LottieAnimationView()
     
-    public final class func showAnimation<T: AnyObject>(name: String? = nil,
-                                                 url stringUrl: String? = nil,
-                                                 from: T? = nil,
-                                                 
-                                                 inView containingView: UIView,
-                                                 loopMode: LottieLoopMode? = nil,
-                                                 contentMode: UIView.ContentMode? = nil,
-                                                 userInteractionEnabled: Bool? = nil,
-                                                 animationSpeed: CGFloat? = nil,
-                                                 duraction:TimeInterval? = nil,
-                                                 playCompletion: Lottie.LottieCompletionBlock? = nil) {
-        AILottieAnimationView.createAnimation(name: name, url: stringUrl, from: from) { animation in
+    public final class func showAnimation(animationInfo: AILottieAnimationInfo!,
+                                          inView containingView: UIView,
+                                          loopMode: LottieLoopMode? = nil,
+                                          contentMode: UIView.ContentMode? = nil,
+                                          userInteractionEnabled: Bool? = nil,
+                                          animationSpeed: CGFloat? = nil,
+                                          duraction:TimeInterval? = nil,
+                                          playCompletion: Lottie.LottieCompletionBlock? = nil) {
+        AILottieAnimationView.createAnimation(animationInfo: animationInfo) { animation in
             let animation: LottieAnimation! = animation
             AILottieAnimationView.createAIAnimationView(animation: animation,
                                                         inView: containingView,
@@ -55,47 +101,59 @@ public class AILottieAnimationView: UIView {
     
     public final class func play(in view: UIView) {
         for aiAnimation in AILottieAnimationView.aiLottieAnimationViews(in: view) {
-            aiAnimation.animationView.play()
+            aiAnimation.lottieAnimationView.play()
         }
     }
     
     public final class func stop(in view: UIView) {
         for aiAnimation in AILottieAnimationView.aiLottieAnimationViews(in: view) {
-            aiAnimation.animationView.stop()
+            aiAnimation.lottieAnimationView.stop()
         }
     }
     
     public final class func pause(in view: UIView) {
         for aiAnimation in AILottieAnimationView.aiLottieAnimationViews(in: view) {
-            aiAnimation.animationView.pause()
+            aiAnimation.lottieAnimationView.pause()
         }
     }
 }
 
-private extension AILottieAnimationView {
-    final class func createAnimation<T: AnyObject>(name: String? = nil,
-                                                   url stringUrl: String?,
-                                                   from: T? = nil,
-                                                   completion: ((LottieAnimation) -> Void)? = nil) {
-        if let name = name {
-            let _: Bundle? = (from != nil) ? Bundle(for: type(of: from!)) : nil
+public extension AILottieAnimationView {
+    final class func createAnimation(animationInfo: AILottieAnimationInfo,
+                                     completion: ((LottieAnimation) -> Void)? = nil) {
+        switch animationInfo.source {
+        case .nameDir:
             var animation: LottieAnimation!
-            if let from = from {
-                animation = LottieAnimation.named(name, bundle: Bundle(for: type(of: from)), animationCache: LRUAnimationCache.sharedCache)
+            if let from = animationInfo.from {
+                let bundle: Bundle = (animationInfo.from != nil) ? Bundle(for: type(of: from)) : Bundle.main
+                animation = LottieAnimation.named(animationInfo.name!, bundle: bundle, animationCache: DefaultAnimationCache.sharedCache)
             } else {
-                animation = LottieAnimation.named(name, animationCache: LRUAnimationCache.sharedCache)
+                animation = LottieAnimation.named(animationInfo.name!, animationCache: DefaultAnimationCache.sharedCache)
             }
             completion?(animation)
-        }
-        
-        if let stringUrl = stringUrl {
-            if let url = URL(string: stringUrl) {
-                LottieAnimation.loadedFrom(url: url, closure: { animation in
-                    if let animation = animation {
-                        completion?(animation)
-                    }
-                }, animationCache: LRUAnimationCache.sharedCache)
+        case .nameAsset:
+            var animation: LottieAnimation!
+            if let from = animationInfo.from {
+                let bundle: Bundle = (animationInfo.from != nil) ? Bundle(for: type(of: from)) : Bundle.main
+                animation = LottieAnimation.asset(animationInfo.name!, bundle: bundle, animationCache: DefaultAnimationCache.sharedCache)
+            } else {
+                animation = LottieAnimation.asset(animationInfo.name!, animationCache: DefaultAnimationCache.sharedCache)
             }
+            completion?(animation)
+        case .url:
+            if let stringUrl = animationInfo.url {
+                if let url = URL(string: stringUrl) {
+                    LottieAnimation.loadedFrom(url: url, closure: { animation in
+                        if let animation = animation {
+                            completion?(animation)
+                        }
+                    }, animationCache: DefaultAnimationCache.sharedCache)
+                }
+            }
+        case nil:
+            break
+        case .some(.none):
+            break
         }
     }
     
@@ -108,23 +166,22 @@ private extension AILottieAnimationView {
                                            duraction:TimeInterval? = nil,
                                            playCompletion: Lottie.LottieCompletionBlock? = nil) {
         let aiLottieAnimationView = AILottieAnimationView()
-        aiLottieAnimationView.animationView = LottieAnimationView()
-        let animationView = aiLottieAnimationView.animationView
+        let lottieAnimationView = aiLottieAnimationView.lottieAnimationView
         
         // animationView customization
-        animationView.animation = animation
+        lottieAnimationView.animation = animation
         if let loopMode = loopMode {
-            animationView.loopMode = loopMode
+            lottieAnimationView.loopMode = loopMode
         }
         if let contentMode = contentMode {
-            animationView.contentMode = contentMode
+            lottieAnimationView.contentMode = contentMode
         }
         if let userInteractionEnabled = userInteractionEnabled {
             aiLottieAnimationView.isUserInteractionEnabled = userInteractionEnabled
-            animationView.isUserInteractionEnabled = userInteractionEnabled
+            lottieAnimationView.isUserInteractionEnabled = userInteractionEnabled
         }
         if let animationSpeed = animationSpeed {
-            animationView.animationSpeed = animationSpeed
+            lottieAnimationView.animationSpeed = animationSpeed
         }
         
         //        let colorProvider = ColorValueProvider(UIColor.orange.lottieColorValue)
@@ -142,16 +199,16 @@ private extension AILottieAnimationView {
         }
         containingView.bringSubviewToFront(aiLottieAnimationView)
         
-        aiLottieAnimationView.addSubview(animationView)
-        animationView.snp.makeConstraints { (make) in
+        aiLottieAnimationView.addSubview(lottieAnimationView)
+        lottieAnimationView.snp.makeConstraints { (make) in
             make.edges.equalTo(0)
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
         }
-        containingView.bringSubviewToFront(animationView)
+        containingView.bringSubviewToFront(lottieAnimationView)
         
         
-        animationView.play { finished in
+        lottieAnimationView.play { finished in
             playCompletion?(finished)
         }
         
@@ -180,6 +237,6 @@ private extension AILottieAnimationView {
     }
     
     final class func clearLottieCache() {
-        LRUAnimationCache.sharedCache.clearCache()
+        DefaultAnimationCache.sharedCache.clearCache()
     }
 }
