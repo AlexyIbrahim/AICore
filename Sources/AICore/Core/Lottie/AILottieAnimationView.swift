@@ -36,7 +36,7 @@ public class AILottieAnimationInfo {
         self.url = nil
     }
     
-    public convenience init<T: AnyObject>(name: String, location: AILottieAnimationLocation, from: T? = nil) {
+    public convenience init(name: String, location: AILottieAnimationLocation, from: AnyObject? = nil) {
         self.init()
         
         switch location {
