@@ -11,17 +11,17 @@ import UIKit
 import SnapKit
 
 
-enum AILottieAnimationLocation {
-    case dir
-    case asset
-}
-
 public class AILottieAnimationInfo {
     enum AILottieAnimationSource {
         case none
         case nameDir
         case nameAsset
         case url
+    }
+    
+    enum AILottieAnimationLocation {
+        case dir
+        case asset
     }
     
     var source: AILottieAnimationSource!
@@ -36,18 +36,15 @@ public class AILottieAnimationInfo {
         self.url = nil
     }
     
-    convenience init<T: AnyObject>(nameInDir name: String, from: T? = nil) {
+    convenience init<T: AnyObject>(nameInDir name: String, location: AILottieAnimationLocation, from: T? = nil) {
         self.init()
         
-        self.source = .nameDir
-        self.name = name
-        self.from = from
-    }
-    
-    convenience init<T: AnyObject>(nameInAsset name: String, from: T? = nil) {
-        self.init()
-        
-        self.source = .nameAsset
+        switch location {
+        case .dir:
+            self.source = .nameDir
+        case .asset:
+            self.source = .nameAsset
+        }
         self.name = name
         self.from = from
     }
