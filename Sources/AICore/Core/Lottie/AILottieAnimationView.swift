@@ -64,12 +64,15 @@ public class AILottieAnimationView: UIView {
     
     public final class func showAnimation(animationInfo: AILottieAnimationInfo,
                                           inView containingView: UIView,
+                                          color: UIColor? = nil,
                                           loopMode: LottieLoopMode? = nil,
                                           contentMode: UIView.ContentMode? = nil,
                                           userInteractionEnabled: Bool? = nil,
                                           animationSpeed: CGFloat? = nil,
                                           duraction:TimeInterval? = nil,
-                                          playCompletion: Lottie.LottieCompletionBlock? = nil) {
+                                          playCompletion: Lottie.LottieCompletionBlock? = nil,
+                                          callback: ((AILottieAnimationView) -> Void)? = nil,
+                                          errorCallback: (() -> ())? = nil) {
         AILottieAnimationView.createAnimation(animationInfo: animationInfo, successCallback: { lottieAnimation in
             AILottieAnimationView.createAIAnimationView(animation: lottieAnimation,
                                                         loopMode: loopMode,
@@ -108,9 +111,11 @@ public class AILottieAnimationView: UIView {
                         }
                     }
                 }
+                
+                callback?(aiLottieAnimationView)
             }
         }, errorCallback: {
-            
+            errorCallback?()
         })
     }
     
@@ -197,6 +202,7 @@ public extension AILottieAnimationView {
     }
     
     final class func createAIAnimationView(animation: LottieAnimation,
+                                           color: UIColor? = nil,
                                            loopMode: LottieLoopMode? = nil,
                                            contentMode: UIView.ContentMode? = nil,
                                            userInteractionEnabled: Bool? = nil,
@@ -223,13 +229,14 @@ public extension AILottieAnimationView {
             lottieAnimationView.animationSpeed = animationSpeed
         }
         
-        callback?(aiLottieAnimationView)
+        if let color = color {
+            let keypath = AnimationKeypath(keys: ["**", "Fill", "**", "Color"])
+            let colorProvider = ColorValueProvider(color.lottieColorValue)
+            
+            lottieAnimationView.setValueProvider(colorProvider, keypath: keypath)
+        }
         
-        //        let colorProvider = ColorValueProvider(UIColor.orange.lottieColorValue)
-        ////        let keypath = AnimationKeypath(keys: ["**", "Fill", "**", "Color"])
-        //        /// A keypath that finds the color value for all `Fill 1` nodes.
-        //        let fillKeypath = AnimationKeypath(keypath: "**.Fill 1.Color")
-        //        animationView.setValueProvider(colorProvider, keypath: fillKeypath)
+        callback?(aiLottieAnimationView)
     }
     
     final class func aiLottieAnimationViews(in view: UIView) -> [AILottieAnimationView] {
