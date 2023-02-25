@@ -61,7 +61,7 @@ public class AILottieAnimationView: UIView {
     //    static let shared = AILottieAnimation()
     var lottieAnimationView: LottieAnimationView = LottieAnimationView()
     
-    public final class func showAnimation(animationInfo: AILottieAnimationInfo!,
+    public final class func showAnimation(animationInfo: AILottieAnimationInfo,
                                           inView containingView: UIView,
                                           loopMode: LottieLoopMode? = nil,
                                           contentMode: UIView.ContentMode? = nil,
