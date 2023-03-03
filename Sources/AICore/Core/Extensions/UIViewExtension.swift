@@ -37,7 +37,7 @@ public extension UIView {
         self.layer.shadowRadius = radius ?? 4
     }
     
-    func addRing(withColor color: UIColor, thickness: CGFloat, padding: CGFloat) -> CAShapeLayer {
+    func addRing(withColor color: UIColor, thickness: CGFloat, padding: CGFloat, masksToBounds: Bool? = nil) -> CAShapeLayer {
         let ringLayer = CAShapeLayer()
         let circlePath = UIBezierPath(ovalIn: self.bounds.insetBy(dx: padding, dy: padding))
         
@@ -45,6 +45,9 @@ public extension UIView {
         ringLayer.fillColor = UIColor.clear.cgColor
         ringLayer.strokeColor = color.cgColor
         ringLayer.lineWidth = thickness
+        if let masksToBounds = masksToBounds {
+            ringLayer.masksToBounds = masksToBounds
+        }
         
         self.layer.addSublayer(ringLayer)
         
