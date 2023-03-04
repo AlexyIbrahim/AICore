@@ -82,6 +82,18 @@ import UIKit
         return self
     }
     
+    @objc public final func addAttribute(forSubstring string:String? = nil, withBaselineOffset baselineOffset:CGFloat) -> AIAttributedString {
+        self.addAttribute(forSubstring: string, attributeKey: NSAttributedString.Key.baselineOffset, value: baselineOffset)
+        
+        return self
+    }
+    
+    @objc public final func addAttribute(forSubstring string:String? = nil, withParagprahStyle paragprahStyle: NSParagraphStyle) -> AIAttributedString {
+        self.addAttribute(forSubstring: string, attributeKey: NSAttributedString.Key.paragraphStyle, value: paragprahStyle)
+        
+        return self
+    }
+    
 //    final func clickable(onString string:String? = nil, _ callback: @escaping ((_ link: String) -> ())) -> AIAttributedString {
 //        var range = NSMakeRange(0, self.mainString.count)
 //        if let string = string {
