@@ -75,6 +75,7 @@ import UIKit
     
     @objc public final func addAttribute(forSubstring string:String? = nil, withUrl url:String) -> AIAttributedString {
         self.addAttribute(forSubstring: string, attributeName: convertFromNSAttributedStringKey(NSAttributedString.Key.link), value: URL.init(string: url)!)
+        self.addAttribute(forSubstring: string, withTextColor: .black)
         
         return self
     }
@@ -128,6 +129,15 @@ import UIKit
         self.attributedString.addAttribute(convertToNSAttributedStringKey(attributeName), value: value , range: range)
     }
     
+    private final func addAttributes(forSubstring string:String? = nil, attributes: [String: Any]) {
+        var range = NSMakeRange(0, self.mainString.count)
+        if let string = string {
+            range = (self.mainString as NSString).range(of: string)
+        }
+        self.attributedString.addAttributes(attributes.reduce(into: [NSAttributedString.Key: Any](), { result, pair in
+            result[convertToNSAttributedStringKey(pair.key)] = pair.value
+        }), range: range)
+    }
     
     public final func text(alignment: NSTextAlignment? = nil) -> NSAttributedString {
 //        let paragraph = NSMutableParagraphStyle()
