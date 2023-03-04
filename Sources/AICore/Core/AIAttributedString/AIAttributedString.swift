@@ -39,7 +39,7 @@ import UIKit
     }
     
     @objc public final func addAttribute(forSubstring string:String? = nil, withTextColor textColor:UIColor) -> AIAttributedString {
-        self.addAttribute(forSubstring: string, attributeName: convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor), value: textColor)
+        self.addAttribute(forSubstring: string, attributeKey: NSAttributedString.Key.foregroundColor, value: textColor)
         
         return self
     }
@@ -47,35 +47,34 @@ import UIKit
     @objc public final func addAttribute(alignment: NSTextAlignment) -> AIAttributedString {
         let paragraph = NSMutableParagraphStyle()
         paragraph.alignment = alignment
-        self.addAttribute(forSubstring: nil, attributeName: convertFromNSAttributedStringKey(NSAttributedString.Key.paragraphStyle), value: paragraph)
+        self.addAttribute(forSubstring: nil, attributeKey: NSAttributedString.Key.paragraphStyle, value: paragraph)
         
         return self
     }
     
     @objc public final func addAttribute(forSubstring string:String? = nil, withFont font:UIFont) -> AIAttributedString {
-        self.addAttribute(forSubstring: string, attributeName: convertFromNSAttributedStringKey(NSAttributedString.Key.font), value: font)
+        self.addAttribute(forSubstring: string, attributeKey: NSAttributedString.Key.font, value: font)
         
         return self
     }
     
     @objc public final func addAttribute(forSubstring string:String? = nil, withUnderlineAreaColor color:UIColor? = nil) -> AIAttributedString {
-        self.addAttribute(forSubstring: string, attributeName: convertFromNSAttributedStringKey(NSAttributedString.Key.underlineStyle), value: NSUnderlineStyle.single.rawValue)
+        self.addAttribute(forSubstring: string, attributeKey: NSAttributedString.Key.underlineStyle, value: NSUnderlineStyle.single.rawValue)
         if let color = color {
-            self.addAttribute(forSubstring: string, attributeName: convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor), value: color)
+            self.addAttribute(forSubstring: string, attributeKey: NSAttributedString.Key.foregroundColor, value: color)
         }
         
         return self
     }
     
     @objc public final func addAttribute(forSubstring string:String? = nil, withBackgroundColor backgroundColor:UIColor) -> AIAttributedString {
-        self.addAttribute(forSubstring: string, attributeName: convertFromNSAttributedStringKey(NSAttributedString.Key.backgroundColor), value: backgroundColor)
+        self.addAttribute(forSubstring: string, attributeKey: NSAttributedString.Key.backgroundColor, value: backgroundColor)
         
         return self
     }
     
     @objc public final func addAttribute(forSubstring string:String? = nil, withUrl url:String) -> AIAttributedString {
-        self.addAttribute(forSubstring: string, attributeName: convertFromNSAttributedStringKey(NSAttributedString.Key.link), value: URL.init(string: url)!)
-        self.addAttribute(forSubstring: string, withTextColor: .black)
+        self.addAttribute(forSubstring: string, attributeKey: NSAttributedString.Key.link, value: URL.init(string: url)!)
         
         return self
     }
@@ -122,21 +121,29 @@ import UIKit
     }
     
     private final func addAttribute(forSubstring string:String? = nil, attributeName:String, value: Any) {
+        self.addAttribute(forSubstring: string, attributeKey: convertToNSAttributedStringKey(attributeName), value: value)
+    }
+    
+    private final func addAttribute(forSubstring string:String? = nil, attributeKey:NSAttributedString.Key, value: Any) {
         var range = NSMakeRange(0, self.mainString.count)
         if let string = string {
             range = (self.mainString as NSString).range(of: string)
         }
-        self.attributedString.addAttribute(convertToNSAttributedStringKey(attributeName), value: value , range: range)
+        self.attributedString.addAttribute(attributeKey, value: value , range: range)
     }
     
     private final func addAttributes(forSubstring string:String? = nil, attributes: [String: Any]) {
+        self.addAttributes(forSubstring: string, attributes: attributes.reduce(into: [NSAttributedString.Key: Any](), { result, pair in
+            result[convertToNSAttributedStringKey(pair.key)] = pair.value
+        }))
+    }
+    
+    private final func addAttributes(forSubstring string:String? = nil, attributes: [NSAttributedString.Key: Any]) {
         var range = NSMakeRange(0, self.mainString.count)
         if let string = string {
             range = (self.mainString as NSString).range(of: string)
         }
-        self.attributedString.addAttributes(attributes.reduce(into: [NSAttributedString.Key: Any](), { result, pair in
-            result[convertToNSAttributedStringKey(pair.key)] = pair.value
-        }), range: range)
+        self.attributedString.addAttributes(attributes, range: range)
     }
     
     public final func text(alignment: NSTextAlignment? = nil) -> NSAttributedString {
