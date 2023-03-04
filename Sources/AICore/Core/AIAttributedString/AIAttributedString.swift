@@ -73,8 +73,11 @@ import UIKit
         return self
     }
     
-    @objc public final func addAttribute(forSubstring string:String? = nil, withUrl url:String) -> AIAttributedString {
+    @objc public final func addAttribute(forSubstring string:String? = nil, withUrl url:String, color: UIColor? = nil) -> AIAttributedString {
         self.addAttribute(forSubstring: string, attributeKey: NSAttributedString.Key.link, value: URL.init(string: url)!)
+        if let color = color {
+            self.addAttribute(forSubstring: string, attributeKey: NSAttributedString.Key.foregroundColor, value: color)
+        }
         
         return self
     }
