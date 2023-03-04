@@ -33,7 +33,7 @@ public class AIAlert {
         }
     }
     
-    public final class func displayNativeMessage(message: String, withTitle title:String? = nil, style: UIAlertController.Style = .alert, buttons: [AlertButton], textFields: [AlertTextField]? = nil) {
+    public final class func displayNativeMessage(message: String? = nil, withTitle title: String? = nil, style: UIAlertController.Style = .alert, buttons: [AlertButton], textFields: [AlertTextField]? = nil) {
         DispatchQueue.main({
             guard let viewController: UIViewController = Utils.topMostWindowController() else {
                 return
@@ -67,7 +67,7 @@ public class AIAlert {
         })
     }
     
-    public final class func displayNativeMessage(message: String, withTitle title:String? = nil, style: UIAlertController.Style = .alert, buttons: AlertButton..., textFields: AlertTextField?...) {
+    public final class func displayNativeMessage(message: String? = nil, withTitle title: String? = nil, style: UIAlertController.Style = .alert, buttons: AlertButton..., textFields: AlertTextField?...) {
         let textfields = textFields.compactMap { $0 }
         displayNativeMessage(message: message, withTitle: title, style: style, buttons: buttons, textFields: textfields)
     }
