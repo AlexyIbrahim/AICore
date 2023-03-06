@@ -10,6 +10,7 @@ import AVFoundation
 import UIKit
 import UserNotifications
 import CoreLocation
+import Contacts
 
 public class AIPermission: NSObject {
     static let shared = AIPermission()
@@ -133,5 +134,24 @@ extension AIPermission: CLLocationManagerDelegate {
     ) {
         // Handle failure to get a user’s location
         AIPermission.locationManagerLocationCallback?(nil)
+    }
+}
+
+
+extension AIPermission {
+    public class func requestContactsPermission(callback: @escaping GenericClosure<Bool>) {
+        let contactStore = CNContactStore()
+
+        // Request permission to access contacts
+        contactStore.requestAccess(for: .contacts) { (granted, error) in
+            if granted {
+                // Access granted, perform the contacts operation here
+                callback(granted)
+            } else {
+                // Access denied
+                callback(granted)
+                print("Access to contacts denied")
+            }
+        }
     }
 }
