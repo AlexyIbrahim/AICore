@@ -184,7 +184,7 @@ public class Utils {
         UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
     }
     
-    public final class func playSound(filename: String, ext: String) {
+    public final class func playSound(filename: String, ext: String, volume: Float? = nil) {
 //        if let bundle = Bundle.main.path(forResource: "91926__tim-kahn__ding", ofType: "mp3") {
         
 //        guard let url = Bundle.main.url(forResource: filename, withExtension: ext) else { return }
@@ -195,6 +195,9 @@ public class Utils {
 
             guard let player = self.shared.avPlayer else { return }
             player.numberOfLoops = 0
+            if let volume = volume {
+                player.volume = volume
+            }
             DispatchQueue.main.async {
                 player.prepareToPlay()
                 player.play()
