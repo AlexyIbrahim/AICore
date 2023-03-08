@@ -187,10 +187,11 @@ public class Utils {
     public final class func playSound(filename: String, ext: String) {
 //        if let bundle = Bundle.main.path(forResource: "91926__tim-kahn__ding", ofType: "mp3") {
         
-        guard let url = Bundle.main.url(forResource: filename, withExtension: ext) else { return }
-
+//        guard let url = Bundle.main.url(forResource: filename, withExtension: ext) else { return }
+        guard let path = Bundle.main.path(forResource: filename, ofType: ext) else { return }
+        
         do {
-            self.shared.avPlayer = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.mp3.rawValue)
+            self.shared.avPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: path), fileTypeHint: AVFileType.mp3.rawValue)
 
             guard let player = self.shared.avPlayer else { return }
             player.numberOfLoops = 0
