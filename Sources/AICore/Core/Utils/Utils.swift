@@ -184,51 +184,13 @@ public class Utils {
         UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
     }
     
-    public final class func playSound() {
-        
+    public final class func playSound(filename: String, ext: String) {
 //        if let bundle = Bundle.main.path(forResource: "91926__tim-kahn__ding", ofType: "mp3") {
-//          let backgroundMusic = NSURL(fileURLWithPath: bundle)
-//            do {
-//                self.shared.avPlayer = try AVAudioPlayer(contentsOf: backgroundMusic as URL)
-//                guard let audioPlayer = self.shared.avPlayer else {return}
-//                audioPlayer.numberOfLoops = 0
-//                audioPlayer.prepareToPlay()
-//                audioPlayer.play()
-//            } catch {
-//                print(error)
-//            }}
-//
-//        do{
-//            if #available(iOS 10.0, *) {
-//                try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.mixWithOthers])
-//            } else {
-//                // Fallback on earlier versions
-//            }
-//            print("Playback ok")
-//            try AVAudioSession.sharedInstance().setActive(true)
-//            print("session is active")
-//
-//            guard let player = self.shared.avPlayer else{
-//                return
-//            }
-//
-//            player.play()
-//        }
-//        catch {
-//            print ("oops")
-//        }
         
-        guard let url = Bundle.main.url(forResource: "91926__tim-kahn__ding", withExtension: "mp3") else { return }
+        guard let url = Bundle.main.url(forResource: filename, withExtension: ext) else { return }
 
         do {
-//            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
-//            try AVAudioSession.sharedInstance().setActive(true)
-
-            /* The following line is required for the player to work on iOS 11. Change the file type accordingly*/
             self.shared.avPlayer = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.mp3.rawValue)
-
-            /* iOS 10 and earlier require the following line:
-            player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3) */
 
             guard let player = self.shared.avPlayer else { return }
             player.numberOfLoops = 0
