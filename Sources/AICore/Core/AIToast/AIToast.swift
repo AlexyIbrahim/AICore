@@ -44,7 +44,7 @@ public class AIToast {
     ///   - loafjetView: UIView on which the Loaf is to be presented
     ///   - alphaValue: The opacity value of the background colour parameter, specified as a value from 0.0 to 1.0
     
-    public static func plainLoaf(message: String, position:LoafPosition, loafWidth:CGFloat? = nil , loafHeight:CGFloat? = nil,cornerRadius: CGFloat? = nil, fontStyle: String? = nil, fontSize: CGFloat? = nil, bgColor: UIColor? = nil,fontColor: UIColor? = nil, alphaValue:CGFloat? = nil, loafImage: String? = nil, animationDirection: LoafAnimation , duration: TimeInterval? = nil) {
+    public static func plainLoaf(message: String, position:LoafPosition, loafWidth:CGFloat? = nil , loafHeight:CGFloat? = nil,cornerRadius: CGFloat? = nil, fontStyle: String? = nil, fontSize: CGFloat? = nil, bgColor: UIColor? = nil,fontColor: UIColor? = nil, alphaValue:CGFloat? = nil, loafImage: String? = nil, animationDirection: LoafAnimation , duration: TimeInterval? = nil, offset: CGFloat? = nil) {
         
         let loafWidth = loafWidth ?? 240
         let loafHeight = loafHeight ?? 40
@@ -95,7 +95,7 @@ public class AIToast {
         }
         
         // Animation method call
-        Animation(Direction: animationDirection, View: loafjetView, DelayTime: duration, LoafLabel: plainLoafLabel, LoafView: plainLoafView, LoafImageView: plainLoafImageView)
+        Animation(Direction: animationDirection, View: loafjetView, DelayTime: duration, LoafLabel: plainLoafLabel, LoafView: plainLoafView, LoafImageView: plainLoafImageView, offset: offset)
         
         // ADDING LOAF VIEW TO THE PRESENTATION VIEW
         plainLoafView.addSubview(plainLoafLabel)
