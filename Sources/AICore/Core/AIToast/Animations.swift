@@ -6,7 +6,7 @@ import UIKit
 extension AIToast {
     
     // Loaf Animation
-    static func Animation(Direction: LoafAnimation, View: UIView, DelayTime: TimeInterval, LoafLabel: UILabel, LoafView: UIView, LoafImageView: UIImageView?){
+    static func Animation(Direction: LoafAnimation, View: UIView, DelayTime: TimeInterval, LoafLabel: UILabel, LoafView: UIView, LoafImageView: UIImageView?, offset: CGFloat? = nil){
         
         if Direction == .left {
             LoafView.center.x = View.frame.origin.x - LoafLabel.frame.width
@@ -50,7 +50,7 @@ extension AIToast {
             LoafView.center.x = View.center.x
             UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut) {
                 // TOP -> BOTTOM
-                LoafView.frame.origin.y = 60
+                LoafView.frame.origin.y = offset ?? 60
             }completion: { _ in
                 UIView.animate(withDuration: 1.5, delay: DelayTime, options: .curveEaseOut) {
                     // BOTTOM -> TOP
