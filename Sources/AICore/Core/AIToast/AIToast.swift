@@ -101,6 +101,7 @@ public class AIToast {
         plainLoafView.addSubview(plainLoafLabel)
         plainLoafView.addSubview(plainLoafImageView)
         loafjetView.addSubview(plainLoafView)
+        loafjetView.bringSubviewToFront(plainLoafView)
         
     }
     
