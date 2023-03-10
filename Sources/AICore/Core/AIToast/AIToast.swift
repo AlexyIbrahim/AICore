@@ -57,7 +57,7 @@ public class AIToast {
         let loafImage = loafImage ?? ""
         let duration = duration ?? 3.0
         
-        guard let loafjetView = Utils.currentViewController()?.view else { return }
+        guard let loafjetView = Utils.topMostWindowController()?.view else { return }
         
         guard (loafHeight >= 40 && loafHeight <= 90 && loafWidth >= 240) else {
             print("Pod Loafjet: Plain Loaf must have Height varying from 90 - 40 and Width greater than 240")
