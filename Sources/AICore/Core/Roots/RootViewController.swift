@@ -9,10 +9,12 @@ import Foundation
 import UIKit
 import ProgressHUD
 import RxSwift
+import Combine
 
 open class RootViewController: UIViewController {
 
     public let disposeBag = DisposeBag()
+    public let observers: [AnyCancellable] = []
     
     open override func viewDidLoad() {
         super.viewDidLoad()
