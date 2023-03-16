@@ -22,6 +22,10 @@ public class FirebasePerformanceHelper {
         return trace
     }
     
+    public class func stopTrace(trace: FirebasePerformance.Trace) {
+        trace.stop()
+    }
+    
     public class func incrementMetric(forTrace trace: FirebasePerformance.Trace, metric: String, by: Int64? = nil) {
         trace.incrementMetric(metric, by: by ?? 1)
     }
