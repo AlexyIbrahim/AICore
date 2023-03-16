@@ -23,34 +23,42 @@ public class FirebasePerformanceHelper {
     }
     
     public class func stopTrace(trace: FirebasePerformance.Trace?) {
-        trace?.stop()
+        guard let trace = trace else { return }
+        trace.stop()
     }
     
     public class func incrementMetric(forTrace trace: FirebasePerformance.Trace?, metric: String, by: Int64? = nil) {
-        trace?.incrementMetric(metric, by: by ?? 1)
+        guard let trace = trace else { return }
+        trace.incrementMetric(metric, by: by ?? 1)
     }
     
     public class func valueForMetric(forTrace trace: FirebasePerformance.Trace?, metric: String) -> Int64? {
-        trace?.valueForMetric(metric)
+        guard let trace = trace else { return nil }
+        return trace.valueForMetric(metric)
     }
     
     public class func valueForAttribute(forTrace trace: FirebasePerformance.Trace?, attribute: String) -> String? {
-        trace?.value(forAttribute: attribute)
+        guard let trace = trace else { return nil }
+        return trace.value(forAttribute: attribute)
     }
     
     public class func removeAttribute(forTrace trace: FirebasePerformance.Trace?, attribute: String) {
-        trace?.removeAttribute(attribute)
+        guard let trace = trace else { return }
+        trace.removeAttribute(attribute)
     }
     
     public class func attributes(forTrace trace: FirebasePerformance.Trace?) -> [String: String]? {
-        trace?.attributes
+        guard let trace = trace else { return nil }
+        return trace.attributes
     }
     
     public class func setMetric(forTrace trace: FirebasePerformance.Trace?, metric: String, value: Int64) {
-        trace?.setValue(value, forMetric: metric)
+        guard let trace = trace else { return }
+        trace.setValue(value, forMetric: metric)
     }
     
     public class func setAttribute(forTrace trace: FirebasePerformance.Trace?, attribute: String, value: String) {
-        trace?.setValue(value, forAttribute: attribute)
+        guard let trace = trace else { return }
+        trace.setValue(value, forAttribute: attribute)
     }
 }
