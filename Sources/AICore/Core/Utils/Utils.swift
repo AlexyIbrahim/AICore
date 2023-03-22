@@ -62,7 +62,7 @@ public class Utils {
     }
     
     //MARK: Remove user default
-    public final class func removeUserDefaul(key:String) {
+    public final class func removeUserDefault(key:String) {
         UserDefaults.standard.removeObject(forKey: key)
     }
     

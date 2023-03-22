@@ -48,7 +48,7 @@ extension AIToast {
         }
         else if Direction == .top {
             LoafView.center.x = View.center.x
-            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut) {
+            UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut) {
                 // TOP -> BOTTOM
                 LoafView.frame.origin.y = offset ?? 60
             }completion: { _ in
