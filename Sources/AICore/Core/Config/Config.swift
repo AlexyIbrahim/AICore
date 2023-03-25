@@ -8,7 +8,7 @@ import AINetworkCalls
     {
         let envString = (Utils.readFromPropertyList("Config", key: "ENVIRONMENT") as! String)
         let env = Environment(rawValue: envString)
-        return setEnvironment(env ?? .prod)
+        return setEnvironment(env)
     }()
 }
 
@@ -104,13 +104,13 @@ public extension Config {
     // MARK: API Endpoint
     static var API_ENDPOINT: String {
         get {
-            return Utils.readDynamicConfigFromPropertyListForKey("API_ENDPOINT", subKey: Config.environmentConfigKeyName)
+            return Utils.readDynamicConfigFromPropertyListForKey("API_ENDPOINT", subKey: Config.environmentConfigKeyName)!
         }
     }
     
     static var LOG_PRINTS: Bool {
         get {
-            return Utils.readDynamicConfigFromPropertyListForKey("LOG_PRINTS")
+            return Utils.readDynamicConfigFromPropertyListForKey("LOG_PRINTS") ?? false
         }
     }
 }

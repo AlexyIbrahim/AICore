@@ -4,7 +4,7 @@ import UIKit
 
 //MARK: - Enumeration Keys
 
-extension AIToast {
+extension AIToastTest {
     
     //MARK: - Position Method
     public enum LoafPosition {

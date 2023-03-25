@@ -3,7 +3,7 @@ import Foundation
 import UIKit
 
 //MARK: - Blur effect method
-extension AIToast {
+extension AIToastTest {
    
      static func applyBlurEffect(effect: UIBlurEffect.Style?, view: UIView){
         guard let effect = effect else {

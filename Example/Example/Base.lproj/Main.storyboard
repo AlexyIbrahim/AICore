@@ -17,25 +17,44 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Kty-LS-va3">
-                                <rect key="frame" x="16" y="409" width="361" height="34.333333333333314"/>
+                                <rect key="frame" x="16" y="391.66666666666669" width="361" height="68.666666666666686"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A9g-Hl-b3C" customClass="AIButton">
                                         <rect key="frame" x="0.0" y="0.0" width="361" height="34.333333333333336"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="notification"/>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l2V-aD-Uje" customClass="AIButton">
+                                        <rect key="frame" x="0.0" y="34.333333333333314" width="361" height="34.333333333333343"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="notification 2"/>
+                                    </button>
                                 </subviews>
                             </stackView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z5x-4Z-j0j" customClass="AISwitch" customModule="AICore">
+                                <rect key="frame" x="76.666666666666686" y="59" width="240" height="128"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="128" id="p51-bT-aao"/>
+                                    <constraint firstAttribute="width" constant="240" id="rqF-HD-rgC"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="Kty-LS-va3" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="3JW-mZ-fM0"/>
                             <constraint firstItem="Kty-LS-va3" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="70J-WS-Ttl"/>
+                            <constraint firstItem="z5x-4Z-j0j" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="HLe-77-8no"/>
+                            <constraint firstItem="z5x-4Z-j0j" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="KGQ-Qc-d9g"/>
                             <constraint firstItem="Kty-LS-va3" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="dns-Pm-f2N"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Kty-LS-va3" secondAttribute="trailing" constant="16" id="y40-TW-pEX"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="button_notification" destination="A9g-Hl-b3C" id="Cmv-AU-OWg"/>
+                        <outlet property="button_notification2" destination="l2V-aD-Uje" id="u9I-qC-9ex"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

@@ -108,18 +108,18 @@ public class Utils {
         return ""
     }
     
-    public class func readDynamicConfigFromPropertyListForKey(_ key: String) -> Bool {
-        let value = (self.readFromPropertyList("Config", key: key) as! Bool)
+    public class func readDynamicConfigFromPropertyListForKey(_ key: String) -> Bool? {
+        let value = (self.readFromPropertyList("Config", key: key) as? Bool)
         return value
     }
     
-    public class func readDynamicConfigFromPropertyListForKey(_ key: String) -> String {
-        let value = (self.readFromPropertyList("Config", key: key) as! String)
+    public class func readDynamicConfigFromPropertyListForKey(_ key: String) -> String? {
+        let value = (self.readFromPropertyList("Config", key: key) as? String)
         return value
     }
     
-    public class func readDynamicConfigFromPropertyListForKey(_ key: String, subKey: String) -> String {
-        let value = (self.readFromPropertyList("Config", key: key) as! [String: Any])[subKey] as! String
+    public class func readDynamicConfigFromPropertyListForKey(_ key: String, subKey: String) -> String? {
+        let value = (self.readFromPropertyList("Config", key: key) as! [String: Any])[subKey] as? String
         return value
     }
     

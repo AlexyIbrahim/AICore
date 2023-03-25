@@ -3,7 +3,7 @@ import Foundation
 import UIKit
 
 //MARK: - Animation Methods
-extension AIToast {
+extension AIToastTest {
     
     // Loaf Animation
     static func Animation(Direction: LoafAnimation, View: UIView, DelayTime: TimeInterval, LoafLabel: UILabel, LoafView: UIView, LoafImageView: UIImageView?, offset: CGFloat? = nil){

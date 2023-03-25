@@ -1,7 +1,7 @@
 
 import Foundation
 
-extension AIToast {
+extension AIToastTest {
     static func getImageDynamics(height: CGFloat, imageName: String) -> (imageLength:CGFloat, labelSpace:CGFloat){
         var dynamicImageSize:CGFloat = 0
         var labelXAxis:CGFloat = 0

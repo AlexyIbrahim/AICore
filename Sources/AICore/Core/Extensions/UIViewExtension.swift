@@ -24,8 +24,14 @@ public extension UIView {
     }
     
     func removeSubviews() {
-        for subView in self.subviews {
-            subView.removeFromSuperview()
+        self.subviews.forEach {
+            $0.removeFromSuperview()
+        }
+    }
+    
+    func safelyRemoveFromSuperview() {
+        if self.superview != nil {
+            self.removeFromSuperview()
         }
     }
     

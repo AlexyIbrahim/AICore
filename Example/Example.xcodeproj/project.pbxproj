@@ -13,6 +13,7 @@
 		7BD737D329CDE23D003432FC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7BD737D129CDE23D003432FC /* Main.storyboard */; };
 		7BD737D529CDE23E003432FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7BD737D429CDE23E003432FC /* Assets.xcassets */; };
 		7BD737D829CDE23E003432FC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7BD737D629CDE23E003432FC /* LaunchScreen.storyboard */; };
+		7BD737E229CDE898003432FC /* AICore in Frameworks */ = {isa = PBXBuildFile; productRef = 7BD737E129CDE898003432FC /* AICore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7BD737E229CDE898003432FC /* AICore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -44,6 +46,7 @@
 				7BD737DF29CDE254003432FC /* AICore */,
 				7BD737CA29CDE23D003432FC /* Example */,
 				7BD737C929CDE23D003432FC /* Products */,
+				7BD737E029CDE855003432FC /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -69,6 +72,13 @@
 			path = Example;
 			sourceTree = "<group>";
 		};
+		7BD737E029CDE855003432FC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -85,6 +95,9 @@
 			dependencies = (
 			);
 			name = Example;
+			packageProductDependencies = (
+				7BD737E129CDE898003432FC /* AICore */,
+			);
 			productName = Example;
 			productReference = 7BD737C829CDE23D003432FC /* Example.app */;
 			productType = "com.apple.product-type.application";
@@ -360,6 +373,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7BD737E129CDE898003432FC /* AICore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AICore;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 7BD737C029CDE23D003432FC /* Project object */;
 }
