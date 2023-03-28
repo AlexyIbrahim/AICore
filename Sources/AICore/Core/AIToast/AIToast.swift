@@ -216,7 +216,7 @@ extension AIToast {
                     switch position {
                     case .top:
                         make.centerX.equalTo(superview)
-                        toast.constraint = make.topMargin.equalTo(superview).offset(toast.bounds.height + (offset ?? 40)).constraint
+                        toast.constraint = make.topMargin.equalTo(superview).offset(toast.bounds.height + (offset ?? 10)).constraint
                         make.height.equalTo(46)
                         make.width.equalTo(181)
                     case .center:
