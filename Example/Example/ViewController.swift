@@ -18,11 +18,12 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         self.button_notification.addAction {
-            AIToast.show(message: "Hello world", position: .top, backgroundColor: .blackWhite, textColor: .whiteBlack, leftImage: nil)
+            AIToast.show(title: "Pinged", subtitle: "Alexy Ibrahim", position: .top)
+
         }
         
         self.button_notification2.addAction {
-            AIToast.show(message: "Successsss", position: .top, backgroundColor: .success, textColor: .blackWhite, leftImage: nil)
+            AIToast.show(title: "Error", subtitle: "Alexy Ibrahim", position: .top, backgroundColor: .error)
         }
     }
 
