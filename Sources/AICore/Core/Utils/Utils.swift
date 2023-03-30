@@ -66,6 +66,15 @@ public class Utils {
         UserDefaults.standard.removeObject(forKey: key)
     }
     
+    //MARK: Key exists
+    public final class func keyExists(key: String) -> Bool {
+        if let _ = UserDefaults.standard.object(forKey: key) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
     public final class func topMostWindowController() -> UIViewController? {
         
         var topController = UIApplication.shared.keyWindow?.rootViewController
