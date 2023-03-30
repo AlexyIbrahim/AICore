@@ -123,6 +123,11 @@ public class Utils {
         return value
     }
     
+    public class func readDynamicConfigFromPropertyListForKey(_ key: String, subKey: String) -> Bool? {
+        let value = (self.readFromPropertyList("Config", key: key) as! [String: Any])[subKey] as? Bool
+        return value
+    }
+    
     public final class func appVersion() -> String {
         let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String ?? ""
         return appVersion
