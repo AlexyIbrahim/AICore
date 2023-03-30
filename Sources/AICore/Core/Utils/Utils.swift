@@ -67,7 +67,7 @@ public class Utils {
     }
     
     //MARK: Key exists
-    public final class func keyExists(key: String) -> Bool {
+    public final class func userDefaultKeyExists(key: String) -> Bool {
         if let _ = UserDefaults.standard.object(forKey: key) {
             return true
         } else {
