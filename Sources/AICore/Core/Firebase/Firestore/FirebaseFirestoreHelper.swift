@@ -74,14 +74,14 @@ public class FirebaseFirestoreHelper {
         }
     }
     
-    public final class func readDocument(collectionName: String, documentId: String, source: FirestoreSource? = nil, callback: GenericClosure<[String: Any]>? = nil, errorCallback: GenericClosure<Error>? = nil, emptyDataCallback: VoidClosure? = nil) {
+    public final class func readDocument(collectionName: String, documentId: String, source: FirestoreSource? = nil, callback: GenericClosure<[String: Any]>? = nil, errorCallback: GenericClosure<Error>? = nil, emptyDataCallback: GenericClosure<Error?>? = nil) {
         let docRef = documentRef(collectionName: collectionName, documentId: documentId)
         docRef.getDocument(source: source ?? .default) { (document, error) in
             if let document = document, document.exists {
                 let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
                 guard let data = document.data() else {
                     print("\(docRef.path) - Document data was empty.")
-                    emptyDataCallback?()
+                    emptyDataCallback?(error)
                     return
                 }
                 callback?(data)
@@ -91,7 +91,7 @@ public class FirebaseFirestoreHelper {
         }
     }
     
-    public final class func readDocumentRealmtime(collectionName: String, documentId: String, includeMetadataChanges: Bool? = nil, callback: GenericClosure<[String: Any]>? = nil, errorCallback: GenericClosure<Error>? = nil, emptyDataCallback: VoidClosure? = nil) -> ListenerRegistration {
+    public final class func readDocumentRealmtime(collectionName: String, documentId: String, includeMetadataChanges: Bool? = nil, callback: GenericClosure<[String: Any]>? = nil, errorCallback: GenericClosure<Error>? = nil, emptyDataCallback: GenericClosure<Error?>? = nil) -> ListenerRegistration {
         let docRef = documentRef(collectionName: collectionName, documentId: documentId)
         let listener = docRef
             .addSnapshotListener(includeMetadataChanges: includeMetadataChanges ?? false) { documentSnapshot, error in
@@ -102,7 +102,7 @@ public class FirebaseFirestoreHelper {
                 }
                 guard let data = document.data() else {
                     print("\(docRef.path) - Document data was empty.")
-                    emptyDataCallback?()
+                    emptyDataCallback?(error)
                     return
                 }
                 callback?(data)
