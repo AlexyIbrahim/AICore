@@ -17,16 +17,15 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
-        .package(url: "https://gitlab.com/alexyib/ainetworkcalls.git", from: "1.4.6"),
+        .package(url: "https://gitlab.com/alexyib/ainetworkcalls.git", from: "1.0.0"),
         .package(url: "https://github.com/relatedcode/ProgressHUD.git", from: "13.0.0"),
-        .package(url: "https://github.com/SnapKit/SnapKit.git", from: "5.0.0"),
+        .package(url: "https://github.com/SnapKit/SnapKit.git", from: "5.6.0"),
         .package(url: "https://gitlab.com/alexyib/aienvironmentkit.git", from: "1.0.0"),
         .package(url: "https://github.com/airbnb/lottie-ios.git", from: "4.0.0"),
         .package(url: "https://github.com/getsentry/sentry-cocoa.git", from: "7.0.0"),
-        .package(url: "https://github.com/ReactiveX/RxSwift.git", from: "6.0.0"),
         .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "9.0.0"),
         .package(url: "https://github.com/malcommac/SwiftDate.git", from: "7.0.0"),
-        .package(url: "https://github.com/onevcat/Kingfisher.git", from: "7.6.2"),
+        .package(url: "https://github.com/onevcat/Kingfisher.git", from: "7.0.0"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -40,10 +39,6 @@ let package = Package(
                 .product(name: "ProgressHUD", package: "ProgressHUD"),
                 .product(name: "Lottie", package: "lottie-ios"),
                 .product(name: "Sentry", package: "sentry-cocoa"),
-                .product(name: "RxSwift", package: "RxSwift"),
-                .product(name: "RxCocoa", package: "RxSwift"),
-                .product(name: "RxRelay", package: "RxSwift"),
-                .product(name: "RxBlocking", package: "RxSwift"),
                 .product(name: "FirebaseAnalyticsSwift", package: "firebase-ios-sdk"),
                 .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
                 .product(name: "FirebaseCrashlytics", package: "firebase-ios-sdk"),
