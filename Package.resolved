@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://gitlab.com/alexyib/ainetworkcalls.git",
       "state" : {
-        "revision" : "bdbe8794a96ce2be61c537c272bd6235c12adf76",
-        "version" : "1.4.8"
+        "revision" : "934adb414e9676c9791547c8f5ff7dc479a7581b",
+        "version" : "1.5.0"
       }
     },
     {
@@ -151,15 +151,6 @@
       "state" : {
         "revision" : "ec957ccddbcc710ccc64c9dcbd4c7006fcf8b73a",
         "version" : "2.2.0"
-      }
-    },
-    {
-      "identity" : "rxswift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ReactiveX/RxSwift.git",
-      "state" : {
-        "revision" : "b4307ba0b6425c0ba4178e138799946c3da594f8",
-        "version" : "6.5.0"
       }
     },
     {
