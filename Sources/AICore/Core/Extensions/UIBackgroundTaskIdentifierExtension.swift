@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-extension UIBackgroundTaskIdentifier {
+public extension UIBackgroundTaskIdentifier {
     func end() {
         UIApplication.shared.endBackgroundTask(self)
     }
