@@ -9,9 +9,9 @@ import Foundation
 
 public extension DispatchQueue {
 
-    static func background(background: (()->Void)? = nil, delay: Double? = nil, completionOnMain: (() -> Void)? = nil, completionDelay: Double? = nil) {
+    static func background(background: @escaping (() -> Void), delay: Double? = nil, completionOnMain: (() -> Void)? = nil, completionDelay: Double? = nil) {
         DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + (delay ?? 0.0), execute: {
-            background?()
+            background()
             if let completion = completionOnMain {
                 DispatchQueue.main.asyncAfter(deadline: .now() + (delay ?? 0.0), execute: {
                     completion()
@@ -20,12 +20,10 @@ public extension DispatchQueue {
         })
     }
     
-    static func main(_ code: (() -> Void)? = nil, delay: Double? = nil) {
-        if let code = code {
-            DispatchQueue.main.asyncAfter(deadline: .now() + (delay ?? 0.0), execute: {
-                code()
-            })
-        }
+    static func main(_ code: @escaping (() -> Void), delay: Double? = nil) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + (delay ?? 0.0), execute: {
+            code()
+        })
     }
 
 }
