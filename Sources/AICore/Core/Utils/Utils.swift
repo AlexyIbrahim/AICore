@@ -521,9 +521,9 @@ public class Utils {
         }
     }
     
-    public final class func displayErrorDebuggingMessage(name: String, body: String? = nil) {
+    public final class func displayErrorDebuggingMessage(name: String? = nil, body: String? = nil) {
         if Session.errorDebuggingEnabled {
-            Utils.scheduleNotification(task: ReminderTask.init(name: name,
+            Utils.scheduleNotification(task: ReminderTask.init(name: (name != nil) ? "error: \(name!)": "error",
                                                                body: body,
                                                                reminder: Reminder.init(timeInterval: 0.1,
                                                                                        date: nil,
