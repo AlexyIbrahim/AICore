@@ -29,6 +29,23 @@ public class Session: SessionExtensions {
         }
     }
     
+    var errorDebuggingEnabled: Bool {
+        get {
+            Session.getLocalValue(keyPath: \.errorDebuggingEnabled) ?? false
+        }
+        set {
+            Session.saveLocally(keyPath: \.errorDebuggingEnabled, withValue: newValue)
+        }
+    }
+    public static var errorDebuggingEnabled: Bool {
+        get {
+            Session.shared.errorDebuggingEnabled
+        }
+        set {
+            Session.shared.errorDebuggingEnabled = newValue
+        }
+    }
+    
     var isLoggedIn: Bool {
         get {
             Session.getLocalValue(keyPath: \.isLoggedIn) ?? false
@@ -53,6 +70,7 @@ extension PartialKeyPath where Root == Session {
         switch self {
         case \Session.isLoggedIn: return (SESSION_KEY + "_" + "isLoggedIn")
         case \Session.debuggingEnabled: return (SESSION_KEY + "_" + "debuggingEnabled")
+        case \Session.errorDebuggingEnabled: return (SESSION_KEY + "_" + "errorDebuggingEnabled")
         default:
             print("Unexpected key path: \(self)")
 //            fatalError("Unexpected key path")
