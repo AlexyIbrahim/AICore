@@ -508,6 +508,30 @@ public class Utils {
         }
         return true
     }
+    
+    public final class func displayDebuggingMessage(name: String, body: String? = nil) {
+        if Session.debuggingEnabled {
+            Utils.scheduleNotification(task: ReminderTask.init(name: name,
+                                                               body: body,
+                                                               reminder: Reminder.init(timeInterval: 0.1,
+                                                                                       date: nil,
+                                                                                       location: nil,
+                                                                                       reminderType: .time,
+                                                                                       repeats: false)))
+        }
+    }
+    
+    public final class func displayErrorDebuggingMessage(name: String, body: String? = nil) {
+        if Session.errorDebuggingEnabled {
+            Utils.scheduleNotification(task: ReminderTask.init(name: name,
+                                                               body: body,
+                                                               reminder: Reminder.init(timeInterval: 0.1,
+                                                                                       date: nil,
+                                                                                       location: nil,
+                                                                                       reminderType: .time,
+                                                                                       repeats: false)))
+        }
+    }
 }
 
 extension URL {
