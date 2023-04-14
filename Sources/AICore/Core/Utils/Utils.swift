@@ -151,51 +151,29 @@ public class Utils {
         return String(format: "Version %@ (%@)", Utils.appVersion(), Utils.build())
     }
     
-    public final class func scheduleNotification(task: ReminderTask) {
-        // 2
+    public final class func scheduleNotification(title: String, body: String? = nil, userInfo: [AnyHashable : Any]? = nil, delaySeconds:TimeInterval? = nil, successCallback: VoidClosure? = nil, errorCallback: ((_ error: Error) -> ())? = nil) {
         let content = UNMutableNotificationContent()
-        content.title = task.name
-        content.body = task.body ?? ""
-        
-        // 3
-        var trigger: UNNotificationTrigger?
-        switch task.reminder.reminderType {
-        case .time:
-            if let timeInterval = task.reminder.timeInterval {
-                trigger = UNTimeIntervalNotificationTrigger(
-                    timeInterval: timeInterval,
-                    repeats: task.reminder.repeats)
-            }
-        default:
-            return
-        }
-        
-        // 4
-        if let trigger = trigger {
-            let request = UNNotificationRequest(
-                identifier: task.id,
-                content: content,
-                trigger: trigger)
-            // 5
-            UNUserNotificationCenter.current().add(request) { error in
-                if let error = error {
-                    print(error)
-                }
-            }
-        }
-    }
-    
-    public final class func scheduleLocalNotification(title:String?, body:String?, delaySeconds:TimeInterval?) {
-        
-        let content = UNMutableNotificationContent()
-        
-        content.title = title ?? ""
+        content.title = title
         content.body = body ?? ""
-        content.badge = 1
+        content.userInfo = userInfo ?? [AnyHashable : Any]()
         
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval:delaySeconds ?? 0 , repeats: false)
-        let request = UNNotificationRequest(identifier: "notification.id.01", content: content, trigger: trigger)
-        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+        let trigger = UNTimeIntervalNotificationTrigger(
+            timeInterval: delaySeconds ?? 0.1,
+            repeats: false)
+        
+        let request = UNNotificationRequest(
+            identifier: UUID().uuidString,
+            content: content,
+            trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print(error)
+                errorCallback?(error)
+            } else {
+                successCallback?()
+            }
+        }
     }
     
     public final class func playSound(filename: String, ext: String, volume: Float? = nil) {
@@ -511,25 +489,13 @@ public class Utils {
     
     public final class func displayDebuggingMessage(name: String, body: String? = nil) {
         if Session.debuggingEnabled {
-            Utils.scheduleNotification(task: ReminderTask.init(name: name,
-                                                               body: body,
-                                                               reminder: Reminder.init(timeInterval: 0.1,
-                                                                                       date: nil,
-                                                                                       location: nil,
-                                                                                       reminderType: .time,
-                                                                                       repeats: false)))
+            Utils.scheduleNotification(title: name, body: body, userInfo: nil, delaySeconds: nil, successCallback: nil, errorCallback: nil)
         }
     }
     
     public final class func displayErrorDebuggingMessage(name: String? = nil, body: String? = nil) {
         if Session.errorDebuggingEnabled {
-            Utils.scheduleNotification(task: ReminderTask.init(name: (name != nil) ? "error: \(name!)": "error",
-                                                               body: body,
-                                                               reminder: Reminder.init(timeInterval: 0.1,
-                                                                                       date: nil,
-                                                                                       location: nil,
-                                                                                       reminderType: .time,
-                                                                                       repeats: false)))
+            Utils.scheduleNotification(title: (name != nil) ? "error: \(name!)": "error", body: body, userInfo: nil, delaySeconds: nil, successCallback: nil, errorCallback: nil)
         }
     }
 }
