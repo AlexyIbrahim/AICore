@@ -8,11 +8,13 @@
 import Foundation
 import UIKit
 import AVKit
+import Combine
 
 public class Utils {
     static let shared = Utils()
     
     var avPlayer: AVAudioPlayer?
+    public static var logs_updated = PassthroughSubject<Void, Never>()
     
     private static func nibFileExists(_ nibName: String) -> Bool {
         Bundle(for: self).path(forResource: nibName, ofType: "nib") != nil

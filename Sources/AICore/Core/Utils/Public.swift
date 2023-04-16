@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 public func print(_ items: String..., filename: String = #file, function : String = #function, line: Int = #line, separator: String = " ", terminator: String = "\n", sameLine: Bool? = nil) {
 #if DEBUG
     let pretty = "\(URL(fileURLWithPath: filename).lastPathComponent) [#\(line)] \(function)\((sameLine ?? true) ? "" : "\n")\t-> "
@@ -18,6 +17,7 @@ public func print(_ items: String..., filename: String = #file, function : Strin
         DebugHelper.log(final_print)
     }
     Swift.print(final_print, terminator: terminator)
+    Utils.logs_updated.send()
 #else
     Swift.print("RELEASE MODE")
 #endif
@@ -31,6 +31,7 @@ public func print(_ items: Any...,  separator: String = " ", terminator: String 
         DebugHelper.log(output)
     }
     Swift.print(output, terminator: terminator)
+    Utils.logs_updated.send()
 #else
     Swift.print("RELEASE MODE")
 #endif
