@@ -97,6 +97,9 @@ public extension Config {
             Config.environment.rawValue
         }
     }
+    
+    static var log_file_name: String!
+    static var log_folder_name: String?
 }
 
 // MARK: - settings | keys

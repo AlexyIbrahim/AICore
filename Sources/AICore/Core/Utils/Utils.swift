@@ -200,6 +200,128 @@ public class Utils {
         }
     }
     
+    public final class func logTextToFile(_ txt: String, fileName: String? = nil, folderName: String? = nil) {
+        let fileName = fileName ?? "logs.txt"
+        let fileManager = FileManager.default
+        guard let documentsDirectory = fileManager.urls(for: .documentDirectory,
+                                                        in: .userDomainMask).first else {
+            return
+        }
+        var folderURL: URL?
+        if let folderName = folderName {
+            folderURL = documentsDirectory.appendingPathComponent(folderName)
+            if !fileManager.fileExists(atPath: folderURL!.path) {
+                do {
+                    try fileManager.createDirectory(at: folderURL!, withIntermediateDirectories: false, attributes: nil)
+                } catch {
+                    print(error)
+                    return
+                }
+            }
+        }
+        var fileURL: URL!
+        if let folderURL = folderURL {
+            fileURL = folderURL.appendingPathComponent(fileName)
+        } else {
+            fileURL = documentsDirectory.appendingPathComponent(fileName)
+        }
+        
+        var txt = "\(txt)\n"
+        if let fileHandle = try? FileHandle(forWritingTo: fileURL) {
+            fileHandle.seekToEndOfFile() // Go to the end of the file
+            if let data = txt.data(using: .utf8) {
+                fileHandle.write(data) // Write the data to the end of the file
+            }
+            fileHandle.closeFile() // Close the file handle
+        }
+        else {
+            do {
+                try txt.write(to: fileURL, atomically: false, encoding: .utf8) // Write the string to the file as a new file
+            }
+            catch {
+                print("Error writing to file: \(error)") // Handle any errors
+            }
+        }
+    }
+    
+    public final class func readLogFile(fileName: String? = nil,
+                                        folderName: String? = nil) -> String? {
+        let fileName = fileName ?? "logs.txt"
+        let fileManager = FileManager.default
+        guard let documentsDirectory = fileManager.urls(for: .documentDirectory,
+                                                        in: .userDomainMask).first else {
+            return nil
+        }
+        var folderURL: URL?
+        if let folderName = folderName {
+            folderURL = documentsDirectory.appendingPathComponent(folderName)
+            if !fileManager.fileExists(atPath: folderURL!.path) {
+                do {
+                    try fileManager.createDirectory(at: folderURL!, withIntermediateDirectories: false, attributes: nil)
+                } catch {
+                    print(error)
+                    return nil
+                }
+            }
+        }
+        var fileURL: URL!
+        if let folderURL = folderURL {
+            fileURL = folderURL.appendingPathComponent(fileName)
+        } else {
+            fileURL = documentsDirectory.appendingPathComponent(fileName)
+        }
+        
+        do {
+            let readString = try String(contentsOf: fileURL, encoding: .utf8) // Read the string from the file
+            
+            print("The file contains: \(readString)") // Print the string we read in
+            return readString
+        }
+        catch {
+            print("Error writing to or reading from file: \(error)") // Handle any errors
+            return nil
+        }
+    }
+    
+    public final class func clearLogFile(fileName: String? = nil,
+                                         folderName: String? = nil) -> Bool? {
+        let fileName = fileName ?? "logs.txt"
+        let fileManager = FileManager.default
+        guard let documentsDirectory = fileManager.urls(for: .documentDirectory,
+                                                        in: .userDomainMask).first else {
+            return nil
+        }
+        var folderURL: URL?
+        if let folderName = folderName {
+            folderURL = documentsDirectory.appendingPathComponent(folderName)
+            if !fileManager.fileExists(atPath: folderURL!.path) {
+                do {
+                    try fileManager.createDirectory(at: folderURL!, withIntermediateDirectories: false, attributes: nil)
+                } catch {
+                    print(error)
+                    return nil
+                }
+            }
+        }
+        var fileURL: URL!
+        if let folderURL = folderURL {
+            fileURL = folderURL.appendingPathComponent(fileName)
+        } else {
+            fileURL = documentsDirectory.appendingPathComponent(fileName)
+        }
+        
+        do {
+            let fileHandle = try FileHandle(forWritingTo: fileURL) // Create a new file handle for writing to the file
+            fileHandle.truncateFile(atOffset: 0) // Truncate the file at offset 0
+            fileHandle.closeFile() // Close the file handle
+            return true
+        }
+        catch {
+            print("Error clearing file: \(error)") // Handle any errors
+            return false
+        }
+    }
+    
     public final class func store(image: UIImage,
                                   fileName: String,
                                   folderName: String? = nil,
@@ -262,7 +384,7 @@ public class Utils {
     }
     
     public final class func retrieveImage(fileName: String,
-                              folderName: String? = nil) -> UIImage? {
+                                          folderName: String? = nil) -> UIImage? {
         let fileManager = FileManager.default
         guard let documentsDirectory = fileManager.urls(for: .documentDirectory,
                                                         in: .userDomainMask).first else {
