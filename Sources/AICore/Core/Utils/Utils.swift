@@ -179,14 +179,14 @@ public class Utils {
     }
     
     public final class func playSound(filename: String, ext: String, volume: Float? = nil) {
-//        if let bundle = Bundle.main.path(forResource: "91926__tim-kahn__ding", ofType: "mp3") {
+        //        if let bundle = Bundle.main.path(forResource: "91926__tim-kahn__ding", ofType: "mp3") {
         
-//        guard let url = Bundle.main.url(forResource: filename, withExtension: ext) else { return }
+        //        guard let url = Bundle.main.url(forResource: filename, withExtension: ext) else { return }
         guard let path = Bundle.main.path(forResource: filename, ofType: ext) else { return }
         
         do {
             self.shared.avPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: path), fileTypeHint: AVFileType.mp3.rawValue)
-
+            
             guard let player = self.shared.avPlayer else { return }
             player.numberOfLoops = 0
             if let volume = volume {
@@ -196,13 +196,13 @@ public class Utils {
                 player.prepareToPlay()
                 player.play()
             }
-
+            
         } catch let error {
             print(error.localizedDescription)
         }
     }
     
-    public final class func logTextToFile(_ txt: String, fileName: String? = nil, folderName: String? = nil) {
+    public final class func writeTextToFile(_ txt: String, fileName: String? = nil, folderName: String? = nil) {
         let fileName = fileName ?? "logs.txt"
         let fileManager = FileManager.default
         guard let documentsDirectory = fileManager.urls(for: .documentDirectory,
@@ -245,8 +245,8 @@ public class Utils {
         }
     }
     
-    public final class func readLogFile(fileName: String? = nil,
-                                        folderName: String? = nil) -> String? {
+    public final class func readTextFromFile(fileName: String? = nil,
+                                             folderName: String? = nil) -> String? {
         let fileName = fileName ?? "logs.txt"
         let fileManager = FileManager.default
         guard let documentsDirectory = fileManager.urls(for: .documentDirectory,
@@ -282,8 +282,8 @@ public class Utils {
         }
     }
     
-    public final class func clearLogFile(fileName: String? = nil,
-                                         folderName: String? = nil) -> Bool? {
+    public final class func clearFile(fileName: String? = nil,
+                                      folderName: String? = nil) -> Bool? {
         let fileName = fileName ?? "logs.txt"
         let fileManager = FileManager.default
         guard let documentsDirectory = fileManager.urls(for: .documentDirectory,
@@ -463,7 +463,7 @@ public class Utils {
     }
     
     public final class func deleteImage(fileName: String,
-                            folderName: String? = nil) -> Bool {
+                                        folderName: String? = nil) -> Bool {
         let fileManager = FileManager.default
         guard let documentsDirectory = fileManager.urls(for: .documentDirectory,
                                                         in: .userDomainMask).first else {
