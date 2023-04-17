@@ -241,7 +241,6 @@ public class Utils {
                 try txt.write(to: fileURL, atomically: false, encoding: .utf8) // Write the string to the file as a new file
             }
             catch {
-                print("Error writing to file: \(error)") // Handle any errors
             }
         }
     }
@@ -276,11 +275,9 @@ public class Utils {
         do {
             let readString = try String(contentsOf: fileURL, encoding: .utf8) // Read the string from the file
             
-            print("The file contains: \(readString)") // Print the string we read in
             return readString
         }
         catch {
-            print("Error writing to or reading from file: \(error)") // Handle any errors
             return nil
         }
     }
@@ -319,7 +316,6 @@ public class Utils {
             return true
         }
         catch {
-            print("Error clearing file: \(error)") // Handle any errors
             return false
         }
     }
