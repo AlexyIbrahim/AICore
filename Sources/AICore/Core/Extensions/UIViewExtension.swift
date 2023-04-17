@@ -16,6 +16,7 @@ public extension UIView {
     }
     
     func makeRounded(cornerRadius: CGFloat? = nil) {
+        self.clipsToBounds = true
         self.layer.cornerRadius = cornerRadius ?? 8
     }
     
