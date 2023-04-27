@@ -18,9 +18,8 @@ public func print(_ items: String..., filename: String = #file, function : Strin
                 Utils.writeTextToFile("• \(final_print)", fileName: Config.log_file_name, folderName: Config.log_folder_name)
                 DebugHelper.log(final_print)
             }
-            if final
-                Swift.print(final_print, terminator: terminator)
-                Utils.logs_updated.send()
+            Swift.print(final_print, terminator: terminator)
+            Utils.logs_updated.send()
         }
     }
 //#if DEBUG
