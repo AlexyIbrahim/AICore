@@ -40,6 +40,14 @@ public extension UIScrollView {
     }
     
     func endRefreshing(deadline: DispatchTime? = nil) { _refreshControl?.endRefreshing(deadline: deadline) }
+    
+    var isAtBottom: Bool {
+        let offsetY = contentOffset.y
+        let contentHeight = contentSize.height
+        let frameHeight = frame.height
+        let bottomInset = contentInset.bottom
+        return offsetY >= (contentHeight - frameHeight + bottomInset)
+    }
 }
 
 public class RefreshControl: UIRefreshControl {
