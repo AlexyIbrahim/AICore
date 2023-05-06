@@ -27,8 +27,11 @@ public extension Encodable {
         return dictionary
     }
     
-    var dictionary: [String: Any] {
-        return self.asDictionary()
+    var dictionary: [String: Any]? {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        guard let data = try? encoder.encode(self) else { return nil }
+        return (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)).flatMap { $0 as? [String: Any] }
     }
     
     func asJsonString() -> String? {
