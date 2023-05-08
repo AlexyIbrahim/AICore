@@ -618,6 +618,18 @@ public class Utils {
             Utils.scheduleNotification(title: (name != nil) ? "error: \(name!)": "error", body: body, userInfo: nil, delaySeconds: nil, successCallback: nil, errorCallback: nil)
         }
     }
+    
+    public final class func share(text: String) {
+        let activityViewController = UIActivityViewController(activityItems: [text], applicationActivities: nil)
+
+        if let vc = Utils.topMostWindowController() {
+            if let popoverController = activityViewController.popoverPresentationController {
+                popoverController.sourceView = vc.view
+            }
+            
+            vc.present(activityViewController, animated: true, completion: nil)
+        }
+    }
 }
 
 extension URL {
