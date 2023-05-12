@@ -23,7 +23,7 @@ let package = Package(
         .package(url: "https://gitlab.com/alexyib/aienvironmentkit.git", from: "1.0.0"),
         .package(url: "https://github.com/airbnb/lottie-ios.git", from: "4.0.0"),
         .package(url: "https://github.com/getsentry/sentry-cocoa.git", from: "7.0.0"),
-        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "9.0.0"),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "10.0.0"),
         .package(url: "https://github.com/malcommac/SwiftDate.git", from: "7.0.0"),
         .package(url: "https://github.com/onevcat/Kingfisher.git", from: "7.0.0"),
     ],
