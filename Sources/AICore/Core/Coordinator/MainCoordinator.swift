@@ -13,7 +13,16 @@ import UIKit
     
     public var childCoordinators = [Coordinator]()
     public var navigationController: UINavigationController
+    var currentViewController: UIViewController?
     var presentedViewController: UIViewController?
+    
+    public static var currentViewController: UIViewController? {
+        MainCoordinator.shared.currentViewController
+    }
+    
+    public static var presentedViewController: UIViewController? {
+        MainCoordinator.shared.presentedViewController
+    }
     
     convenience init() {
         self.init(navigationController: UINavigationController())
@@ -30,6 +39,7 @@ public extension MainCoordinator {
         if removePreviousVCs ?? false || dismissPresentedViewController ?? false {
             self.dismissPresentedViewController()
         }
+        MainCoordinator.shared.currentViewController = viewController
         if removePreviousVCs ?? false {
             MainCoordinator.shared.navigationController.viewControllers.removeAll()
             MainCoordinator.shared.navigationController.viewControllers = [viewController]
@@ -57,6 +67,7 @@ public extension MainCoordinator {
             self.dismissPresentedViewController()
         }
         MainCoordinator.shared.navigationController.popToRootViewController(animated: animated ?? true)
+        MainCoordinator.shared.currentViewController = MainCoordinator.shared.navigationController.topViewController
     }
     
     final class func popCurrentViewController(animated: Bool? = nil, dismissPresentedViewController: Bool? = nil) {
@@ -64,6 +75,7 @@ public extension MainCoordinator {
             self.dismissPresentedViewController()
         }
         MainCoordinator.shared.navigationController.popViewController(animated: animated ?? true)
+        MainCoordinator.shared.currentViewController = MainCoordinator.shared.navigationController.topViewController
     }
     
     final class func dismissPresentedViewController(_ animated: Bool? = nil) {
