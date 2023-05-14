@@ -14,7 +14,7 @@ import Foundation
 public struct AIError: Error {
     var errorDescription: String?
 
-    init(_ description: String) {
+    public init(_ description: String) {
         self.errorDescription = description
     }
 }
