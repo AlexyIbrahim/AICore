@@ -11,8 +11,8 @@ import Foundation
 //    case error(String)
 //}
 
-public struct AIError: Error {
-    var errorDescription: String?
+public struct AIError: LocalizedError {
+    public var errorDescription: String?
 
     public init(_ description: String) {
         self.errorDescription = description
