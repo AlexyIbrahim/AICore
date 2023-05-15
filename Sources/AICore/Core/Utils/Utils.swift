@@ -632,13 +632,13 @@ public class Utils {
         }
     }
     
-    public final class func downloadImage(imagePath: String, successCallback: ((_ uiimage: UIImage, _ imageData: Data, _ result: ImageLoadingResult) -> ())? = nil, errorCallback: ((_ error: Error) -> ())? = nil) {
+    public final class func downloadImage(imagePath: String, successCallback: ((_ uiimage: UIImage, _ imageData: Data, _ result: ImageLoadingResult) -> ())? = nil, errorCallback: ((_ error: KingfisherError) -> ())? = nil) {
         if let imageURL = URL(string: imagePath) {
             Utils.downloadImage(imageURL: imageURL, successCallback: successCallback, errorCallback: errorCallback)
         }
     }
     
-    public final class func downloadImage(imageURL: URL, successCallback: ((_ uiimage: UIImage, _ imageData: Data, _ result: ImageLoadingResult) -> ())? = nil, errorCallback: ((_ error: Error) -> ())? = nil) {
+    public final class func downloadImage(imageURL: URL, successCallback: ((_ uiimage: UIImage, _ imageData: Data, _ result: ImageLoadingResult) -> ())? = nil, errorCallback: ((_ error: KingfisherError) -> ())? = nil) {
         ImageDownloader.default.downloadImage(with: imageURL) { result in
             switch result {
             case .success(let value):
