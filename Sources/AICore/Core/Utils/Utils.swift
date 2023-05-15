@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 import AVKit
 import Combine
+import Kingfisher
 
 public class Utils {
     static let shared = Utils()
@@ -628,6 +629,23 @@ public class Utils {
             }
             
             vc.present(activityViewController, animated: true, completion: nil)
+        }
+    }
+    
+    public final class func downloadImage(imagePath: String, successCallback: ((_ uiimage: UIImage, _ imageData: Data, _ result: ImageLoadingResult) -> ())? = nil, errorCallback: ((_ error: Error) -> ())? = nil) {
+        if let imageURL = URL(string: imagePath) {
+            Utils.downloadImage(imageURL: imageURL, successCallback: successCallback, errorCallback: errorCallback)
+        }
+    }
+    
+    public final class func downloadImage(imageURL: URL, successCallback: ((_ uiimage: UIImage, _ imageData: Data, _ result: ImageLoadingResult) -> ())? = nil, errorCallback: ((_ error: Error) -> ())? = nil) {
+        ImageDownloader.default.downloadImage(with: imageURL) { result in
+            switch result {
+            case .success(let value):
+                successCallback?(value.image, value.originalData, value)
+            case .failure(let error):
+                errorCallback?(error)
+            }
         }
     }
 }
