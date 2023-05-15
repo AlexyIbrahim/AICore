@@ -77,7 +77,7 @@ public extension String {
     }
     
     var isOnlyAlphabetical: Bool {
-        return self.allSatisfy { $0.isLetter }
+        return self.allSatisfy { $0.isLetter || $0.isWhitespace }
 
 //        let letters = CharacterSet.letters
 //        return self.unicodeScalars.allSatisfy { letters.contains($0) }
