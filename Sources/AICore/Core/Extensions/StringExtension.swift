@@ -76,7 +76,7 @@ public extension String {
         return ceil(boundingBox.width)
     }
     
-    func isOnlyAlphabetical() -> Bool {
+    var isOnlyAlphabetical -> Bool {
         return self.allSatisfy { $0.isLetter }
 
 //        let letters = CharacterSet.letters
