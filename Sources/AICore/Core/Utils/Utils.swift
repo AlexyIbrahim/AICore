@@ -648,6 +648,11 @@ public class Utils {
             }
         }
     }
+    
+    public final class func playHapticFeedback(style: UIImpactFeedbackGenerator.FeedbackStyle? = nil) {
+        let generator = UIImpactFeedbackGenerator(style: style ?? .light)
+        generator.impactOccurred()
+    }
 }
 
 extension URL {
