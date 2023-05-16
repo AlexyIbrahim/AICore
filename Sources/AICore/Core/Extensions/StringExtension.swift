@@ -73,7 +73,7 @@ public extension String {
             }
             
             if let limit = limit {
-                if limit >= i {
+                if i >= limit {
                     break
                 }
             }
