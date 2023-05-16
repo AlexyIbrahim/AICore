@@ -62,6 +62,26 @@ public extension String {
         return initials
     }
     
+    func initials(limit: UInt? = nil) -> String {
+        let words = self.components(separatedBy: " ")
+        var initials = ""
+        
+        for i in 0..<words.count {
+            let word = words[i]
+            if let firstChar = word.first {
+                initials.append(String(firstChar).capitalized)
+            }
+            
+            if let limit = limit {
+                if limit >= i {
+                    break
+                }
+            }
+        }
+        
+        return initials
+    }
+    
     func height(withConstrainedWidth width: CGFloat, font: UIFont) -> CGFloat {
         let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
         let boundingBox = self.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: font], context: nil)
