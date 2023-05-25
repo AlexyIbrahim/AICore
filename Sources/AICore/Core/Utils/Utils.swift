@@ -571,7 +571,12 @@ public class Utils {
     }
     
     public final class func currentDate() -> String {
-        let date = Date.now
+        var date: Date!
+        if #available(iOS 15, *) {
+            date = Date.now
+        } else {
+            date = Date()
+        }
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "E, d MMM yyyy hh:mm:ss a"

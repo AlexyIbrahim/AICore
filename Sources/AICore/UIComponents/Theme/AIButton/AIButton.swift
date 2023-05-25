@@ -133,25 +133,27 @@ public class AIButton: UIButton {
             layer.cornerRadius = 0
         }
         
-        if let font = style.font?.font {
-            if var configuration = self.configuration {
-                var container = AttributeContainer()
-                container.font = font
-                configuration.attributedTitle = AttributedString(self.title(for: .normal) ?? "", attributes: container)
-                self.configuration = configuration
-            } else {
-                titleLabel?.font = font
+        if #available(iOS 15.0, *) {
+            if let font = style.font?.font {
+                if var configuration = self.configuration {
+                    var container = AttributeContainer()
+                    container.font = font
+                    configuration.attributedTitle = AttributedString(self.title(for: .normal) ?? "", attributes: container)
+                    self.configuration = configuration
+                } else {
+                    titleLabel?.font = font
+                }
+                
+                //            if self.configuration == nil
+                //            if var configuration = self.configuration {
+                //                var container = AttributeContainer()
+                //                container.font = font
+                //                configuration.attributedTitle = AttributedString(self.title(for: .normal) ?? "", attributes: container)
+                //                self.configuration = nil
+                //            } else {
+                //                self.setTitle(title(for: .normal), for: .normal)
+                //            }
             }
-            
-//            if self.configuration == nil
-//            if var configuration = self.configuration {
-//                var container = AttributeContainer()
-//                container.font = font
-//                configuration.attributedTitle = AttributedString(self.title(for: .normal) ?? "", attributes: container)
-//                self.configuration = nil
-//            } else {
-//                self.setTitle(title(for: .normal), for: .normal)
-//            }
         }
         
         if let borderColor = style.borderColor {
