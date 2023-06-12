@@ -29,8 +29,8 @@ public class AIHotline {
     private func registerNotifications() {
         registerForKeyboardNotifications()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardDidDisappear(_:)), name: .USER_DID_TAKE_SCREENSHOT_NOTIFICATION, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardDidDisappear(_:)), name: .CAPTURED_DID_CHANGE_NOTIFICATION, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(userDidTakeScreenshot(_:)), name: .USER_DID_TAKE_SCREENSHOT_NOTIFICATION, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(screenCaptureDidChange(_:)), name: .CAPTURED_DID_CHANGE_NOTIFICATION, object: nil)
     }
 
     private func registerForKeyboardNotifications() {
