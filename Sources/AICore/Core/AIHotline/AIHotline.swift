@@ -7,6 +7,8 @@ import UIKit
 
 extension Notification.Name {
     static let INJECTION_BUNDLE_NOTIFICATION = Notification.Name(rawValue: "INJECTION_BUNDLE_NOTIFICATION")
+    static let USER_DID_TAKE_SCREENSHOT_NOTIFICATION = UIApplication.userDidTakeScreenshotNotification
+    static let CAPTURED_DID_CHANGE_NOTIFICATION = UIScreen.capturedDidChangeNotification
 }
 
 public class AIHotline {
@@ -17,6 +19,8 @@ public class AIHotline {
     public var keyboardWillHideCallBack: (() -> Void)?
     public var keyboardDidShowCallBack: (() -> Void)?
     public var keyboardDidHideCallBack: (() -> Void)?
+    public var userDidTakeScreenshot: (() -> Void)?
+    public var captureDidChange: ((_ isCaptured: Bool) -> Void)?
 
     public init() {
         self.registerNotifications()
@@ -24,6 +28,9 @@ public class AIHotline {
 
     private func registerNotifications() {
         registerForKeyboardNotifications()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardDidDisappear(_:)), name: .USER_DID_TAKE_SCREENSHOT_NOTIFICATION, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardDidDisappear(_:)), name: .CAPTURED_DID_CHANGE_NOTIFICATION, object: nil)
     }
 
     private func registerForKeyboardNotifications() {
@@ -42,34 +49,9 @@ public class AIHotline {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardDidShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardDidHideNotification, object: nil)
-    }
-
-    @objc private func onKeyboardWillAppear(_ notification: NSNotification) {
-        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            let keyboardRectangle = keyboardFrame.cgRectValue
-            let keyboardHeight = keyboardRectangle.height
-
-            AIHotline.keyboardHeight = keyboardHeight
-            self.keyboardWillShowCallBack?()
-        }
-    }
-
-    @objc private func onKeyboardWillDisappear(_ notification: NSNotification) {
-        self.keyboardWillHideCallBack?()
-    }
-
-    @objc private func onKeyboardDidAppear(_ notification: NSNotification) {
-        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            let keyboardRectangle = keyboardFrame.cgRectValue
-            let keyboardHeight = keyboardRectangle.height
-
-            AIHotline.keyboardHeight = keyboardHeight
-            self.keyboardDidShowCallBack?()
-        }
-    }
-
-    @objc private func onKeyboardDidDisappear(_ notification: NSNotification) {
-        self.keyboardDidHideCallBack?()
+        
+        NotificationCenter.default.removeObserver(self, name: .USER_DID_TAKE_SCREENSHOT_NOTIFICATION, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .CAPTURED_DID_CHANGE_NOTIFICATION, object: nil)
     }
 
     public final class func notifyListeners(notificationName: Notification.Name, object: Any? = nil) {
@@ -117,4 +99,50 @@ public class AIHotline {
         NotificationCenter.default.removeObserver(actionTarget, name: notificationName, object: nil)
     }
     
+}
+
+// manually implemented notifications
+extension AIHotline {
+    // keyboard
+    @objc private func onKeyboardWillAppear(_ notification: NSNotification) {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardHeight = keyboardRectangle.height
+
+            AIHotline.keyboardHeight = keyboardHeight
+            self.keyboardWillShowCallBack?()
+        }
+    }
+
+    @objc private func onKeyboardWillDisappear(_ notification: NSNotification) {
+        self.keyboardWillHideCallBack?()
+    }
+
+    @objc private func onKeyboardDidAppear(_ notification: NSNotification) {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardHeight = keyboardRectangle.height
+
+            AIHotline.keyboardHeight = keyboardHeight
+            self.keyboardDidShowCallBack?()
+        }
+    }
+
+    @objc private func onKeyboardDidDisappear(_ notification: NSNotification) {
+        self.keyboardDidHideCallBack?()
+    }
+    
+    // screenshot
+    @objc private func userDidTakeScreenshot(_ notification: NSNotification) {
+        self.userDidTakeScreenshot?()
+    }
+    
+    // screen recording
+    @objc private func screenCaptureDidChange(_ notification: NSNotification) {
+        if UIScreen.main.isCaptured {
+            self.captureDidChange?(true)
+        } else {
+            self.captureDidChange?(false)
+        }
+    }
 }
