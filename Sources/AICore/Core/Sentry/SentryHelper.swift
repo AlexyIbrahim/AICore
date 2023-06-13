@@ -12,7 +12,7 @@ public class SentryHelper: NSObject {
     public final class func initSentry(dsn: String, callback: ((_ scope: Scope, _ options: Options) -> Void)? = nil) {
         SentrySDK.start { options in
             options.dsn = dsn
-            options.debug = false
+            options.debug = true
             
             // features
             options.enablePreWarmedAppStartTracing = true
@@ -47,7 +47,31 @@ public class SentryHelper: NSObject {
             }
             
             SentrySDK.configureScope { scope in
-                let scope = SentryHelper.initScope(fromScope: scope)
+                // settings vars
+                scope.setEnvironment(AIEnvironmentKit.environmentName)
+        //        tempScope.setUser(SentryHelper.initSentryUser())
+                scope.setContext(value: [
+                    "system_version": UIDevice.current.systemVersion,
+                    "name": UIDevice.current.name,
+                    "system_name": UIDevice.current.systemName,
+                    "model": UIDevice.current.model,
+                    "user_interface_idiom": "\(UIDevice.current.userInterfaceIdiom)",
+                    "orientation": "\(UIDevice.current.orientation)",
+                    "battery_state": "\(UIDevice.current.batteryState)",
+                    "battery_level": UIDevice.current.batteryLevel.description,
+                    "screen_size": "\(UIScreen.main.bounds.size.width) x \(UIScreen.main.bounds.size.height)",
+                    "identifier_for_vendor": "\(UIDevice.current.identifierForVendor?.uuidString ?? "")",
+                    "model_name": "\(UIDevice.current.modelName)",
+                ], key: "Device")
+                
+                scope.setContext(value: [
+                    "appVersion": Utils.appVersion(),
+                    "build": Utils.build(),
+                ], key: "App")
+                
+                scope.setTags([:])
+                
+//                let scope = SentryHelper.initScope(fromScope: scope)
                 callback?(scope, options)
             }
         }
