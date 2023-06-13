@@ -29,6 +29,7 @@ public class SentryHelper: NSObject {
             options.tracesSampleRate = 1.0
             options.enableUIViewControllerTracing = true
             options.enableNetworkTracking = true
+            options.enableFileIOTracing = false
             options.beforeBreadcrumb = { crumb in
                 return crumb
             }
