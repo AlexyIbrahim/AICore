@@ -101,15 +101,15 @@ public class SentryHelper: NSObject {
     }
 
     // MARK: - Breadcrumb
-    final class func addBreadcrumb<T>(clazz: T, category: SentryBreadcrumbCategory? = nil) {
+    public final class func addBreadcrumb<T>(clazz: T, category: SentryBreadcrumbCategory? = nil) {
         SentryHelper.addBreadcrumb(category: category ?? .view, message: String(describing: type(of: clazz)), level: .info, data: nil)
     }
 
-    final class func addBreadcrumb(category: SentryBreadcrumbCategory? = nil, message: String? = nil, level: SentryLevel? = nil, data: [String: Any]? = nil) {
+    public final class func addBreadcrumb(category: SentryBreadcrumbCategory? = nil, message: String? = nil, level: SentryLevel? = nil, data: [String: Any]? = nil) {
         SentryHelper.addBreadcrumb(category: category?.value, message: message, level: level, data: data)
     }
     
-    final class func addBreadcrumb(category: String? = nil, message: String? = nil, level: SentryLevel? = nil, data: [String: Any]? = nil) {
+    public final class func addBreadcrumb(category: String? = nil, message: String? = nil, level: SentryLevel? = nil, data: [String: Any]? = nil) {
         DispatchQueue.global(qos: .background).async {
             let breadcrumb = Breadcrumb()
             breadcrumb.level = level ?? .info
@@ -127,7 +127,7 @@ public class SentryHelper: NSObject {
     }
     
     // Capture a message
-    final class func captureMessage(_ message: String, level: SentryLevel? = nil, tags: [String: String]?, extras: [String: Any]? = nil, callback: ((_ scope: Scope) -> Void)? = nil) {
+    public final class func captureMessage(_ message: String, level: SentryLevel? = nil, tags: [String: String]?, extras: [String: Any]? = nil, callback: ((_ scope: Scope) -> Void)? = nil) {
         DispatchQueue.global(qos: .background).async {
             if let callback = callback {
                 SentrySDK.capture(message: message) { scope in
@@ -158,7 +158,7 @@ public class SentryHelper: NSObject {
 
     // MARK: - Exception
 
-    final class func reportException(_ exception: NSException, level: SentryLevel? = nil, tags: [String: String]?, extras: [String: Any]? = nil, callback: ((_ scope: Scope) -> Void)? = nil) {
+    public final class func reportException(_ exception: NSException, level: SentryLevel? = nil, tags: [String: String]?, extras: [String: Any]? = nil, callback: ((_ scope: Scope) -> Void)? = nil) {
         DispatchQueue.global(qos: .background).async {
             if let callback = callback {
                 SentrySDK.capture(exception: exception) { scope in
@@ -189,7 +189,7 @@ public class SentryHelper: NSObject {
 
     // MARK: - Custom Exception
 
-    final class func reportCustomException(name: String, reason: String, level: SentryLevel? = nil, tags: [String: String]?, extras: [String: Any]? = nil, callback: ((_ scope: Scope) -> Void)? = nil) {
+    public final class func reportCustomException(name: String, reason: String, level: SentryLevel? = nil, tags: [String: String]?, extras: [String: Any]? = nil, callback: ((_ scope: Scope) -> Void)? = nil) {
         DispatchQueue.global(qos: .background).async {
             let exception = NSException(name: NSExceptionName(name), reason: reason, userInfo: nil)
 
@@ -222,7 +222,7 @@ public class SentryHelper: NSObject {
 
     // MARK: - Error
 
-    final class func reportError(_ error: Error?, level: SentryLevel? = nil, tags: [String: String]? = nil, extras: [String: Any]? = nil, callback: ((_ scope: Scope) -> Void)? = nil) {
+    public final class func reportError(_ error: Error?, level: SentryLevel? = nil, tags: [String: String]? = nil, extras: [String: Any]? = nil, callback: ((_ scope: Scope) -> Void)? = nil) {
         DispatchQueue.global(qos: .background).async {
             guard let error = error else {
                 return
@@ -256,7 +256,7 @@ public class SentryHelper: NSObject {
     
     // MARK: - Custom Error
 
-    final class func reportCustomError(domain: String, reason: String, level: SentryLevel? = nil, tags: [String: String]? = nil, extras: [String: Any]? = nil, callback: ((_ scope: Scope) -> Void)? = nil) {
+    public final class func reportCustomError(domain: String, reason: String, level: SentryLevel? = nil, tags: [String: String]? = nil, extras: [String: Any]? = nil, callback: ((_ scope: Scope) -> Void)? = nil) {
         DispatchQueue.global(qos: .background).async {
             let error = NSError(domain: domain, code: 0, userInfo: [NSLocalizedDescriptionKey: reason])
             if let callback = callback {
@@ -288,7 +288,7 @@ public class SentryHelper: NSObject {
 
     // MARK: - Event
 
-    final class func reportEvent(reason: String, level: SentryLevel? = nil, tags: [String: String]? = nil, extras: [String: Any]? = nil, callback: ((_ scope: Scope) -> Void)? = nil) {
+    public final class func reportEvent(reason: String, level: SentryLevel? = nil, tags: [String: String]? = nil, extras: [String: Any]? = nil, callback: ((_ scope: Scope) -> Void)? = nil) {
         DispatchQueue.global(qos: .background).async {
             let event = Event(level: level ?? .warning)
 
@@ -323,8 +323,38 @@ public class SentryHelper: NSObject {
     }
     
     // Flush events to Sentry
-    final class func flushEvents(timeout: TimeInterval? = nil) {
+    public final class func flushEvents(timeout: TimeInterval? = nil) {
         SentrySDK.flush(timeout: timeout ?? 0)
+    }
+    
+    public class func startTransaction(_ name: String, operation: String, bindToScope: Bool? = nil,  data: [String: Any]? = nil, tags: [String: String]? = nil, measurements: [String: NSNumber]? = nil) -> Sentry.Span? {
+        let transaction = SentrySDK.startTransaction(name: name, operation: operation, bindToScope: bindToScope ?? false)
+        data?.forEach { (key: String, value: Any) in
+            transaction.setData(value: value, key: key)
+        }
+        tags?.forEach { (key: String, value: String) in
+            transaction.setTag(value: value, key: key)
+        }
+        measurements?.forEach({ (key: String, value: NSNumber) in
+            transaction.setMeasurement(name: key, value: value)
+        })
+        
+        return transaction
+    }
+    
+    public class func startChild(transaction: Sentry.Span, operation: String, description: String? = nil,  data: [String: Any]? = nil, tags: [String: String]? = nil, measurements: [String: NSNumber]? = nil) -> Sentry.Span? {
+        let transaction = transaction.startChild(operation: operation, description: description)
+        data?.forEach { (key: String, value: Any) in
+            transaction.setData(value: value, key: key)
+        }
+        tags?.forEach { (key: String, value: String) in
+            transaction.setTag(value: value, key: key)
+        }
+        measurements?.forEach({ (key: String, value: NSNumber) in
+            transaction.setMeasurement(name: key, value: value)
+        })
+        
+        return transaction
     }
 }
 
@@ -333,7 +363,7 @@ public class SentryHelper: NSObject {
 extension SentryHelper {
     // MARK: - SentryBreadcrumbCategory enum
 
-    enum SentryBreadcrumbCategory {
+    public enum SentryBreadcrumbCategory {
         case view
         case viewDidLoad
         case viewWillAppear
