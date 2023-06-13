@@ -24,7 +24,9 @@ public class DebugHelper {
             let pretty = "\(URL(fileURLWithPath: filename).lastPathComponent) [#\(line)] \(function)\t-> "
             finalMsg = pretty + finalMsg
         }
-        FirebaseCrashlyticsHelper.log(finalMsg)
+        DispatchQueue.background {
+            FirebaseCrashlyticsHelper.log(finalMsg)
+        }
     }
     
     public final class func log(key: String, value: Any, filename: String = #file, function : String = #function, line: Int = #line) {
@@ -33,8 +35,9 @@ public class DebugHelper {
             let pretty = "\(URL(fileURLWithPath: filename).lastPathComponent) [#\(line)] \(function)\t-> "
             finalMsg = pretty + finalMsg
         }
-        
-        FirebaseCrashlyticsHelper.log(finalMsg)
+        DispatchQueue.background {
+            FirebaseCrashlyticsHelper.log(finalMsg)
+        }
     }
     
     public final class func log(_ dictionary: [String: Any], filename: String = #file, function : String = #function, line: Int = #line) {
@@ -43,8 +46,9 @@ public class DebugHelper {
             let pretty = "\(URL(fileURLWithPath: filename).lastPathComponent) [#\(line)] \(function)\t-> "
             finalMsg = pretty + finalMsg
         }
-        
-        FirebaseCrashlyticsHelper.log(finalMsg)
+        DispatchQueue.background {
+            FirebaseCrashlyticsHelper.log(finalMsg)
+        }
     }
     
     public final class func log(message: String, dictionary: [String: Any], filename: String = #file, function : String = #function, line: Int = #line) {
@@ -53,8 +57,9 @@ public class DebugHelper {
             let pretty = "\(URL(fileURLWithPath: filename).lastPathComponent) [#\(line)] \(function)\t-> "
             finalMsg = pretty + finalMsg
         }
-        
-        FirebaseCrashlyticsHelper.log(message: finalMsg, dictionary: dictionary)
+        DispatchQueue.background {
+            FirebaseCrashlyticsHelper.log(message: finalMsg, dictionary: dictionary)
+        }
     }
     
     public final class func reportError(_ error: Error, userInfo: [String: Any]? = nil) {
