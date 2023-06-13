@@ -659,6 +659,17 @@ public class Utils {
         generator.impactOccurred()
     }
     
+    public final class func fetchPublicIP() -> String? {
+        var publicIP: String? = nil
+        do {
+            if let url = URL(string: "https://icanhazip.com/") {
+                publicIP = try String(contentsOf: url, encoding: .utf8)
+            }
+        } catch {
+        }
+        publicIP = publicIP?.trimmingCharacters(in: CharacterSet.newlines)
+        return publicIP
+    }
 }
 
 extension URL {

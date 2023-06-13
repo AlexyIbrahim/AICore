@@ -55,7 +55,18 @@ public class SentryHelper: NSObject {
 
     // MARK: sentry user
 
-    public final class func initUser(_ user: Sentry.User) {
+    public final class func setUser(id: String? = nil, username: String? = nil, email: String? = nil, ipAddress: String? = nil, data: [String: Any]? = nil) {
+        let sentryUser = Sentry.User()
+        sentryUser.userId = id
+        sentryUser.username = username
+        sentryUser.email = email
+        sentryUser.ipAddress = Utils.fetchPublicIP()
+        sentryUser.data = data
+        
+        SentryHelper.setUser(sentryUser)
+    }
+    
+    public final class func setUser(_ user: Sentry.User) {
         SentrySDK.setUser(user)
     }
     
