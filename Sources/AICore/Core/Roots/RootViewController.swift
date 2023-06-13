@@ -18,6 +18,9 @@ open class RootViewController: UIViewController {
         super.viewDidLoad()
         
         self.hideKeyboardWhenTappedAround()
+        if Session.allowScreenshots.isFalse {
+            self.view.makeSecure()
+        }
     }
     
     open override func viewWillAppear(_ animated: Bool) {

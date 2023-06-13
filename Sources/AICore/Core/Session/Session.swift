@@ -62,6 +62,23 @@ public class Session: SessionExtensions {
             Session.shared.isLoggedIn = newValue
         }
     }
+    
+    var allowScreenshots: Bool {
+        get {
+            Session.getLocalValue(keyPath: \.allowScreenshots) ?? true
+        }
+        set {
+            Session.saveLocally(keyPath: \.allowScreenshots, withValue: newValue)
+        }
+    }
+    public static var allowScreenshots: Bool {
+        get {
+            Session.shared.allowScreenshots
+        }
+        set {
+            Session.shared.allowScreenshots = newValue
+        }
+    }
 }
 
 private let SESSION_KEY = "Session"
@@ -71,6 +88,7 @@ extension PartialKeyPath where Root == Session {
         case \Session.isLoggedIn: return (SESSION_KEY + "_" + "isLoggedIn")
         case \Session.debuggingEnabled: return (SESSION_KEY + "_" + "debuggingEnabled")
         case \Session.errorDebuggingEnabled: return (SESSION_KEY + "_" + "errorDebuggingEnabled")
+        case \Session.allowScreenshots: return (SESSION_KEY + "_" + "allowScreenshots")
         default:
             print("Unexpected key path: \(self)")
 //            fatalError("Unexpected key path")
