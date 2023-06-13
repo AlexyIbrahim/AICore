@@ -12,7 +12,7 @@ public class SentryHelper: NSObject {
     public final class func initSentry(dsn: String, callback: ((_ scope: Scope, _ options: Options) -> Void)? = nil) {
         SentrySDK.start { options in
             options.dsn = dsn
-            options.debug = true
+            options.debug = false
             
             // features
             options.enablePreWarmedAppStartTracing = true
@@ -28,7 +28,7 @@ public class SentryHelper: NSObject {
             options.appHangTimeoutInterval = 2
             options.tracesSampleRate = 1.0
             options.enableUIViewControllerTracing = true
-            options.enableNetworkTracking = false
+            options.enableNetworkTracking = true
             options.beforeBreadcrumb = { crumb in
                 return crumb
             }
