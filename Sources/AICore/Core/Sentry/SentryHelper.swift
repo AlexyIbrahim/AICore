@@ -9,7 +9,7 @@ public class SentryHelper: NSObject {
 
     // MARK: sentry
 
-    public final class func initSentry(dsn: String, callback: ((_ scope: Scope) -> Void)? = nil) {
+    public final class func initSentry(dsn: String, callback: ((_ scope: Scope, _ options: Options) -> Void)? = nil) {
         SentrySDK.start { options in
             options.dsn = dsn
             options.debug = true
@@ -45,11 +45,11 @@ public class SentryHelper: NSObject {
 //                        SentrySDK.capture(userFeedback: userFeedback)
                 }
             }
-        }
-                    
-        SentrySDK.configureScope { scope in
-            let scope = SentryHelper.initScope(fromScope: scope)
-            callback?(scope)
+            
+            SentrySDK.configureScope { scope in
+                let scope = SentryHelper.initScope(fromScope: scope)
+                callback?(scope, options)
+            }
         }
     }
 
