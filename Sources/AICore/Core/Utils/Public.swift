@@ -15,10 +15,10 @@ public func print(_ items: String..., filename: String = #file, function : Strin
         if output.isNotEmpty {
             let final_print: String = pretty+output
             if Config.LOG_PRINTS {
-                DispatchQueue.background {
-                    Utils.writeTextToFile("• \(final_print)", fileName: Config.log_file_name, folderName: Config.log_folder_name)
-                    DebugHelper.log(final_print)
-                }
+//                DispatchQueue.background {
+//                    Utils.writeTextToFile("• \(final_print)", fileName: Config.log_file_name, folderName: Config.log_folder_name)
+//                    DebugHelper.log(final_print)
+//                }
             }
             Swift.print(final_print, terminator: terminator)
             Utils.logs_updated.send()
@@ -35,10 +35,10 @@ public func print(_ items: Any...,  separator: String = " ", terminator: String 
         let output = items.map { "\($0)" }.joined(separator: separator)
         if output.isNotEmpty {
             if Config.LOG_PRINTS {
-                DispatchQueue.background {
-                    Utils.writeTextToFile("• \(output)", fileName: Config.log_file_name, folderName: Config.log_folder_name)
-                    DebugHelper.log(output)
-                }
+//                DispatchQueue.background {
+//                    Utils.writeTextToFile("• \(output)", fileName: Config.log_file_name, folderName: Config.log_folder_name)
+//                    DebugHelper.log(output)
+//                }
             }
             Swift.print(output, terminator: terminator)
             Utils.logs_updated.send()
