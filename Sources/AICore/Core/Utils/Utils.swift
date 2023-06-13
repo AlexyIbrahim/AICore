@@ -658,6 +658,7 @@ public class Utils {
         let generator = UIImpactFeedbackGenerator(style: style ?? .light)
         generator.impactOccurred()
     }
+    
 }
 
 extension URL {
