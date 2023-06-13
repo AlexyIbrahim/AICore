@@ -55,7 +55,7 @@ public class SentryHelper: NSObject {
 
     // MARK: sentry user
 
-    public final class func setUser(id: String? = nil, username: String? = nil, email: String? = nil, ipAddress: String? = nil, data: [String: Any]? = nil) {
+    public final class func setUser(id: String? = nil, username: String? = nil, email: String? = nil, data: [String: Any]? = nil) {
         let sentryUser = Sentry.User()
         sentryUser.userId = id
         sentryUser.username = username
