@@ -61,7 +61,7 @@ public class SentryHelper: NSObject {
         sentryUser.userId = id
         sentryUser.username = username
         sentryUser.email = email
-        sentryUser.ipAddress = Utils.fetchPublicIP()
+//        sentryUser.ipAddress = Utils.fetchPublicIP()
         sentryUser.data = data
         
         SentryHelper.setUser(sentryUser)

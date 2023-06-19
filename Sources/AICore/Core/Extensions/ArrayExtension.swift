@@ -6,9 +6,19 @@
 //
 
 import Foundation
+import Combine
 
 public extension Array {
     var isNotEmpty: Bool {
         !self.isEmpty
+    }
+}
+
+public extension Array where Element == AnyCancellable {
+    mutating func removeAll() {
+        self.forEach { value in
+            value.cancel()
+        }
+        self.removeAll(keepingCapacity: false)
     }
 }

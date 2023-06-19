@@ -659,16 +659,22 @@ public class Utils {
         generator.impactOccurred()
     }
     
-    public final class func fetchPublicIP() -> String? {
-        var publicIP: String? = nil
-        do {
-            if let url = URL(string: "https://icanhazip.com/") {
-                publicIP = try String(contentsOf: url, encoding: .utf8)
-            }
-        } catch {
+    public final class func fetchPublicIP(completion: @escaping (String?) -> Void) {
+        guard let url = URL(string: "https://icanhazip.com/") else {
+            completion(nil)
+            return
         }
-        publicIP = publicIP?.trimmingCharacters(in: CharacterSet.newlines)
-        return publicIP
+
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            if let data = data, let publicIP = String(data: data, encoding: .utf8) {
+                let trimmedIP = publicIP.trimmingCharacters(in: .newlines)
+                completion(trimmedIP)
+            } else {
+                completion(nil)
+            }
+        }
+
+        task.resume()
     }
 }
 
