@@ -12,7 +12,7 @@ public class SentryHelper: NSObject {
     public final class func initSentry(dsn: String, callback: ((_ scope: Scope, _ options: Options) -> Void)? = nil) {
         SentrySDK.start { options in
             options.dsn = dsn
-            options.debug = true
+            options.debug = false
             
             // features
             options.enablePreWarmedAppStartTracing = true
