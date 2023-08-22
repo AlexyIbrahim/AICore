@@ -13,48 +13,50 @@ public class AIActivityIndicator: NSObject {
     
     static let shared = AIActivityIndicator()
     
-    public static var activityIndicator: UIActivityIndicatorView!
+    public var activityIndicator: UIActivityIndicatorView?
     
     public final class func showActivityIndicator(centeredWithView view:UIView, activityIndicatorStyle:UIActivityIndicatorView.Style?, tintColor:UIColor?) {
-        AIActivityIndicator.showActivityIndicator(atPosition: view.snp.center, activityIndicatorStyle:activityIndicatorStyle, tintColor:tintColor)
+		AIActivityIndicator.shared.showActivityIndicator(centeredWithView: view, activityIndicatorStyle: activityIndicatorStyle, tintColor: tintColor)
     }
+	
+	public func showActivityIndicator(centeredWithView view:UIView, activityIndicatorStyle:UIActivityIndicatorView.Style?, tintColor:UIColor?) {
+		DispatchQueue.main {
+			self.activityIndicator = UIActivityIndicatorView()
+			guard let activityIndicator = self.activityIndicator else {
+				return
+			}
+			activityIndicator.hidesWhenStopped = true
+			
+			if let activityIndicatorStyle = activityIndicatorStyle {
+				activityIndicator.style = activityIndicatorStyle
+			}
+			
+			if let tintColor = tintColor {
+				activityIndicator.color = tintColor
+			}
+			
+			Utils.currentViewController()?.view.addSubview(activityIndicator)
+			activityIndicator.snp.makeConstraints { (make) in
+				make.center.equalTo(view.snp.center)
+			}
+			Utils.currentViewController()?.view.bringSubviewToFront(activityIndicator)
+			activityIndicator.startAnimating()
+		}
+	}
     
-    private final class func showActivityIndicator(atPosition position: ConstraintItem, activityIndicatorStyle:UIActivityIndicatorView.Style?, tintColor:UIColor?) {
-        DispatchQueue.main {
-            AIActivityIndicator.activityIndicator = UIActivityIndicatorView()
-            AIActivityIndicator.activityIndicator.hidesWhenStopped = true
-            
-            if let activityIndicatorStyle = activityIndicatorStyle {
-                AIActivityIndicator.activityIndicator.style = activityIndicatorStyle
-            }
-            
-            if let tintColor = tintColor {
-                AIActivityIndicator.activityIndicator.color = tintColor
-            }
-            
-            Utils.currentViewController()?.view.addSubview(AIActivityIndicator.activityIndicator)
-            AIActivityIndicator.activityIndicator.snp.makeConstraints { (make) in
-                make.center.equalTo(position)
-            }
-            Utils.currentViewController()?.view.bringSubviewToFront(AIActivityIndicator.activityIndicator)
-            AIActivityIndicator.activityIndicator.startAnimating()
-        }
-    }
-    
-    public final class func stopAnimating() {
-//        guard AIActivityIndicator.shared.activityIndicator != nil else {
-//            print("AIActivityIndicator.shared.activityIndicator is nil")
-//            return
-//        }
-        
-        guard let activityIndicator = AIActivityIndicator.activityIndicator else {
-            print("AIActivityIndicator.shared.activityIndicator is nil")
+	public final class func stopAnimating() {
+		AIActivityIndicator.shared.stopAnimating()
+	}
+	
+    public func stopAnimating() {
+        guard let activityIndicator = self.activityIndicator else {
+            print("activityIndicator is nil")
             return
         }
         DispatchQueue.main {
             activityIndicator.stopAnimating()
             activityIndicator.removeFromSuperview()
-            AIActivityIndicator.activityIndicator = nil
+			self.activityIndicator = nil
         }
     }
     

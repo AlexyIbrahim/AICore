@@ -7,6 +7,8 @@
 
 import Foundation
 import UIKit
+import SnapKit
+import Combine
 
 public extension AIButton {
     enum SideIconPosition {
@@ -37,6 +39,16 @@ public class AIButton: UIButton {
     
     public private(set) var sideIconModel: SideIconUIModel?
 //    public private(set) var style: AIButtonStyle?
+	
+	private var _isLoading: Bool! = false
+	public var isLoading: Bool! {
+		return _isLoading
+	}
+	private var isLoadingCombine = PassthroughSubject<Bool, Never>()
+	private var observers: [AnyCancellable] = []
+	private var aiActivityIndicator: AIActivityIndicator!
+	private var buttonTitle: String?
+	
     public var badgeValue : String! = "" {
         didSet {
             self.layoutSubviews()
@@ -54,12 +66,12 @@ public class AIButton: UIButton {
         
         self.commonInit()
     }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        
-        commonInit()
-    }
+	
+	public required init?(coder: NSCoder) {
+		super.init(coder: coder)
+		
+		commonInit()
+	}
     
     public override func awakeFromNib() {
         self.commonInit()
@@ -68,6 +80,26 @@ public class AIButton: UIButton {
     
     func commonInit() {
         self.applyStyle()
+		
+		self.aiActivityIndicator = AIActivityIndicator()
+		
+		observers.removeAll()
+		self.isLoadingCombine.eraseToAnyPublisher().sink { [weak self] isLoading in
+			guard let self = self else { return }
+			_isLoading = isLoading
+			
+			if isLoading {
+				buttonTitle = self.title(for: .normal)
+				self.setTitle("", for: .normal)
+				
+				self.aiActivityIndicator.showActivityIndicator(centeredWithView: self, activityIndicatorStyle: .none, tintColor: nil)
+			} else {
+				self.aiActivityIndicator.stopAnimating()
+				
+				self.setTitle(buttonTitle, for: .normal)
+				buttonTitle = nil
+			}
+		}.store(in: &observers)
     }
     
     public func setStyle(_ style: AIButtonStyle) {
@@ -109,6 +141,10 @@ public class AIButton: UIButton {
         imageEdgeInsets = iconModel.edgeInsets
         semanticContentAttribute = iconModel.iconPosition == .right ? .forceRightToLeft : .forceLeftToRight
     }
+	
+	public func setLoading(_ isLoading: Bool) {
+		self.isLoadingCombine.send(isLoading)
+	}
     
     /// This method/function was designed & implemented to: update the button's style
     private func updateStyle() {
@@ -243,6 +279,10 @@ public class AIButton: UIButton {
 //            layer.cornerRadius = 0
 //        }
 //    }
+	
+	public override func setTitle(_ title: String?, for state: UIControl.State) {
+		super.setTitle(title, for: state)
+	}
     
 //    override func setTitle(_ title: String?, for state: UIControl.State) {
 //        super.setTitle(title, for: state)
