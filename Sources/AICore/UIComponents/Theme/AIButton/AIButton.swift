@@ -93,11 +93,15 @@ public class AIButton: UIButton {
 				self.setTitle("", for: .normal)
 				
 				self.aiActivityIndicator.showActivityIndicator(centeredWithView: self, activityIndicatorStyle: .none, tintColor: nil)
+				
+				self.isUserInteractionEnabled = false
 			} else {
 				self.aiActivityIndicator.stopAnimating()
 				
 				self.setTitle(buttonTitle, for: .normal)
 				buttonTitle = nil
+				
+				self.isUserInteractionEnabled = true
 			}
 		}.store(in: &observers)
     }
