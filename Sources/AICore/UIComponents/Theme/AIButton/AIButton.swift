@@ -51,6 +51,7 @@ public class AIButton: UIButton {
 		return indicator
 	}()
 	private var buttonTitle: String?
+	private var activityIndicatorTintColor: AIColor?
 	
     public var badgeValue : String! = "" {
         didSet {
@@ -93,7 +94,7 @@ public class AIButton: UIButton {
 				buttonTitle = self.title(for: .normal)
 				self.setTitle("", for: .normal)
 				
-				self.aiActivityIndicator.showActivityIndicator(centeredWithView: self, activityIndicatorStyle: .none, tintColor: nil)
+				self.aiActivityIndicator.showActivityIndicator(centeredWithView: self, activityIndicatorStyle: .none, tintColor: self.activityIndicatorTintColor?.color)
 				
 				self.isUserInteractionEnabled = false
 			} else {
@@ -152,7 +153,7 @@ public class AIButton: UIButton {
 	}
 	
 	public func setActivityIndicatorTintColor(_ aicolor: AIColor) {
-		self.aiActivityIndicator.setTintColor(aicolor)
+		self.activityIndicatorTintColor = aicolor
 	}
     
     /// This method/function was designed & implemented to: update the button's style

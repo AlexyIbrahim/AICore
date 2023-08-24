@@ -19,7 +19,7 @@ public class AIActivityIndicator: NSObject {
 		AIActivityIndicator.shared.showActivityIndicator(centeredWithView: view, activityIndicatorStyle: activityIndicatorStyle, tintColor: tintColor)
 	}
 	
-	public func showActivityIndicator(centeredWithView view:UIView, activityIndicatorStyle:UIActivityIndicatorView.Style?, tintColor:UIColor?) {
+	public func showActivityIndicator(centeredWithView view: UIView, activityIndicatorStyle: UIActivityIndicatorView.Style?, tintColor: UIColor?) {
 		DispatchQueue.main {
 			self.activityIndicator = UIActivityIndicatorView()
 			guard let activityIndicator = self.activityIndicator else {
