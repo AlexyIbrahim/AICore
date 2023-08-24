@@ -46,7 +46,10 @@ public class AIButton: UIButton {
 	}
 	private var isLoadingCombine = PassthroughSubject<Bool, Never>()
 	private var observers: [AnyCancellable] = []
-	private var aiActivityIndicator: AIActivityIndicator!
+	private lazy var aiActivityIndicator: AIActivityIndicator = {
+		let indicator = AIActivityIndicator()
+		return indicator
+	}()
 	private var buttonTitle: String?
 	
     public var badgeValue : String! = "" {
@@ -80,8 +83,6 @@ public class AIButton: UIButton {
     
     func commonInit() {
         self.applyStyle()
-		
-		self.aiActivityIndicator = AIActivityIndicator()
 		
 		observers.removeAll()
 		self.isLoadingCombine.eraseToAnyPublisher().sink { [weak self] isLoading in
@@ -148,6 +149,10 @@ public class AIButton: UIButton {
 	
 	public func setLoading(_ isLoading: Bool) {
 		self.isLoadingCombine.send(isLoading)
+	}
+	
+	public func setActivityIndicatorTintColor(_ aicolor: AIColor) {
+		self.aiActivityIndicator.setTintColor(aicolor)
 	}
     
     /// This method/function was designed & implemented to: update the button's style

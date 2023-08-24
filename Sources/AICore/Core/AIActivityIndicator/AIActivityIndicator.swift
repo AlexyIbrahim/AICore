@@ -10,14 +10,14 @@ import UIKit
 import SnapKit
 
 public class AIActivityIndicator: NSObject {
-    
-    static let shared = AIActivityIndicator()
-    
-    public var activityIndicator: UIActivityIndicatorView?
-    
-    public final class func showActivityIndicator(centeredWithView view:UIView, activityIndicatorStyle:UIActivityIndicatorView.Style?, tintColor:UIColor?) {
+	
+	static let shared = AIActivityIndicator()
+	
+	public var activityIndicator: UIActivityIndicatorView?
+	
+	public final class func showActivityIndicator(centeredWithView view:UIView, activityIndicatorStyle:UIActivityIndicatorView.Style?, tintColor:UIColor?) {
 		AIActivityIndicator.shared.showActivityIndicator(centeredWithView: view, activityIndicatorStyle: activityIndicatorStyle, tintColor: tintColor)
-    }
+	}
 	
 	public func showActivityIndicator(centeredWithView view:UIView, activityIndicatorStyle:UIActivityIndicatorView.Style?, tintColor:UIColor?) {
 		DispatchQueue.main {
@@ -43,21 +43,29 @@ public class AIActivityIndicator: NSObject {
 			activityIndicator.startAnimating()
 		}
 	}
-    
+	
 	public final class func stopAnimating() {
 		AIActivityIndicator.shared.stopAnimating()
 	}
 	
-    public func stopAnimating() {
-        guard let activityIndicator = self.activityIndicator else {
-            print("activityIndicator is nil")
-            return
-        }
-        DispatchQueue.main {
-            activityIndicator.stopAnimating()
-            activityIndicator.removeFromSuperview()
+	public func stopAnimating() {
+		guard let activityIndicator = self.activityIndicator else {
+			print("activityIndicator is nil")
+			return
+		}
+		DispatchQueue.main {
+			activityIndicator.stopAnimating()
+			activityIndicator.removeFromSuperview()
 			self.activityIndicator = nil
-        }
-    }
-    
+		}
+	}
+	
+	public final class func setTintColor(_ aicolor: AIColor) {
+		AIActivityIndicator.shared.setTintColor(aicolor)
+	}
+	
+	public func setTintColor(_ aicolor: AIColor) {
+		self.activityIndicator?.tintColor = aicolor.color
+	}
+	
 }
