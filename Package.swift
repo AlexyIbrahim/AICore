@@ -49,7 +49,6 @@ let package = Package(
                 .product(name: "FirebaseRemoteConfigSwift", package: "firebase-ios-sdk"),
                 .product(name: "SwiftDate", package: "SwiftDate"),
                 .product(name: "Kingfisher", package: "Kingfisher"),
-                .product(name: "FBLPromises", package: "promises"),
                 .product(name: "Promises", package: "promises"),
             ]),
         .testTarget(
