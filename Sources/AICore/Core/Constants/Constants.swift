@@ -10,3 +10,7 @@ import Foundation
 
 public typealias GenericClosure<T> = (T) -> Void
 public typealias VoidClosure = () -> Void
+
+class Constants {
+	static internal let bundleId: String = Bundle.main.bundleIdentifier!
+}
