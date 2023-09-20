@@ -15,6 +15,7 @@ public protocol KeychainServiceProtocol {
     static func save(value: String)
     static func read() -> String?
     static func delete()
+	var exist: Bool { get }
 }
 
 public extension KeychainServiceProtocol {
