@@ -89,4 +89,17 @@ public class KeychainService {
         let status = SecItemDelete(query as CFDictionary)
         return status == errSecSuccess
     }
+	
+	public var exist: Bool {
+		let query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
+									kSecAttrAccount as String: key,
+									kSecReturnData as String: true,
+									kSecMatchLimit as String: kSecMatchLimitOne,
+									kSecReturnAttributes as String: true,
+									kSecUseAuthenticationContext as String: LAContext()]
+		
+		var item: CFTypeRef?
+		let status = SecItemCopyMatching(query as CFDictionary, &item)
+		return status == errSecSuccess
+	}
 }
