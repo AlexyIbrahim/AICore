@@ -8,7 +8,7 @@
 import Foundation
 import OSLog
 
-extension Logger {
+public extension Logger {
 	static let viewCycle = Logger(subsystem: Constants.bundleId, category: "viewcycle")
 	static let statistics = Logger(subsystem: Constants.bundleId, category: "statistics")
 	static let system = Logger(subsystem: Constants.bundleId, category: "system")
