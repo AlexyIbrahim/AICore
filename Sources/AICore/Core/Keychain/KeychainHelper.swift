@@ -15,7 +15,7 @@ public protocol KeychainServiceProtocol {
     static func save(value: String)
     static func read() -> String?
     static func delete()
-	var exist: Bool { get }
+	static func exist() -> Bool
 }
 
 public extension KeychainServiceProtocol {
@@ -91,7 +91,7 @@ public class KeychainService {
         return status == errSecSuccess
     }
 	
-	public var exist: Bool {
+	public func exist() -> Bool {
 		let query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
 									kSecAttrAccount as String: key,
 									kSecReturnData as String: true,
