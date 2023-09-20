@@ -38,6 +38,10 @@ public extension KeychainServiceProtocol {
     static func delete() {
         keychainService.delete()
     }
+    
+    static func exist() -> Bool {
+        keychainService.exist()
+    }
 }
 
 public class KeychainService {
