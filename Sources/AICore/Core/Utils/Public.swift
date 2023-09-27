@@ -37,6 +37,8 @@ private func print(_ items: [String], category: Logger.Category? = nil, level: O
 			}
 			if let category = category {
 				category.logger.log(level: level ?? .default, "\(final_print)")
+			} else if let level = level {
+				Logger.misc.log(level: level, "\(final_print)")
 			} else {
 				Swift.print(final_print, terminator: terminator)
 			}
@@ -68,6 +70,8 @@ public func print(_ items: [String], category: Logger.Category? = nil, level: OS
 			}
 			if let category = category {
 				category.logger.log(level: level ?? .default, "\(output)")
+			} else if let level = level {
+				Logger.misc.log(level: level, "\(output)")
 			} else {
 				Swift.print(output, terminator: terminator)
 			}
