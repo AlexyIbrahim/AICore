@@ -9,8 +9,17 @@ import Foundation
 import OSLog
 
 public extension Logger {
-	static let viewCycle = Logger(subsystem: Constants.bundleId, category: "viewcycle")
-	static let statistics = Logger(subsystem: Constants.bundleId, category: "statistics")
-	static let system = Logger(subsystem: Constants.bundleId, category: "system")
-	static let misc = Logger(subsystem: Constants.bundleId, category: "misc")
+	static let viewCycle: Logger = Logger.Category.viewCycle.logger
+	static let statistics: Logger = Logger.Category.statistics.logger
+	static let system: Logger = Logger.Category.system.logger
+	static let misc: Logger = Logger.Category.misc.logger
+	
+	struct Category {
+		public let logger: Logger
+		
+		public static let viewCycle = Logger.Category(logger: Logger(subsystem: Constants.bundleId, category: "viewcycle"))
+		public static let statistics = Logger.Category(logger: Logger(subsystem: Constants.bundleId, category: "statistics"))
+		public static let system = Logger.Category(logger: Logger(subsystem: Constants.bundleId, category: "system"))
+		public static let misc = Logger.Category(logger: Logger(subsystem: Constants.bundleId, category: "misc"))
+	}
 }
