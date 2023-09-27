@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://gitlab.com/alexyib/ainetworkcalls.git",
       "state" : {
-        "revision" : "539d3dbd2d6f0d917c2eac6779593ff1beff49cd",
-        "version" : "1.5.4"
+        "revision" : "1296b997b0eeb34ae811dd975c9ad25fd085b3b0",
+        "version" : "1.5.8"
       }
     },
     {
@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/firebase-ios-sdk",
       "state" : {
-        "revision" : "2bfe6abe1014aafe5cf28401708f7d39f9926a76",
-        "version" : "10.14.0"
+        "revision" : "8a8ec57a272e0d31480fb0893dda0cf4f769b57e",
+        "version" : "10.15.0"
       }
     },
     {
@@ -122,8 +122,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/airbnb/lottie-ios.git",
       "state" : {
-        "revision" : "d6feea26a370019b4d3a85f5984cb95a2734776f",
-        "version" : "4.2.0"
+        "revision" : "5197d6f06c00753ca299d8424c8e089c6a372f3c",
+        "version" : "4.3.2"
       }
     },
     {
@@ -158,8 +158,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa.git",
       "state" : {
-        "revision" : "12998398eb51e2e8ff7098163fa97d305eee6d87",
-        "version" : "8.11.0"
+        "revision" : "0a915b93ff3abee1a9752448e47808334d306980",
+        "version" : "8.13.0"
       }
     },
     {
