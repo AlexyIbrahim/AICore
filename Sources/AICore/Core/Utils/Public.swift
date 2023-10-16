@@ -9,21 +9,40 @@ import Foundation
 import AIEnvironmentKit
 import OSLog
 
-
-public func print(_ items: OSLogMessage..., category: Logger.Category? = nil, level: OSLogType? = nil, filename: String = #file, function : String = #function, line: Int = #line, separator: String = " ", terminator: String = "\n", sameLine: Bool? = nil) {
-	let stringItems = items.map { "\($0)" }
-	print(stringItems, category: category, level: level, filename: filename, function: function, line: line, separator: separator, terminator: terminator, sameLine: sameLine)
+public protocol Loggable {
+	static var loggerCategory: Logger { get }
 }
 
-public func print(_ items: String..., category: Logger.Category? = nil, level: OSLogType? = nil, filename: String = #file, function : String = #function, line: Int = #line, separator: String = " ", terminator: String = "\n", sameLine: Bool? = nil) {
-	print(items, category: category, level: level, filename: filename, function: function, line: line, separator: separator, terminator: terminator, sameLine: sameLine)
+// MARK: -
+public func print<T: Loggable>(_ caller: T.Type, _ items: OSLogMessage..., level: OSLogType? = nil, filename: String = #file, function : String = #function, line: Int = #line, separator: String = " ", terminator: String = "\n", sameLine: Bool? = nil) {
+	print(items, logger: caller.loggerCategory, level: level, filename: filename, function: function, line: line, separator: separator, terminator: terminator, sameLine: sameLine)
+}
+
+public func print(_ items: OSLogMessage..., logger: Logger.CategoryEnum? = nil, level: OSLogType? = nil, filename: String = #file, function : String = #function, line: Int = #line, separator: String = " ", terminator: String = "\n", sameLine: Bool? = nil) {
+	let stringItems = items.map { "\($0)" }
+	print(stringItems, logger: logger?.logger, level: level, filename: filename, function: function, line: line, separator: separator, terminator: terminator, sameLine: sameLine)
+}
+
+public func print(_ items: OSLogMessage..., logger: Logger? = nil, level: OSLogType? = nil, filename: String = #file, function : String = #function, line: Int = #line, separator: String = " ", terminator: String = "\n", sameLine: Bool? = nil) {
+	let stringItems = items.map { "\($0)" }
+	print(stringItems, logger: logger, level: level, filename: filename, function: function, line: line, separator: separator, terminator: terminator, sameLine: sameLine)
+}
+
+public func print(_ items: String..., logger: Logger? = nil, level: OSLogType? = nil, filename: String = #file, function : String = #function, line: Int = #line, separator: String = " ", terminator: String = "\n", sameLine: Bool? = nil) {
+	print(items, logger: logger, level: level, filename: filename, function: function, line: line, separator: separator, terminator: terminator, sameLine: sameLine)
 //#if DEBUG
 //#else
 //    Swift.print("RELEASE MODE")
 //#endif
 }
 
-private func print(_ items: [String], category: Logger.Category? = nil, level: OSLogType? = nil, filename: String, function : String, line: Int, separator: String, terminator: String, sameLine: Bool?) {
+public func print(_ items: Any..., logger: Logger? = nil, level: OSLogType? = nil, filename: String = #file, function : String = #function, line: Int = #line, separator: String = " ", terminator: String = "\n", sameLine: Bool? = nil) {
+	let stringItems = items.map { "\($0)" }
+	print(stringItems, logger: logger, level: level, filename: filename, function: function, line: line, separator: separator, terminator: terminator, sameLine: sameLine)
+}
+
+
+private func print(_ items: [String], logger: Logger? = nil, level: OSLogType? = nil, filename: String, function : String, line: Int, separator: String, terminator: String, sameLine: Bool?) {
 	AIEnvironmentKit.executeIfNotAppStore {
 		let pretty = "\(URL(fileURLWithPath: filename).lastPathComponent) [#\(line)] \(function)\((sameLine ?? true) ? "" : "\n")\t-> "
 		let output = items.map { "\($0)" }.joined(separator: separator)
@@ -35,8 +54,8 @@ private func print(_ items: [String], category: Logger.Category? = nil, level: O
 					DebugHelper.log(final_print)
 				}
 			}
-			if let category = category {
-				category.logger.log(level: level ?? .default, "\(final_print)")
+			if let logger = logger {
+				logger.log(level: level ?? .default, "\(final_print)")
 			} else if let level = level {
 				Logger.misc.log(level: level, "\(final_print)")
 			} else {
@@ -48,17 +67,31 @@ private func print(_ items: [String], category: Logger.Category? = nil, level: O
 	}
 }
 
-public func print(_ items: OSLogMessage..., category: Logger.Category? = nil, level: OSLogType? = nil, separator: String = " ", terminator: String = "\n") {
-	let stringItems = items.map { "\($0)" }
-	print(stringItems, category: category, level: level, separator: separator, terminator: terminator)
+// MARK: -
+public func print<T: Loggable>(_ caller: T.Type, _ items: OSLogMessage..., level: OSLogType? = nil, separator: String = " ", terminator: String = "\n") {
+	print(items, logger: caller.loggerCategory, level: level, separator: separator, terminator: terminator)
 }
 
-public func print(_ items: Any..., category: Logger.Category? = nil, level: OSLogType? = nil, separator: String = " ", terminator: String = "\n") {
+public func print(_ items: OSLogMessage..., logger: Logger.CategoryEnum? = nil, level: OSLogType? = nil, separator: String = " ", terminator: String = "\n") {
 	let stringItems = items.map { "\($0)" }
-	print(stringItems, category: category, level: level, separator: separator, terminator: terminator)
+	print(stringItems, logger: logger?.logger, level: level, separator: separator, terminator: terminator)
 }
 
-public func print(_ items: [String], category: Logger.Category? = nil, level: OSLogType? = nil, separator: String = " ", terminator: String = "\n") {
+public func print(_ items: OSLogMessage..., logger: Logger? = nil, level: OSLogType? = nil, separator: String = " ", terminator: String = "\n") {
+	let stringItems = items.map { "\($0)" }
+	print(stringItems, logger: logger, level: level, separator: separator, terminator: terminator)
+}
+
+public func print(_ items: String..., logger: Logger? = nil, level: OSLogType? = nil, separator: String = " ", terminator: String = "\n") {
+	print(items, logger: logger, level: level, separator: separator, terminator: terminator)
+}
+
+public func print(_ items: Any..., logger: Logger? = nil, level: OSLogType? = nil, separator: String = " ", terminator: String = "\n") {
+	let stringItems = items.map { "\($0)" }
+	print(stringItems, logger: logger, level: level, separator: separator, terminator: terminator)
+}
+
+public func print(_ items: [String], logger: Logger? = nil, level: OSLogType? = nil, separator: String = " ", terminator: String = "\n") {
 	AIEnvironmentKit.executeIfNotAppStore {
 		let output = items.map { "\($0)" }.joined(separator: separator)
 		if output.isNotEmpty {
@@ -68,8 +101,8 @@ public func print(_ items: [String], category: Logger.Category? = nil, level: OS
 					DebugHelper.log(output)
 				}
 			}
-			if let category = category {
-				category.logger.log(level: level ?? .default, "\(output)")
+			if let logger = logger {
+				logger.log(level: level ?? .default, "\(output)")
 			} else if let level = level {
 				Logger.misc.log(level: level, "\(output)")
 			} else {
