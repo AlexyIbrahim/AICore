@@ -8,6 +8,7 @@
 import Foundation
 import OSLog
 
+@available(iOS 14.0, *)
 public extension Logger {
 	static let viewCycle: Logger = Logger.Category.viewCycle.logger
 	static let networking: Logger = Logger.Category.networking.logger

@@ -65,7 +65,8 @@ public class AIPermission: NSObject {
         application.registerForRemoteNotifications()
     }
     
-    public static var locationPermissionStatus: CLAuthorizationStatus? {
+	@available(iOS 14.0, *)
+	public static var locationPermissionStatus: CLAuthorizationStatus? {
         if CLLocationManager.locationServicesEnabled() {
             return locationManager.authorizationStatus
         } else {
@@ -74,6 +75,7 @@ public class AIPermission: NSObject {
         }
     }
     
+	@available(iOS 14.0, *)
     public class func requestLocationPermission(callback: @escaping GenericClosure<CLAuthorizationStatus?>) {
         AIPermission.locationManagerPermissionCallback = callback
         
@@ -120,7 +122,8 @@ public class AIPermission: NSObject {
 }
 
 extension AIPermission: CLLocationManagerDelegate {
-    public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+	@available(iOS 14.0, *)
+	public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         AIPermission.locationManagerPermissionCallback?(manager.authorizationStatus)
     }
     

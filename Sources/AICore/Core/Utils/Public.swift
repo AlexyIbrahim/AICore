@@ -9,6 +9,7 @@ import Foundation
 import AIEnvironmentKit
 import OSLog
 
+@available(iOS 14.0, *)
 public protocol Loggable {
 	static var logger: Logger { get }
 }
