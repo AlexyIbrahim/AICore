@@ -74,7 +74,7 @@ public extension UIViewController {
         button_BackIcon.setImage(nil, for: .normal)
         //        button_BackIcon.setImage(UIImage.init(named: "back_icon"), for: .normal)
         button_BackIcon.sizeToFit()
-        button_BackIcon.on(.touchUpInside) { (sender) in
+        _ = button_BackIcon.on(.touchUpInside) { (sender) in
             if let callback = callback {
                 callback()
             } else {
@@ -97,7 +97,7 @@ public extension UIViewController {
         }
         button_BackTitle.setTitle(title, for: .normal)
         button_BackTitle.sizeToFit()
-        button_BackTitle.on(.touchUpInside) { (sender) in
+        _ = button_BackTitle.on(.touchUpInside) { (sender) in
             if let callback = callback {
                 callback()
             } else {
@@ -137,7 +137,7 @@ public extension UIViewController {
                 button.setImage(image, for: .normal)
             }
             button.sizeToFit()
-            button.on(.touchUpInside) { (sender) in
+            _ = button.on(.touchUpInside) { (sender) in
                 callback?()
             }
             
@@ -181,7 +181,7 @@ public extension UIViewController {
         return barButtonItem!
     }
     
-    public func removeBarButtonItems(direction: BarButtonItemDirection, animated: Bool? = nil) {
+	func removeBarButtonItems(direction: BarButtonItemDirection, animated: Bool? = nil) {
         switch direction {
         case .left:
             self.navigationItem.setLeftBarButtonItems(nil, animated: animated ?? true)

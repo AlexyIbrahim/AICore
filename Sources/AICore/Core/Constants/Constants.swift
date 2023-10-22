@@ -7,10 +7,7 @@
 
 import Foundation
 
-
-public typealias GenericClosure<T> = (T) -> Void
-public typealias VoidClosure = () -> Void
-
-class Constants {
-	static internal let bundleId: String = Bundle.main.bundleIdentifier!
+public class Constants: NSObject {
+	static let sdkName = "AICore"
+	static public let bundleId: String = Bundle.main.bundleIdentifier!
 }

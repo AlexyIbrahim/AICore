@@ -10,6 +10,7 @@ import UIKit
 import AVKit
 import Combine
 import Kingfisher
+import SwiftyJSON
 
 public class Utils {
     static let shared = Utils()
@@ -688,6 +689,50 @@ public class Utils {
 		let range = NSRange(location: 0, length: url.utf16.count)
 		let modifiedUrl = regex?.stringByReplacingMatches(in: url, options: [], range: range, withTemplate: "/")
 		return modifiedUrl ?? url
+	}
+	
+	public final class func decode<T> (model: T.Type, from json: JSON, dateFormat: String? = nil) -> T? where T : Decodable {
+		guard let dictionaryObject = json.dictionaryObject,
+			  let jsonData = try? JSONSerialization.data(withJSONObject: dictionaryObject, options: []) else {
+			print("Error converting JSON to data")
+			return nil
+		}
+		return Utils.decode(model: model, from: jsonData, dateFormat: dateFormat)
+	}
+	
+	public final class func decode<T> (model: T.Type, from dictionary: [String: Any], dateFormat: String? = nil) -> T? where T : Decodable {
+		do {
+			let data = try JSONSerialization.data(withJSONObject: dictionary, options: [])
+			return Utils.decode(model: model, from: data, dateFormat: dateFormat)
+		} catch {
+			print("Error converting dictionary to data: \(error)")
+			return nil
+		}
+	}
+	
+	public final class func decode<T> (model: T.Type, from string: String, dateFormat: String? = nil) -> T? where T : Decodable {
+		guard let data = string.data(using: .utf8) else {
+			print("Error converting string to data")
+			return nil
+		}
+		return Utils.decode(model: model, from: data, dateFormat: dateFormat)
+	}
+	
+	public final class func decode<T> (model: T.Type, from data: Data, dateFormat: String? = nil) -> T? where T : Decodable {
+		do {
+			let decoder = JSONDecoder()
+			if let dateFormat = dateFormat {
+				let dateFormatter = DateFormatter()
+				dateFormatter.dateFormat = dateFormat
+				decoder.dateDecodingStrategy = .formatted(dateFormatter)
+			}
+			
+			let myStruct = try decoder.decode(model, from: data)
+			return myStruct
+		} catch {
+			print("Error decoding data: \(error)")
+			return nil
+		}
 	}
 }
 

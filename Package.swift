@@ -27,6 +27,8 @@ let package = Package(
         .package(url: "https://github.com/malcommac/SwiftDate.git", from: "7.0.0"),
         .package(url: "https://github.com/onevcat/Kingfisher.git", from: "7.0.0"),
         .package(url: "https://github.com/google/promises.git", from: "2.0.0"),
+        .package(url: "https://github.com/socketio/socket.io-client-swift.git", from: "16.1.0"),
+        .package(url: "https://github.com/daltoniam/Starscream.git", from: "4.0.6"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -50,6 +52,8 @@ let package = Package(
                 .product(name: "SwiftDate", package: "SwiftDate"),
                 .product(name: "Kingfisher", package: "Kingfisher"),
                 .product(name: "Promises", package: "promises"),
+                .product(name: "SocketIO", package: "socket.io-client-swift"),
+                .product(name: "Starscream", package: "Starscream"),
             ]),
         .testTarget(
             name: "AICoreTests",
