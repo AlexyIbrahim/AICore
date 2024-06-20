@@ -710,6 +710,16 @@ public class Utils {
 		}
 	}
 	
+	public final class func decode<T> (model: T.Type, from dictionary: [AnyHashable: Any], dateFormat: String? = nil) -> T? where T : Decodable {
+		do {
+			let data = try JSONSerialization.data(withJSONObject: dictionary, options: [])
+			return Utils.decode(model: model, from: data, dateFormat: dateFormat)
+		} catch {
+			print("Error converting dictionary to data: \(error)")
+			return nil
+		}
+	}
+	
 	public final class func decode<T> (model: T.Type, from string: String, dateFormat: String? = nil) -> T? where T : Decodable {
 		guard let data = string.data(using: .utf8) else {
 			print("Error converting string to data")
@@ -729,6 +739,18 @@ public class Utils {
 			
 			let myStruct = try decoder.decode(model, from: data)
 			return myStruct
+		} catch {
+			print("Error decoding data: \(error)")
+			return nil
+		}
+	}
+	
+	public final class func decode<T> (model: T.Type, from data: Data, dateFormat: String? = nil) -> T? {
+		do {
+			if let result: T = try JSONSerialization.jsonObject(with: data, options: []) as? T {
+				return result
+			}
+			return nil
 		} catch {
 			print("Error decoding data: \(error)")
 			return nil
