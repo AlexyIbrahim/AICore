@@ -34,7 +34,7 @@ public class AIAlert {
     }
     
     public final class func displayNativeMessage(message: String? = nil, withTitle title: String? = nil, style: UIAlertController.Style = .alert, buttons: [AlertButton], textFields: [AlertTextField]? = nil) {
-        DispatchQueue.main({
+		DispatchQueue.main({
             guard let viewController: UIViewController = Utils.topMostWindowController() else {
                 return
             }

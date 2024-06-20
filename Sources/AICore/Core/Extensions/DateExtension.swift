@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum DateFormateEnum {
+public enum DateFormatEnum {
     case MMMMddyyyy
     case ddMMMMyyyyhhmm
     
@@ -32,7 +32,7 @@ public extension Date {
         Int((Date.timeIntervalBetween1970AndReferenceDate * 1000.0).rounded())
     }
     
-    func formatted(_ format: DateFormateEnum) -> String {
+    func formatted(_ format: DateFormatEnum) -> String {
         let dateformat = DateFormatter()
         dateformat.dateFormat = format.format
         return dateformat.string(from: self)
