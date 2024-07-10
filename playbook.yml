@@ -54,7 +54,7 @@
       debug:
         var: version
 
-    - name: Generate changelog
+    - name: Generate changelog file
       shell: git-changelog -n {{ version }} -f changelog.md
       register: changelog_output
       ignore_errors: yes
