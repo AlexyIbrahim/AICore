@@ -1,6 +1,14 @@
 ---
 - hosts: localhost
   tasks:
+    - name: Check the status of the working tree
+      shell: git status --porcelain
+      register: git_status
+
+    - name: Stop playbook if there are no changes to commit
+      meta: end_play
+      when: git_status.stdout == ""
+
     - name: Check if bump2version is installed
       command: pip3 show bump2version
       register: bump2version_installed
@@ -38,17 +46,28 @@
     - name: Stage all changes, including untracked files
       shell: git add -A
 
-    - name: Commit all changes
+    - name: Commit all changes if any
       shell: git commit -m "Bump version to {{ version }}"
+      when: git_status.stdout != ""
+      ignore_errors: yes
 
     - name: Push the commit to origin
       shell: git push origin main
+      when: git_status.stdout != ""
 
-    - name: Tag the commit
+    - name: Check if tag already exists
+      shell: git tag -l "{{ version }}"
+      register: tag_exists
+
+    - name: Create tag if it does not already exist
       shell: git tag -a "{{ version }}" -m "Version {{ version }}"
+      when: tag_exists.stdout == ""
+      ignore_errors: yes
 
     - name: Push the tag to origin
       shell: git push origin "{{ version }}"
+      when: tag_exists.stdout == ""
+      ignore_errors: yes
 
     - name: Check if glab is installed
       command: glab --version
