@@ -17,6 +17,17 @@
     - name: Install bump2version
       command: pip3 install bump2version
       when: bump2version_installed.rc != 0
+      
+    - name: Check if git-changelog is installed
+      command: git-changelog --version
+      register: changelog_installed
+      ignore_errors: yes
+
+    - name: Install git-changelog
+      npm:
+        name: git-changelog
+        global: yes
+      when: changelog_installed.rc != 0
 
     - name: Ensure .bumpversion.cfg is added to git
       command: git add .bumpversion.cfg
@@ -69,6 +80,11 @@
       when: tag_exists.stdout == ""
       ignore_errors: yes
 
+    - name: Generate changelog
+      shell: git-changelog --next-tag {{ version }} > changelog.md
+      register: changelog_output
+      ignore_errors: yes
+
     - name: Check if glab is installed
       command: glab --version
       register: glab_installed
@@ -80,6 +96,6 @@
       when: glab_installed.rc != 0
 
     - name: Create a release on GitLab
-      shell: glab release create {{ version }} --title "Release {{ version }}" --notes "Description of the release for version {{ version }}"
-      when: glab_installed.rc == 0
+      shell: glab release create {{ version }} -n "Release {{ version }}" -F changelog.md
+      when: glab_installed.rc == 0 and changelog_output.rc == 0
       ignore_errors: yes
