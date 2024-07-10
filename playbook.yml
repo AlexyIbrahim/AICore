@@ -17,7 +17,7 @@
     - name: Install bump2version
       command: pip3 install bump2version
       when: bump2version_installed.rc != 0
-      
+
     - name: Check if git-changelog is installed
       command: git-changelog --version
       register: changelog_installed
@@ -54,11 +54,20 @@
       debug:
         var: version
 
+    - name: Generate changelog
+      shell: git-changelog -n {{ version }} -f changelog.md
+      register: changelog_output
+      ignore_errors: yes
+
+    - name: Stage the changelog
+      shell: git add changelog.md
+      when: changelog_output.rc == 0
+
     - name: Stage all changes, including untracked files
       shell: git add -A
 
     - name: Commit all changes if any
-      shell: git commit -m "Bump version to {{ version }}"
+      shell: git commit -m "Bump version to {{ version }} and update changelog"
       when: git_status.stdout != ""
       ignore_errors: yes
 
@@ -78,11 +87,6 @@
     - name: Push the tag to origin
       shell: git push origin "{{ version }}"
       when: tag_exists.stdout == ""
-      ignore_errors: yes
-
-    - name: Generate changelog
-      shell: git-changelog --next-tag {{ version }} > changelog.md
-      register: changelog_output
       ignore_errors: yes
 
     - name: Check if glab is installed
