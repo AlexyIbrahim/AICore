@@ -101,9 +101,9 @@
       ignore_errors: yes
 
     # Ensure the tags are pushed before creating releases
-    - name: Push all tags to remote repositories
-      shell: git push --tags
-      ignore_errors: yes
+    # - name: Push all tags to remote repositories
+    #   shell: git push --tags
+    #   ignore_errors: yes
 
     - name: Check if glab is installed
       command: glab --version
