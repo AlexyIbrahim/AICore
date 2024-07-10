@@ -136,6 +136,6 @@
       register: tag_on_github
 
     - name: Create a release on GitHub
-      shell: gh release create "{{ version }}" -t "Release {{ version }}" -F changelog.md
+      shell: gh release create "{{ version }}" --title "Release {{ version }}" --generate-notes # -F changelog.md
       when: gh_installed.rc == 0 and changelog_output.rc == 0 and tag_on_github.rc == 0
       ignore_errors: yes
