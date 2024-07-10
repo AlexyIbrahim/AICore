@@ -1,7 +1,6 @@
 import Foundation
 
-internal extension DispatchQueue {
-	
+public extension DispatchQueue {
 	/// Function to run code in the background thread.
 	/// Optionally, you can specify a delay and a completion block to run on the main thread after the background code is done executing.
 	/// - Parameters:
@@ -73,7 +72,7 @@ internal extension DispatchQueue {
 ///   - code: The code to run on the main thread.
 ///   - delay: The time in seconds before the code should start. Default is nil, which means it starts immediately.
 ///   - isSynchronous: Whether the execution should be synchronous. Default is false.
-func mainThread(delay: DispatchTimeInterval? = nil, isSynchronous: Bool = false, _ code: @escaping (() -> Void)) {
+public func mainThread(delay: DispatchTimeInterval? = nil, isSynchronous: Bool = false, _ code: @escaping (() -> Void)) {
 	DispatchQueue.main(delay: delay, isSynchronous: isSynchronous, code)
 }
 
@@ -85,6 +84,6 @@ func mainThread(delay: DispatchTimeInterval? = nil, isSynchronous: Bool = false,
 ///   - completionOnMain: The code to run on the main thread after the background code is done. Default is nil, which means nothing is run afterwards.
 ///   - completionDelay: The time in seconds before the completion code should start. Default is nil, which means it starts immediately after the background code is done.
 ///   - isSynchronous: Whether the execution should be synchronous. Default is false.
-func backgroundThread(delay: DispatchTimeInterval? = nil, completionDelay: Double? = nil, isSynchronous: Bool = false, background: @escaping (() -> Void), completionOnMain: (() -> Void)? = nil) {
+public func backgroundThread(delay: DispatchTimeInterval? = nil, completionDelay: Double? = nil, isSynchronous: Bool = false, background: @escaping (() -> Void), completionOnMain: (() -> Void)? = nil) {
 	DispatchQueue.background(delay: delay, completionDelay: completionDelay, isSynchronous: isSynchronous, background: background, completionOnMain: completionOnMain)
 }

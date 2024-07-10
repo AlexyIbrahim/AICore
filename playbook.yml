@@ -1,0 +1,53 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Check if bump2version is installed
+      command: pip3 show bump2version
+      register: bump2version_installed
+      ignore_errors: yes
+
+    - name: Install bump2version
+      command: pip3 install bump2version
+      when: bump2version_installed.rc != 0
+
+    - name: Increment the patch version
+      command: bump2version --allow-dirty --list patch # allow uncommitted changes
+      register: bump2version_output
+
+    - name: Extract the new version
+      set_fact:
+        version: "{{ bump2version_output.stdout_lines | select('match', '^new_version=.*') | map('replace', 'new_version=', '') | first }}"
+
+    - name: Log version
+      debug:
+        var: version
+
+    - name: Stage all changes, including untracked files
+      shell: git add -A
+
+    - name: Commit all changes
+      shell: git commit -m "Bump version to {{ version }}"
+
+    - name: Push the commit to origin
+      shell: git push origin main
+
+    - name: Tag the commit
+      shell: git tag -a "{{ version }}" -m "Version {{ version }}"
+
+    - name: Push the tag to origin
+      shell: git push origin "{{ version }}"
+
+    - name: Check if glab is installed
+      command: glab --version
+      register: glab_installed
+      ignore_errors: yes
+
+    - name: Display warning if glab is not installed
+      debug:
+        msg: "Warning: glab is not installed. Skipping GitLab release creation."
+      when: glab_installed.rc != 0
+
+    - name: Create a release on GitLab
+      shell: glab release create {{ version }} --title "Release {{ version }}" --notes "Description of the release for version {{ version }}"
+      when: glab_installed.rc == 0
+      ignore_errors: yes
