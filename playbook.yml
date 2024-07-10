@@ -54,8 +54,12 @@
       debug:
         var: version
 
-    - name: Generate changelog file
-      shell: git-changelog -n {{ version }} -f changelog.md
+    # - name: Ensure the remote config for git-changelog
+    #   shell: git remote add origin <glab-repo-url>
+    #   ignore_errors: yes
+
+    - name: Generate changelog
+      shell: git-changelog -n {{ version }} -f changelog.md --repo_url git@gitlab.com:alexyib/aicore.git
       register: changelog_output
       ignore_errors: yes
 
