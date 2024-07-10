@@ -81,27 +81,25 @@
       when: git_status.stdout != ""
       ignore_errors: yes
 
-    # - name: Check if tag already exists
-    #   shell: git tag -l "{{ version }}"
-    #   register: tag_exists
+    - name: Check if tag already exists
+      shell: git tag -l "{{ version }}"
+      register: tag_exists
 
     - name : Check if tag already exists
       debug:
         var: tag_exists.stdout
 
-    # - name: Create tag if it does not already exist
-    #   shell: git tag -a "{{ version }}" -m "Version {{ version }}"
-    #   when: tag_exists.stdout == ""
-    #   ignore_errors: yes
+    - name: Create tag if it does not already exist
+      shell: git tag -a "{{ version }}" -m "Version {{ version }}"
+      when: tag_exists.stdout == ""
+      ignore_errors: yes
 
     - name: Push the tag to origin-glab
       shell: git push origin-glab "{{ version }}"
-      # when: tag_exists.stdout == ""
       ignore_errors: yes
 
     - name: Push the tag to origin-gh
       shell: git push origin-gh "{{ version }}"
-      # when: tag_exists.stdout == ""
       ignore_errors: yes
 
     # Ensure the tags are pushed before creating releases
@@ -135,7 +133,11 @@
       when: gh_installed.rc != 0
 
     # Update the command to create GitHub release with --target flag
+    - name: Ensure tag is available on GitHub
+      shell: git ls-remote --tags origin-gh | grep "refs/tags/{{ version }}"
+      register: tag_on_github
+
     - name: Create a release on GitHub
-      shell: gh release create "{{ version }}" -t "Release {{ version }}" -F changelog.md --target "{{ version }}"
-      when: gh_installed.rc == 0 and changelog_output.rc == 0
+      shell: gh release create "{{ version }}" -t "Release {{ version }}" -F changelog.md
+      when: gh_installed.rc == 0 and changelog_output.rc == 0 and tag_on_github.rc == 0
       ignore_errors: yes

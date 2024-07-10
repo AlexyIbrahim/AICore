@@ -1,6 +1,6 @@
 # My app - Changelog
 
-## 2.4.40  ( Thu Jul 11 2024 02:38:31 GMT+0300 (Eastern European Summer Time) )
+## 2.4.41  ( Thu Jul 11 2024 02:43:02 GMT+0300 (Eastern European Summer Time) )
 
 
 
