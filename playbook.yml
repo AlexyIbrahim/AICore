@@ -54,10 +54,6 @@
       debug:
         var: version
 
-    # - name: Ensure the remote config for git-changelog
-    #   shell: git remote add origin <glab-repo-url>
-    #   ignore_errors: yes
-
     - name: Generate changelog
       shell: git-changelog -n {{ version }} -f changelog.md --repo_url git@gitlab.com:alexyib/aicore.git
       register: changelog_output
@@ -104,6 +100,11 @@
       when: tag_exists.stdout == ""
       ignore_errors: yes
 
+    # Ensure the tags are pushed before creating releases
+    - name: Push all tags to remote repositories
+      shell: git push --tags
+      ignore_errors: yes
+
     - name: Check if glab is installed
       command: glab --version
       register: glab_installed
@@ -129,7 +130,8 @@
         msg: "Warning: gh is not installed. Skipping GitHub release creation."
       when: gh_installed.rc != 0
 
+    # Update the command to create GitHub release with --target flag
     - name: Create a release on GitHub
-      shell: gh release create "{{ version }}" -t "Release {{ version }}" -F changelog.md
+      shell: gh release create "{{ version }}" -t "Release {{ version }}" -F changelog.md --target "{{ version }}"
       when: gh_installed.rc == 0 and changelog_output.rc == 0
       ignore_errors: yes
