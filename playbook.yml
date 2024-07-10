@@ -71,15 +71,8 @@
       when: git_status.stdout != ""
       ignore_errors: yes
 
-    - name: Push the commit to origin-glab
-      shell: git push origin-glab main
-      when: git_status.stdout != ""
-      ignore_errors: yes
-
-    - name: Push the commit to origin-gh
-      shell: git push origin-gh main
-      when: git_status.stdout != ""
-      ignore_errors: yes
+    - name: Tag the commit with the new version
+      shell: git tag -a "{{ version }}" -m "Version {{ version }}"
 
     - name: Check if tag already exists
       shell: git tag -l "{{ version }}"
@@ -89,9 +82,14 @@
       debug:
         var: tag_exists.stdout
 
-    - name: Create tag if it does not already exist
-      shell: git tag -a "{{ version }}" -m "Version {{ version }}"
-      when: tag_exists.stdout == ""
+    - name: Push the commit to origin-glab
+      shell: git push origin-glab main
+      when: git_status.stdout != ""
+      ignore_errors: yes
+
+    - name: Push the commit to origin-gh
+      shell: git push origin-gh main
+      when: git_status.stdout != ""
       ignore_errors: yes
 
     - name: Push the tag to origin-glab
