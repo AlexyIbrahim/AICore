@@ -71,9 +71,15 @@
       when: git_status.stdout != ""
       ignore_errors: yes
 
-    - name: Push the commit to origin
-      shell: git push origin main
+    - name: Push the commit to origin-glab
+      shell: git push origin-glab main
       when: git_status.stdout != ""
+      ignore_errors: yes
+
+    - name: Push the commit to origin-gh
+      shell: git push origin-gh main
+      when: git_status.stdout != ""
+      ignore_errors: yes
 
     - name: Check if tag already exists
       shell: git tag -l "{{ version }}"
@@ -84,8 +90,13 @@
       when: tag_exists.stdout == ""
       ignore_errors: yes
 
-    - name: Push the tag to origin
-      shell: git push origin "{{ version }}"
+    - name: Push the tag to origin-glab
+      shell: git push origin-glab "{{ version }}"
+      when: tag_exists.stdout == ""
+      ignore_errors: yes
+
+    - name: Push the tag to origin-gh
+      shell: git push origin-gh "{{ version }}"
       when: tag_exists.stdout == ""
       ignore_errors: yes
 
@@ -102,4 +113,19 @@
     - name: Create a release on GitLab
       shell: glab release create {{ version }} -n "Release {{ version }}" -F changelog.md
       when: glab_installed.rc == 0 and changelog_output.rc == 0
+      ignore_errors: yes
+
+    - name: Check if gh is installed
+      command: gh --version
+      register: gh_installed
+      ignore_errors: yes
+
+    - name: Display warning if gh is not installed
+      debug:
+        msg: "Warning: gh is not installed. Skipping GitHub release creation."
+      when: gh_installed.rc != 0
+
+    - name: Create a release on GitHub
+      shell: gh release create "{{ version }}" -t "Release {{ version }}" -F changelog.md
+      when: gh_installed.rc == 0 and changelog_output.rc == 0
       ignore_errors: yes
