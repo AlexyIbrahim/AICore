@@ -10,6 +10,19 @@
       command: pip3 install bump2version
       when: bump2version_installed.rc != 0
 
+    - name: Ensure .bumpversion.cfg is added to git
+      command: git add .bumpversion.cfg
+      register: add_bumpversion_cfg
+      ignore_errors: yes
+
+    - name: Commit .bumpversion.cfg if not already committed
+      shell: >
+        if git diff --name-only --cached | grep .bumpversion.cfg; then
+          git commit -m "Add .bumpversion.cfg";
+        fi
+      when: add_bumpversion_cfg is changed
+      ignore_errors: yes
+
     - name: Increment the patch version
       command: bump2version --allow-dirty --list patch # allow uncommitted changes
       register: bump2version_output
