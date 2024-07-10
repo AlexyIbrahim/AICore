@@ -112,7 +112,7 @@
 
     - name: Display warning if glab is not installed
       debug:
-        msg: "Warning: glab is not installed. Skipping GitLab release creation."
+        msg: "Warning: sglab is not installed. Skipping GitLab release creation."
       when: glab_installed.rc != 0
 
     - name: Create a release on GitLab
