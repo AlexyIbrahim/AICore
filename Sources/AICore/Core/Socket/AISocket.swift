@@ -12,7 +12,7 @@ public class AISocket: Loggable {
 	
 	@available(iOS 14.0, *)
 	public static var logger: Logger = Logger(subsystem: Constants.bundleId, category: "Socket")
-	public static var logLevel: LogLevelEnum = .info
+	public static var logLevel: OSLogType = .info
 	
 	private(set) var socket: WebSocket!
 	private var eventCallbacks: [String: AISocketEventCallback] = [:]
