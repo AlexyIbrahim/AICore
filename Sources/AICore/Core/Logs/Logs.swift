@@ -77,8 +77,11 @@ public class LogUtils {
 }
 
 public class LogConstants {
-	internal static var baseLogLevel: OSLogType {
-		return .default
+	private static var _baseLogLevel: OSLogType = .default
+	
+	public static var baseLogLevel: OSLogType {
+		get { return _baseLogLevel }
+		set { _baseLogLevel = newValue }
 	}
 	
 	internal static var baseLogLevelDescription: String {
@@ -87,6 +90,7 @@ public class LogConstants {
 	
 	internal static var logPrefix: String = ""
 }
+
 
 // MARK: - Print with file info
 
