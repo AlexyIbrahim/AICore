@@ -41,7 +41,7 @@ public class LogHelper {
 	static let logMessageSubject = PassthroughSubject<LogMessage, Never>()
 }
 
-public class LogUtils {
+internal class LogUtils {
 	internal static func shouldLog(logLevel: OSLogType?) -> Bool {
 		let logLevel = logLevel ?? .default
 		let baseLogLevel = LogConstants.baseLogLevel
@@ -84,11 +84,11 @@ public class LogConstants {
 		set { _baseLogLevel = newValue }
 	}
 	
-	internal static var baseLogLevelDescription: String {
+	public static var baseLogLevelDescription: String {
 		return LogUtils.logLevelDescription(logLevel: baseLogLevel)
 	}
 	
-	internal static var logPrefix: String = ""
+	public static var logPrefix: String = ""
 }
 
 
