@@ -100,11 +100,6 @@
       shell: git push origin-gh "{{ version }}"
       ignore_errors: yes
 
-    # Ensure the tags are pushed before creating releases
-    # - name: Push all tags to remote repositories
-    #   shell: git push --tags
-    #   ignore_errors: yes
-
     - name: Check if glab is installed
       command: glab --version
       register: glab_installed
@@ -130,7 +125,6 @@
         msg: "Warning: gh is not installed. Skipping GitHub release creation."
       when: gh_installed.rc != 0
 
-    # Update the command to create GitHub release with --target flag
     - name: Ensure tag is available on GitHub
       shell: git ls-remote --tags origin-gh | grep "refs/tags/{{ version }}"
       register: tag_on_github
