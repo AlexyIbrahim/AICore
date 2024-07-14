@@ -10,15 +10,15 @@ import UIKit
 
 public extension UITextView {
     func isEmpty() -> Bool {
-        guard let text = self.text, text.count > 0 else { return true }
+        guard let text = text, text.count > 0 else { return true }
         return false
     }
-    
+
     func scrollToBottom() {
-        if self.text.count > 0 {
-            let location = self.text.count - 1
+        if text.count > 0 {
+            let location = text.count - 1
             let bottom = NSMakeRange(location, 1)
-            self.scrollRangeToVisible(bottom)
+            scrollRangeToVisible(bottom)
         }
     }
 }

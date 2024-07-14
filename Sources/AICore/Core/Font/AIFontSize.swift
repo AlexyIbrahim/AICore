@@ -17,7 +17,6 @@ public enum AIFontSize: CGFloat {
 }
 
 public extension AIFontSize {
-    
     /// Return font size
     /// - Parameter scaleFont: boolean value to return scaled font
     /// - Returns: font size

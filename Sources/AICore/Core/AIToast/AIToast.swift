@@ -1,14 +1,14 @@
 //
 //  AIToast.swift
-//  
+//
 //
 //  Created by Alexy Ibrahim on 3/24/23.
 //
 
 import UIKit
 
-import UIKit
 import SnapKit
+import UIKit
 
 public enum AIToastPosition {
     case top
@@ -23,7 +23,7 @@ private protocol AIToastDataSource: AnyObject {
 extension UIView {
     func loadNib(xibName: String? = nil) -> UIView {
         let bundle = Bundle(for: type(of: self))
-        let nibName = xibName ??  type(of: self).description().components(separatedBy: ".").last!
+        let nibName = xibName ?? type(of: self).description().components(separatedBy: ".").last!
         let nib = UINib(nibName: nibName, bundle: bundle)
         return nib.instantiate(withOwner: self, options: nil).first as! UIView
     }
@@ -31,9 +31,9 @@ extension UIView {
 
 public class AIToast: UIView {
     static var shared: AIToast?
-    
+
     let xibName = AIToast.identifier
-    
+
     @IBOutlet private var contentView: UIView!
     @IBOutlet private var view_background: UIView!
     @IBOutlet private var stackview_main: UIStackView!
@@ -49,85 +49,83 @@ public class AIToast: UIView {
     private var nsconstraint: NSLayoutConstraint?
     private var timer: Timer?
     private var isDisplayed: Bool = false
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        self.setupXib()
-        self.setup()
+
+        setupXib()
+        setup()
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        
-        self.setupXib()
-        self.setup()
+
+        setupXib()
+        setup()
     }
-    
-    public override func prepareForInterfaceBuilder() {
+
+    override public func prepareForInterfaceBuilder() {
         super.prepareForInterfaceBuilder()
-        
-        self.setupXib()
-        self.setup()
-        
+
+        setupXib()
+        setup()
+
         contentView?.prepareForInterfaceBuilder()
     }
-    
+
     private func setupXib() {
         //        let bundle: Bundle = (animationInfo.from != nil) ? Bundle(for: type(of: from)) : Bundle.main
         //        Bundle.main.loadNibNamed(xibName, owner: self, options: nil)
         Bundle.module.loadNibNamed(xibName, owner: self, options: nil)
         //        Bundle(for: type(of: self)).loadNibNamed(xibName, owner: self, options: nil)
         //        let view = self.loadNib()
-        
-        self.addSubview(self.contentView)
-        self.sendSubviewToBack(self.contentView)
-        
-        self.contentView.snp.makeConstraints { (make) in
+
+        addSubview(contentView)
+        sendSubviewToBack(contentView)
+
+        contentView.snp.makeConstraints { make in
             make.edges.equalTo(0)
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
         }
-        
-        self.bringSubviewToFront(self.contentView)
+
+        bringSubviewToFront(contentView)
     }
-    
+
     // 🌿 Setup
-    
+
     private func setup() {
-        self.backgroundColor = .clear
-        self.contentView.backgroundColor = .clear
-        self.contentView.clipsToBounds = true
-        self.contentView.isUserInteractionEnabled = true
-        self.isUserInteractionEnabled = true
-        
-        self.contentView.layer.masksToBounds = false
-        
-        self.label_title.clear()
-        self.label_subtitle.clear()
-        self.view_background.makeRounded(cornerRadius: (46/2))
-        self.view_background.addShadow(color: AIColor.blackWhite.color, opacity: 0.1, offset: .init(width: 0, height: 1), radius: 2)
-        self.view_background.backgroundColor = AIColor.whiteBlack.color
-        self.stackview_main.backgroundColor = .clear
-        self.stackview_labels.backgroundColor = .clear
-        self.stackview_labels.spacing = 4
-        self.label_title_container.backgroundColor = .clear
-        self.label_subtitle_container.backgroundColor = .clear
-        self.imageview_left_container.backgroundColor = .clear
-        
-        self.label_title.textColor = AIColor.blackWhite.color
-        self.label_title.font = .systemFont(ofSize: 12, weight: .semibold)
-        self.label_subtitle.textColor = UIColor.systemGray
-        self.label_subtitle.font = .systemFont(ofSize: 12, weight: .semibold)
-        
-        self.layoutIfNeeded()
+        backgroundColor = .clear
+        contentView.backgroundColor = .clear
+        contentView.clipsToBounds = true
+        contentView.isUserInteractionEnabled = true
+        isUserInteractionEnabled = true
+
+        contentView.layer.masksToBounds = false
+
+        label_title.clear()
+        label_subtitle.clear()
+        view_background.makeRounded(cornerRadius: 46 / 2)
+        view_background.addShadow(color: AIColor.blackWhite.color, opacity: 0.1, offset: .init(width: 0, height: 1), radius: 2)
+        view_background.backgroundColor = AIColor.whiteBlack.color
+        stackview_main.backgroundColor = .clear
+        stackview_labels.backgroundColor = .clear
+        stackview_labels.spacing = 4
+        label_title_container.backgroundColor = .clear
+        label_subtitle_container.backgroundColor = .clear
+        imageview_left_container.backgroundColor = .clear
+
+        label_title.textColor = AIColor.blackWhite.color
+        label_title.font = .systemFont(ofSize: 12, weight: .semibold)
+        label_subtitle.textColor = UIColor.systemGray
+        label_subtitle.font = .systemFont(ofSize: 12, weight: .semibold)
+
+        layoutIfNeeded()
     }
-    
 }
 
-extension AIToast {
-    
-    public struct Input {
+public extension AIToast {
+    struct Input {
         let backgroundColor: AIColor?
         let title: String
         let subtitle: String
@@ -135,14 +133,15 @@ extension AIToast {
         let subtitleColor: AIColor?
         let leftImage: UIImage?
         let position: AIToastPosition?
-        
+
         public init(backgroundColor: AIColor? = nil,
                     title: String,
                     subtitle: String,
                     titleColor: AIColor? = nil,
                     subtitleColor: AIColor? = nil,
                     leftImage: UIImage? = nil,
-                    position: AIToastPosition? = nil) {
+                    position: AIToastPosition? = nil)
+        {
             self.backgroundColor = backgroundColor
             self.title = title
             self.subtitle = subtitle
@@ -157,40 +156,40 @@ extension AIToast {
 extension AIToast: AIToastDataSource {
     public func configure(input: AIToast.Input) {
         self.input = input
-        
+
         if let backgroundColor = self.input?.backgroundColor {
-            self.view_background.backgroundColor = backgroundColor.color
+            view_background.backgroundColor = backgroundColor.color
         }
-        
+
         if let titleColor = self.input?.titleColor {
-            self.label_title.textColor = titleColor.color
+            label_title.textColor = titleColor.color
         }
-        
+
         if let subtitleColor = self.input?.subtitleColor {
-            self.label_subtitle.textColor = subtitleColor.color
+            label_subtitle.textColor = subtitleColor.color
         }
-        
+
         if let left_image = self.input?.leftImage {
-            self.imageview_left.image = left_image
-            self.imageview_left_container.isHidden = true
-            self.label_title.textAlignment = .left
-            self.label_subtitle.textAlignment = .left
+            imageview_left.image = left_image
+            imageview_left_container.isHidden = true
+            label_title.textAlignment = .left
+            label_subtitle.textAlignment = .left
         } else {
-            self.imageview_left_container.isHidden = true
-            self.label_title.textAlignment = .center
-            self.label_subtitle.textAlignment = .center
+            imageview_left_container.isHidden = true
+            label_title.textAlignment = .center
+            label_subtitle.textAlignment = .center
         }
-        
-        self.label_title.text = self.input?.title
-        self.label_subtitle.text = self.input?.subtitle
+
+        label_title.text = self.input?.title
+        label_subtitle.text = self.input?.subtitle
     }
 }
 
-extension AIToast {
-    public final class func show(title: String, subtitle: String, position: AIToastPosition? = nil, offset: CGFloat? = nil, backgroundColor: AIColor? = nil, titleColor: AIColor? = nil, subtitleColor: AIColor? = nil, leftImage: UIImage? = nil, duration: TimeInterval? = nil) {
+public extension AIToast {
+    final class func show(title: String, subtitle: String, position: AIToastPosition? = nil, offset: CGFloat? = nil, backgroundColor: AIColor? = nil, titleColor: AIColor? = nil, subtitleColor: AIColor? = nil, leftImage: UIImage? = nil, duration: TimeInterval? = nil) {
         if let toast = AIToast.shared {
             toast.configure(input: .init(backgroundColor: backgroundColor, title: title, subtitle: subtitle, titleColor: titleColor, subtitleColor: subtitleColor, leftImage: leftImage, position: position))
-            
+
             if let timer = toast.timer {
                 timer.invalidate()
                 toast.timer = nil
@@ -204,13 +203,13 @@ extension AIToast {
         } else {
             let toast = AIToast()
             toast.configure(input: .init(backgroundColor: backgroundColor, title: title, subtitle: subtitle, titleColor: titleColor, subtitleColor: subtitleColor, leftImage: leftImage, position: position))
-            
+
             if let viewController = Utils.topMostWindowController() {
                 let superview: UIView = viewController.view
                 superview.addSubview(toast)
-                
+
                 let messageWidth = subtitle.width(withConstrainedHeight: 50, font: toast.label_title.font)
-                toast.snp.makeConstraints { (make) in
+                toast.snp.makeConstraints { make in
                     switch position {
                     case .top:
                         make.centerX.equalTo(superview)
@@ -231,10 +230,10 @@ extension AIToast {
                 }
                 toast.show(animated: true, duration: 0.3)
                 //            toast.layoutIfNeeded()
-                
+
                 toast.isDisplayed = true
                 AIToast.shared = toast
-                
+
                 if let timer = toast.timer {
                     timer.invalidate()
                     toast.timer = nil
@@ -246,7 +245,7 @@ extension AIToast {
                     toast.timer?.invalidate()
                     toast.timer = nil
                 }
-                
+
                 switch position {
                 case .top:
                     //                let constraint = toast.getConstraint(.topMargin)
@@ -273,12 +272,11 @@ extension AIToast {
                 case .none:
                     break
                 }
-                
             }
         }
     }
-    
-    func dismiss() {
+
+    internal func dismiss() {
         UIView.animate(withDuration: 0.3, delay: .zero) {
             self.alpha = 0
         } completion: { completed in
@@ -288,13 +286,13 @@ extension AIToast {
             }
         }
     }
-    
-    public final class func dismiss() {
+
+    final class func dismiss() {
         if let toast = AIToast.shared {
             toast.dismiss()
             AIToast.shared = nil
         }
     }
-    
+
     //    guard let loafjetView = Utils.topMostWindowController()?.view else { return }
 }

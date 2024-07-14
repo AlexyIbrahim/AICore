@@ -12,7 +12,7 @@ public protocol OptionalType {
     func toOptional() -> Wrapped?
 }
 
-extension Optional : OptionalType {
+extension Optional: OptionalType {
     public func toOptional() -> Wrapped? {
         return self
     }
@@ -20,7 +20,7 @@ extension Optional : OptionalType {
 
 public extension Dictionary where Value: OptionalType {
     func unwrappedValues() -> [Key: Value.Wrapped] {
-        return filter({ $0.value.toOptional() != nil })
-           .mapValues({ $0.toOptional()! })
+        return filter { $0.value.toOptional() != nil }
+            .mapValues { $0.toOptional()! }
     }
 }

@@ -8,8 +8,7 @@
 import Foundation
 
 public class MainTheme: Theme {
-    
-    required public init() {}
+    public required init() {}
     public var color: MainColorTheme { MainColorTheme() }
     public var label: MainLabelTheme { MainLabelTheme() }
     public var button: MainButtonTheme { MainButtonTheme() }

@@ -11,7 +11,7 @@ import UIKit
 public struct AILabelStyle {
     public var textColor: AIColor
     public var font: AIFont
-    
+
     public init(textColor: AIColor, font: AIFont) {
         self.textColor = textColor
         self.font = font

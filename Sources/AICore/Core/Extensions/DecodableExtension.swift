@@ -7,5 +7,4 @@
 
 import Foundation
 
-public extension Decodable {
-}
+public extension Decodable {}

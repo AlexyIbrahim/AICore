@@ -8,7 +8,7 @@
 
 import UIKit
 
-//class AIStatusIndicator: UIView {
+// class AIStatusIndicator: UIView {
 //    let xibName = "AIStatusIndicator"
 //    @IBOutlet private var contentView: UIView!
 //
@@ -46,7 +46,7 @@ import UIKit
 //        self.setupXib()
 //        self.setup()
 //    }
-//    
+//
 //    override init(frame:CGRect){
 //        super.init(frame: frame)
 //
@@ -110,10 +110,10 @@ import UIKit
 //        self.label_Title.font = UIFont.systemFont(ofSize: UIFont.systemFontSize - 4)
 //        self.label_Title.backgroundColor = .white
 //    }
-//}
+// }
 //
 //// private
-//extension AIStatusIndicator {
+// extension AIStatusIndicator {
 //    enum StatusEnum {
 //        case normal
 //        case success
@@ -231,10 +231,10 @@ import UIKit
 //        self.timer_Chew.invalidate()
 //        self.timer_Throwup.invalidate()
 //    }
-//}
+// }
 //
 //// public
-//extension AIStatusIndicator {
+// extension AIStatusIndicator {
 //    public final class func show(title: String, status: StatusEnum? = nil, position: PositionEnum? = nil, dismissDelay: Double? = nil) {
 //        AIStatusIndicator.operationQueue.addOperation {
 //            DispatchQueue.main.async {
@@ -324,4 +324,4 @@ import UIKit
 //            AIStatusIndicator.semaphore.wait()
 //        }
 //    }
-//}
+// }

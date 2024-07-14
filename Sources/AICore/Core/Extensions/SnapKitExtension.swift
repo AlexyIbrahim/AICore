@@ -7,11 +7,9 @@ import SnapKit
 
 public extension ConstraintMaker {
     func applyLeadingTrailingMargin(_ v: CGFloat) {
-        self.leading.equalToSuperview().offset(v)
-        self.trailing.equalToSuperview().offset(v)
+        leading.equalToSuperview().offset(v)
+        trailing.equalToSuperview().offset(v)
     }
 
-    func centerHorizontally() {
-
-    }
+    func centerHorizontally() {}
 }

@@ -9,7 +9,6 @@ import Foundation
 
 import UIKit
 
-
 public enum AIButtonStyleCorner {
     case roundCorner
     case zeroRadius
@@ -30,13 +29,13 @@ public struct AIButtonStyle {
     public var highlightedBorderColor: AIColor?
     public var heightType: AIButtonStyleHeight = .custom
     public var cornerStyle: AIButtonStyleCorner = .other(radius: 5)
-    public var borderWidth: CGFloat? = nil
+    public var borderWidth: CGFloat?
     public var loadingIndicatorStyle: UIActivityIndicatorView.Style = .medium
     public var font: AIFont?
     public var contentInset: UIEdgeInsets?
     public var titleEdgeInset: UIEdgeInsets?
-    public var enabled: Bool! = nil
-    
+    public var enabled: Bool!
+
     public init(textColor: AIColor,
                 backgroundColor: AIColor,
                 highlightedBackgroundColor: AIColor? = nil,
@@ -49,8 +48,8 @@ public struct AIButtonStyle {
                 font: AIFont? = nil,
                 contentInset: UIEdgeInsets? = nil,
                 titleEdgeInset: UIEdgeInsets? = nil,
-                enabled: Bool? = nil) {
-        
+                enabled: Bool? = nil)
+    {
         self.textColor = textColor
         self.backgroundColor = backgroundColor
         self.highlightedBackgroundColor = highlightedBackgroundColor

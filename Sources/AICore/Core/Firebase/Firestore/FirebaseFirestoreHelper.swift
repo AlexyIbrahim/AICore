@@ -1,28 +1,28 @@
 //
-//  FirebaseHelpers.swift
+//  FirebaseFirestoreHelper.swift
 //  Instant
 //
 //  Created by Alexy Ibrahim on 11/8/22.
 //
 
-import Foundation
 import FirebaseFirestore
+import Foundation
 
 public class FirebaseFirestoreHelper {
     static let shared = FirebaseFirestoreHelper()
-    
+
     public static var db: Firestore!
-    
+
     public final class func collectionRef(collectionName: String) -> CollectionReference {
         let ref = db.collection(collectionName)
         return ref
     }
-    
+
     public final class func documentRef(collectionName: String, documentId: String) -> DocumentReference {
         let ref = collectionRef(collectionName: collectionName).document(documentId)
         return ref
     }
-    
+
     public final class func addDocument(collectionName: String, data: [String: Any], documentId: String? = nil) -> DocumentReference? {
         if let documentId = documentId {
             let ref: DocumentReference? = documentRef(collectionName: collectionName, documentId: documentId)
@@ -35,7 +35,7 @@ public class FirebaseFirestoreHelper {
             })
             return ref
         } else {
-            var ref: DocumentReference? = nil
+            var ref: DocumentReference?
             ref = collectionRef(collectionName: collectionName).addDocument(data: data) { err in
                 if let err = err {
                     print("Error adding document: \(err)")
@@ -45,9 +45,8 @@ public class FirebaseFirestoreHelper {
             }
             return ref
         }
-        
     }
-    
+
     public final class func updateDocument(collectionName: String, data: [String: Any], documentId: String, callback: GenericClosure<Error?>? = nil) -> DocumentReference? {
         let ref: DocumentReference? = documentRef(collectionName: collectionName, documentId: documentId)
         ref?.updateData(data, completion: { err in
@@ -61,9 +60,9 @@ public class FirebaseFirestoreHelper {
         })
         return ref
     }
-    
+
     public final class func readDocuments(collectionName: String) {
-        collectionRef(collectionName: collectionName).getDocuments() { (querySnapshot, err) in
+        collectionRef(collectionName: collectionName).getDocuments { querySnapshot, err in
             if let err = err {
                 print("Error getting documents: \(err)")
             } else {
@@ -73,10 +72,10 @@ public class FirebaseFirestoreHelper {
             }
         }
     }
-    
+
     public final class func readDocument(collectionName: String, documentId: String, source: FirestoreSource? = nil, callback: GenericClosure<[String: Any]>? = nil, errorCallback: GenericClosure<Error>? = nil, emptyDataCallback: GenericClosure<Error?>? = nil) {
         let docRef = documentRef(collectionName: collectionName, documentId: documentId)
-        docRef.getDocument(source: source ?? .default) { (document, error) in
+        docRef.getDocument(source: source ?? .default) { document, error in
             if let document = document, document.exists {
                 let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
                 guard let data = document.data() else {
@@ -90,7 +89,7 @@ public class FirebaseFirestoreHelper {
             }
         }
     }
-    
+
     public final class func readDocumentRealmtime(collectionName: String, documentId: String, includeMetadataChanges: Bool? = nil, callback: GenericClosure<[String: Any]>? = nil, errorCallback: GenericClosure<Error>? = nil, emptyDataCallback: GenericClosure<Error?>? = nil) -> ListenerRegistration {
         let docRef = documentRef(collectionName: collectionName, documentId: documentId)
         let listener = docRef

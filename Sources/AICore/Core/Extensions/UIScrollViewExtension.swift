@@ -10,37 +10,37 @@ import UIKit
 
 public extension UIScrollView {
     private var _refreshControl: RefreshControl? { return refreshControl as? RefreshControl }
-    
+
     func addRefreshControll(actionTarget: AnyObject?, action: Selector, replaceIfExist: Bool = false) {
-        if !replaceIfExist && refreshControl != nil { return }
+        if !replaceIfExist, refreshControl != nil { return }
         refreshControl = RefreshControl(actionTarget: actionTarget, actionSelector: action)
     }
-    
+
     func scrollToTopAndShowRunningRefreshControl(changeContentOffsetWithAnimation: Bool = false) {
         _refreshControl?.refreshActivityIndicatorView()
-        guard   let refreshControl = refreshControl,
-                contentOffset.y != -refreshControl.frame.height else { return }
+        guard let refreshControl = refreshControl,
+              contentOffset.y != -refreshControl.frame.height else { return }
         setContentOffset(CGPoint(x: 0, y: -refreshControl.frame.height), animated: changeContentOffsetWithAnimation)
     }
-    
+
     private var canStartRefreshing: Bool {
         guard let refreshControl = refreshControl, !refreshControl.isRefreshing else { return false }
         return true
     }
-    
+
     func startRefreshing() {
         guard canStartRefreshing else { return }
         _refreshControl?.generateRefreshEvent()
     }
-    
+
     func pullAndRefresh() {
         guard canStartRefreshing else { return }
         scrollToTopAndShowRunningRefreshControl(changeContentOffsetWithAnimation: true)
         _refreshControl?.generateRefreshEvent()
     }
-    
+
     func endRefreshing(deadline: DispatchTime? = nil) { _refreshControl?.endRefreshing(deadline: deadline) }
-    
+
     var isAtBottom: Bool {
         let offsetY = contentOffset.y
         let contentHeight = contentSize.height
@@ -51,7 +51,6 @@ public extension UIScrollView {
 }
 
 public class RefreshControl: UIRefreshControl {
-
     private weak var actionTarget: AnyObject?
     private var actionSelector: Selector?
     override init() { super.init() }

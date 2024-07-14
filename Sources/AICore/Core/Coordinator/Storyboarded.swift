@@ -16,7 +16,7 @@ import UIKit
 public enum Storyboard {
     case naStoryboard
     case main
-    
+
     var label: String {
         switch self {
         case .naStoryboard: return ""
@@ -29,20 +29,20 @@ extension Storyboarded where Self: UIViewController {
     static func instantiate() -> Self {
         // this pulls out "MyApp.MyViewController"
         let fullName = NSStringFromClass(self)
-        
+
         // this splits by the dot and uses everything after, giving "MyViewController"
         let className = fullName.components(separatedBy: ".")[1]
-        
+
         // load our storyboard
         let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-        
+
         // instantiate a view controller with that identifier, and force cast as the type that was requested
         return storyboard.instantiateViewController(withIdentifier: className) as! Self
     }
 }
 
-extension UIViewController {
-    public static func classNameAsString() -> String {
+public extension UIViewController {
+    static func classNameAsString() -> String {
         // this pulls out "MyApp.MyViewController"
         let fullName = NSStringFromClass(self)
         // this splits by the dot and uses everything after, giving "MyViewController"
@@ -50,27 +50,28 @@ extension UIViewController {
         let className = (components.count > 1) ? components[1] : fullName
         return className
     }
-    
-    public static func instantiate(withIdentifier viewControllerIdentifier: String?, fromStoryboard storyboard: Storyboard?) -> Self {
+
+    static func instantiate(withIdentifier viewControllerIdentifier: String?, fromStoryboard storyboard: Storyboard?) -> Self {
         let storyboard = UIStoryboard(name: storyboard?.label ?? "Main", bundle: nil)
         let viewController = storyboard.instantiateViewController(withIdentifier: viewControllerIdentifier ?? classNameAsString()) as! Self
-        
+
         return viewController
     }
-    
-    public static func instantiateInitialViewController(fromStoryboard storyboard: Storyboard?) -> Self {
+
+    static func instantiateInitialViewController(fromStoryboard storyboard: Storyboard?) -> Self {
         let storyboard = UIStoryboard(name: storyboard?.label ?? "Main", bundle: nil)
         let viewController = storyboard.instantiateInitialViewController() as! Self
-        
+
         return viewController
     }
 }
 
 extension UIViewController {
-    struct StoryboardedHolder {
-        static var _executeOnDismiss = [String:(()->())?]()
+    enum StoryboardedHolder {
+        static var _executeOnDismiss = [String: (() -> Void)?]()
     }
-    var executeOnDismiss:(()->Void)? {
+
+    var executeOnDismiss: (() -> Void)? {
         get {
             let tmpAddress = String(format: "%p", unsafeBitCast(self, to: Int.self))
             return StoryboardedHolder._executeOnDismiss[tmpAddress] ?? nil

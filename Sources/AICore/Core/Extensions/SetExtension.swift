@@ -5,9 +5,8 @@
 //  Created by Alexy Ibrahim on 12/20/22.
 //
 
-import Foundation
 import Combine
-
+import Foundation
 
 public extension Set {
     var array: [Element] {
@@ -15,12 +14,11 @@ public extension Set {
     }
 }
 
-
 public extension Set where Element == AnyCancellable {
     mutating func removeAll() {
-        self.forEach { value in
+        for value in self {
             value.cancel()
         }
-        self.removeAll(keepingCapacity: false)
+        removeAll(keepingCapacity: false)
     }
 }

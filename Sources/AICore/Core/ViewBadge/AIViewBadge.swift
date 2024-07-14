@@ -6,39 +6,33 @@
 //
 
 import Foundation
-import UIKit
 import SnapKit
+import UIKit
 
 public enum BadgeDirection {
-    
     case upperRight
     case upperLeft
     case bottomRight
     case bottomLeft
     case center
-    
 }
 
 public extension UIView {
-    
     /// add a new badge to the view
     /// - Parameters:
     ///   - direction: where the view's x/y boundaries will be anchored
     @discardableResult func setBadge(in direction: BadgeDirection, with text: String) -> AIBadgeLabel {
-        
         let badge = AIBadgeLabel(text: text)
         badge.accessibilityIdentifier = "badge"
         addSubview(badge)
-        self.bringSubviewToFront(badge)
+        bringSubviewToFront(badge)
         setBadgeConstraintsInSafeArea(for: badge, in: direction)
-        
+
         return badge
-        
     }
-    
+
     private func setBadgeConstraintsInSafeArea(for badge: AIBadgeLabel, in direction: BadgeDirection) {
         switch direction {
-            
         case .center:
             badge.snp.makeConstraints { make in
                 make.centerX.equalToSuperview()
@@ -65,7 +59,5 @@ public extension UIView {
                 make.leading.equalToSuperview().offset(-6)
             }
         }
-        
     }
-    
 }

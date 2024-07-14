@@ -10,7 +10,7 @@ import Foundation
 public enum DateFormatEnum {
     case MMMMddyyyy
     case ddMMMMyyyyhhmm
-    
+
     var format: String {
         switch self {
         case .MMMMddyyyy:
@@ -25,25 +25,25 @@ public enum DateFormatEnum {
 
 public extension Date {
     var millisecondsSince1970: Int {
-        Int((self.timeIntervalSince1970 * 1000.0).rounded())
+        Int((timeIntervalSince1970 * 1000.0).rounded())
     }
-    
+
     static var millisecondsSince1970: Int {
         Int((Date.timeIntervalBetween1970AndReferenceDate * 1000.0).rounded())
     }
-    
+
     func formatted(_ format: DateFormatEnum) -> String {
         let dateformat = DateFormatter()
         dateformat.dateFormat = format.format
         return dateformat.string(from: self)
     }
-    
+
     static func fromMillisecondsTimestamp(_ timestamp: Int) -> Date {
         return fromMillisecondsTimestamp(Double(timestamp))
     }
-    
-    static func fromMillisecondsTimestamp(_ timestamp: Double) -> Date  {
-        let date =  Date.init(timeIntervalSince1970: TimeInterval(timestamp)/1000)
+
+    static func fromMillisecondsTimestamp(_ timestamp: Double) -> Date {
+        let date = Date(timeIntervalSince1970: TimeInterval(timestamp) / 1000)
         return date
     }
 }

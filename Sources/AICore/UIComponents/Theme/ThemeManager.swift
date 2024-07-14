@@ -13,22 +13,21 @@ public final class ThemeManager {
     public var current: Theme
     public private(set) var currentTheme: ThemeName {
         didSet {
-            self.current = self.currentTheme.theme
+            current = currentTheme.theme
         }
     }
-    
-    public static var shared: ThemeManager = ThemeManager(defaultTheme: .main)
+
+    public static var shared: ThemeManager = .init(defaultTheme: .main)
 
     /// Creates a theme manager.
     ///
     /// - Parameter defaultTheme: The default theme.
     private init(defaultTheme: ThemeName) {
-        self.currentTheme = defaultTheme
-        self.current = self.currentTheme.theme
+        currentTheme = defaultTheme
+        current = currentTheme.theme
     }
-    
+
     public func setTheme(_ themeType: ThemeName) {
-        self.currentTheme = themeType
+        currentTheme = themeType
     }
-    
 }

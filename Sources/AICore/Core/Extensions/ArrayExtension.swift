@@ -5,20 +5,20 @@
 //  Created by Alexy Ibrahim on 11/25/22.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 public extension Array {
     var isNotEmpty: Bool {
-        !self.isEmpty
+        !isEmpty
     }
 }
 
 public extension Array where Element == AnyCancellable {
     mutating func removeAll() {
-        self.forEach { value in
+        for value in self {
             value.cancel()
         }
-        self.removeAll(keepingCapacity: false)
+        removeAll(keepingCapacity: false)
     }
 }

@@ -13,6 +13,5 @@ protocol Identifiable {
 }
 
 extension UIResponder: Identifiable {
-    
     public static var identifier: String { String(describing: self) }
 }

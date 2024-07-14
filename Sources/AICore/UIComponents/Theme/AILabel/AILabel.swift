@@ -8,29 +8,28 @@
 import UIKit
 
 public class AILabel: UILabel {
-    
     public var style: AILabelStyle? {
         didSet {
-            self.applyStyle()
+            applyStyle()
         }
     }
-    
+
     /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
+     // Only override draw() if you perform custom drawing.
+     // An empty implementation adversely affects performance during animation.
+     override func draw(_ rect: CGRect) {
+         // Drawing code
+     }
+     */
+
+    override public func awakeFromNib() {
+        applyStyle()
     }
-    */
-    
-    public override func awakeFromNib() {
-        self.applyStyle()
-    }
-    
+
     private func applyStyle() {
         guard let style = style else { return }
-        
-        self.font = style.font.font
-        self.textColor = style.textColor.color
+
+        font = style.font.font
+        textColor = style.textColor.color
     }
 }

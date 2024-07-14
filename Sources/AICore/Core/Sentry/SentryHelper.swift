@@ -3,7 +3,7 @@ import Sentry
 import UIKit
 
 public class SentryHelper: NSObject {
-    internal static let logSensitiveData: Bool = false
+    static let logSensitiveData: Bool = false
 
     // MARK: - init
 
@@ -13,7 +13,7 @@ public class SentryHelper: NSObject {
         SentrySDK.start { options in
             options.dsn = dsn
             options.debug = false
-            
+
             // features
             options.enablePreWarmedAppStartTracing = true
             options.attachScreenshot = true
@@ -23,7 +23,7 @@ public class SentryHelper: NSObject {
             }
 //                options.swiftAsyncStacktraces = true
 //                options.enableOutOfMemoryTracking = true
-            
+
             options.enableAppHangTracking = true
             options.appHangTimeoutInterval = 2
             options.tracesSampleRate = 1.0
@@ -31,11 +31,11 @@ public class SentryHelper: NSObject {
             options.enableNetworkTracking = true
             options.enableFileIOTracing = false
             options.beforeBreadcrumb = { crumb in
-                return crumb
+                crumb
             }
-            
+
             if !AIEnvironmentKit.isDebug, !AIEnvironmentKit.isDebuggerAttached {
-                options.onCrashedLastRun = { event in
+                options.onCrashedLastRun = { _ in
                     // capture user feedback
 //                        let eventId = SentrySDK.capture(event: event, scope: scope)
 //
@@ -46,7 +46,7 @@ public class SentryHelper: NSObject {
 //                        SentrySDK.capture(userFeedback: userFeedback)
                 }
             }
-            
+
             SentrySDK.configureScope { scope in
                 let scope = SentryHelper.initScope(fromScope: scope)
                 callback?(scope, options)
@@ -63,14 +63,14 @@ public class SentryHelper: NSObject {
         sentryUser.email = email
 //        sentryUser.ipAddress = Utils.fetchPublicIP()
         sentryUser.data = data
-        
+
         SentryHelper.setUser(sentryUser)
     }
-    
+
     public final class func setUser(_ user: Sentry.User) {
         SentrySDK.setUser(user)
     }
-    
+
     final class func clearUser() {
         SentrySDK.setUser(nil)
     }
@@ -101,18 +101,19 @@ public class SentryHelper: NSObject {
             "identifier_for_vendor": "\(UIDevice.current.identifierForVendor?.uuidString ?? "")",
             "model_name": "\(UIDevice.current.modelName)",
         ], key: "Device")
-        
+
         tempScope.setContext(value: [
             "appVersion": Utils.appVersion(),
             "build": Utils.build(),
         ], key: "App")
-        
+
         tempScope.setTags([:])
-        
+
         return tempScope
     }
 
     // MARK: - Breadcrumb
+
     public final class func addBreadcrumb<T>(clazz: T, category: SentryBreadcrumbCategory? = nil) {
         SentryHelper.addBreadcrumb(category: category ?? .view, message: String(describing: type(of: clazz)), level: .info, data: nil)
     }
@@ -120,7 +121,7 @@ public class SentryHelper: NSObject {
     public final class func addBreadcrumb(category: SentryBreadcrumbCategory? = nil, message: String? = nil, level: SentryLevel? = nil, data: [String: Any]? = nil) {
         SentryHelper.addBreadcrumb(category: category?.value, message: message, level: level, data: data)
     }
-    
+
     public final class func addBreadcrumb(category: String? = nil, message: String? = nil, level: SentryLevel? = nil, data: [String: Any]? = nil) {
         DispatchQueue.global(qos: .background).async {
             let breadcrumb = Breadcrumb()
@@ -137,7 +138,7 @@ public class SentryHelper: NSObject {
             SentrySDK.addBreadcrumb(breadcrumb)
         }
     }
-    
+
     // Capture a message
     public final class func captureMessage(_ message: String, level: SentryLevel? = nil, tags: [String: String]?, extras: [String: Any]? = nil, callback: ((_ scope: Scope) -> Void)? = nil) {
         DispatchQueue.global(qos: .background).async {
@@ -265,7 +266,7 @@ public class SentryHelper: NSObject {
             }
         }
     }
-    
+
     // MARK: - Custom Error
 
     public final class func reportCustomError(domain: String, reason: String, level: SentryLevel? = nil, tags: [String: String]? = nil, extras: [String: Any]? = nil, callback: ((_ scope: Scope) -> Void)? = nil) {
@@ -333,13 +334,13 @@ public class SentryHelper: NSObject {
             }
         }
     }
-    
+
     // Flush events to Sentry
     public final class func flushEvents(timeout: TimeInterval? = nil) {
         SentrySDK.flush(timeout: timeout ?? 0)
     }
-    
-    public class func startTransaction(_ name: String, operation: String, bindToScope: Bool? = nil,  data: [String: Any]? = nil, tags: [String: String]? = nil, measurements: [String: NSNumber]? = nil) -> Sentry.Span? {
+
+    public class func startTransaction(_ name: String, operation: String, bindToScope: Bool? = nil, data: [String: Any]? = nil, tags: [String: String]? = nil, measurements: [String: NSNumber]? = nil) -> Sentry.Span? {
         let transaction = SentrySDK.startTransaction(name: name, operation: operation, bindToScope: bindToScope ?? false)
         data?.forEach { (key: String, value: Any) in
             transaction.setData(value: value, key: key)
@@ -347,14 +348,14 @@ public class SentryHelper: NSObject {
         tags?.forEach { (key: String, value: String) in
             transaction.setTag(value: value, key: key)
         }
-        measurements?.forEach({ (key: String, value: NSNumber) in
+        measurements?.forEach { (key: String, value: NSNumber) in
             transaction.setMeasurement(name: key, value: value)
-        })
-        
+        }
+
         return transaction
     }
-    
-    public class func startChild(transaction: Sentry.Span, operation: String, description: String? = nil,  data: [String: Any]? = nil, tags: [String: String]? = nil, measurements: [String: NSNumber]? = nil) -> Sentry.Span? {
+
+    public class func startChild(transaction: Sentry.Span, operation: String, description: String? = nil, data: [String: Any]? = nil, tags: [String: String]? = nil, measurements: [String: NSNumber]? = nil) -> Sentry.Span? {
         let transaction = transaction.startChild(operation: operation, description: description)
         data?.forEach { (key: String, value: Any) in
             transaction.setData(value: value, key: key)
@@ -362,20 +363,19 @@ public class SentryHelper: NSObject {
         tags?.forEach { (key: String, value: String) in
             transaction.setTag(value: value, key: key)
         }
-        measurements?.forEach({ (key: String, value: NSNumber) in
+        measurements?.forEach { (key: String, value: NSNumber) in
             transaction.setMeasurement(name: key, value: value)
-        })
-        
+        }
+
         return transaction
     }
 }
 
-
 // helpers
-extension SentryHelper {
+public extension SentryHelper {
     // MARK: - SentryBreadcrumbCategory enum
 
-    public enum SentryBreadcrumbCategory {
+    enum SentryBreadcrumbCategory {
         case view
         case viewDidLoad
         case viewWillAppear
@@ -392,7 +392,7 @@ extension SentryHelper {
         case functionBody
         case message
         case custom(message: String)
-        
+
         var value: String! {
             switch self {
             case .viewDidLoad:
@@ -423,7 +423,7 @@ extension SentryHelper {
                 return "Message"
             case .view:
                 return "View"
-            case .custom(let message):
+            case let .custom(message):
                 return "\(message)"
             case .functionBody:
                 return "Function Body"

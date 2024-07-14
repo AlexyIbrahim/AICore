@@ -1,12 +1,11 @@
 //
-//  File.swift
-//  
+//  CharacterExtension.swift
+//
 //
 //  Created by Alexy Ibrahim on 5/15/23.
 //
 
 import Foundation
-
 
 public extension Character {
     var isWhitespace: Bool {

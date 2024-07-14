@@ -9,13 +9,12 @@ import Foundation
 import UIKit
 
 public struct AIFont {
-    
     // internal resolved font
     private var resolvedFont: UIFont
-    
+
     // returns font value
     public var font: UIFont { resolvedFont }
-    
+
     /// Initialize ABFont with signle font
     /// - Parameters:
     ///   - font: font name
@@ -23,7 +22,7 @@ public struct AIFont {
         resolvedFont = UIFont(name: fontName,
                               size: fontSize.getFontSize())!
     }
-    
+
     public init(_ font: UIFont) {
         resolvedFont = font
     }

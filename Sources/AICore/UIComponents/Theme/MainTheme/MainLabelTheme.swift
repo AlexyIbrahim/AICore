@@ -8,6 +8,4 @@
 import Foundation
 import UIKit
 
-public class MainLabelTheme {
-
-}
+public class MainLabelTheme {}

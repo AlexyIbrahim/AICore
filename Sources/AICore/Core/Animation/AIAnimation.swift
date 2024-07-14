@@ -17,27 +17,24 @@ public class AIAnimation {
 //        scaleAnimation.fromValue = 1.0;
 //        scaleAnimation.toValue = 1.2;
 //        view.layer.add(scaleAnimation, forKey: "scale")
-        
+
         UIView.animateKeyframes(withDuration: 1.0, delay: 0, options: [.repeat, .autoreverse]) {
             view.transform = CGAffineTransformMakeScale(1.2, 1.2)
-        } completion: { v in
-            
+        } completion: { _ in
         }
-
     }
-    
+
     public final class func endPulsate(for view: UIView) {
         UIView.animateKeyframes(withDuration: 0.01, delay: 0, options: [.beginFromCurrentState, .allowUserInteraction]) {
             view.transform = CGAffineTransformIdentity
-        } completion: { v in
-            
+        } completion: { _ in
         }
     }
-    
+
     public final class func removeAnimations(for view: UIView) {
         view.layer.removeAllAnimations()
     }
-    
+
     public final class func isAnimating(_ view: UIView) -> Bool {
         view.isAnimating
     }

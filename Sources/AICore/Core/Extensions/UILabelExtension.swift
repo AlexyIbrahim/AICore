@@ -8,9 +8,8 @@
 import Foundation
 import UIKit
 
-
 public extension UILabel {
     func clear() {
-        self.text = ""
+        text = ""
     }
 }

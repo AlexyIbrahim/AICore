@@ -10,40 +10,41 @@ import UIKit
 
 @objcMembers public class MainCoordinator: Coordinator {
     public static let shared = MainCoordinator()
-    
+
     public var childCoordinators = [Coordinator]()
     public var navigationController: UINavigationController
     var currentViewController: UIViewController?
     var presentedViewController: UIViewController?
-    
+
     public static var currentViewController: UIViewController? {
         MainCoordinator.shared.currentViewController
     }
-    
+
     public static var presentedViewController: UIViewController? {
         MainCoordinator.shared.presentedViewController
     }
-    
+
     convenience init() {
         self.init(navigationController: UINavigationController())
     }
-    
+
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
 }
 
 // MARK: - Utils
+
 public extension MainCoordinator {
     final class func pushViewController(_ viewController: UIViewController, animated: Bool? = nil, removePreviousVCs: Bool? = nil, dismissPresentedViewController: Bool? = nil, hideNavigationBar: Bool = false) {
         if removePreviousVCs ?? false || dismissPresentedViewController ?? false {
             self.dismissPresentedViewController()
         }
         MainCoordinator.shared.currentViewController = viewController
-		
-		// Conditionally hide or show the navigation bar
-		MainCoordinator.shared.navigationController.setNavigationBarHidden(hideNavigationBar, animated: animated ?? true)
-		
+
+        // Conditionally hide or show the navigation bar
+        MainCoordinator.shared.navigationController.setNavigationBarHidden(hideNavigationBar, animated: animated ?? true)
+
         if removePreviousVCs ?? false {
             MainCoordinator.shared.navigationController.viewControllers.removeAll()
             MainCoordinator.shared.navigationController.viewControllers = [viewController]
@@ -54,8 +55,8 @@ public extension MainCoordinator {
 //            }
         }
     }
-    
-    final class func present(_ viewController: UIViewController,fullScreen: Bool? = nil, animated: Bool? = nil, dismissPresentedViewController: Bool? = nil, hideNavigationBar: Bool = false, completion: (() -> ())? = nil) {
+
+    final class func present(_ viewController: UIViewController, fullScreen: Bool? = nil, animated: Bool? = nil, dismissPresentedViewController: Bool? = nil, hideNavigationBar: Bool = false, completion: (() -> Void)? = nil) {
         if dismissPresentedViewController ?? false {
             self.dismissPresentedViewController()
         }
@@ -63,13 +64,13 @@ public extension MainCoordinator {
         if fullScreen ?? false {
             viewController.setFullscreen()
         }
-		
-		// Conditionally hide or show the navigation bar
-		MainCoordinator.shared.navigationController.setNavigationBarHidden(hideNavigationBar, animated: animated ?? true)
-		
+
+        // Conditionally hide or show the navigation bar
+        MainCoordinator.shared.navigationController.setNavigationBarHidden(hideNavigationBar, animated: animated ?? true)
+
         MainCoordinator.shared.navigationController.present(viewController, animated: animated ?? true, completion: completion)
     }
-    
+
     final class func popToRootViewController(animated: Bool? = nil, dismissPresentedViewController: Bool? = nil) {
         if dismissPresentedViewController ?? false {
             self.dismissPresentedViewController()
@@ -77,7 +78,7 @@ public extension MainCoordinator {
         MainCoordinator.shared.navigationController.popToRootViewController(animated: animated ?? true)
         MainCoordinator.shared.currentViewController = MainCoordinator.shared.navigationController.topViewController
     }
-    
+
     final class func popCurrentViewController(animated: Bool? = nil, dismissPresentedViewController: Bool? = nil) {
         if dismissPresentedViewController ?? false {
             self.dismissPresentedViewController()
@@ -85,9 +86,9 @@ public extension MainCoordinator {
         MainCoordinator.shared.navigationController.popViewController(animated: animated ?? true)
         MainCoordinator.shared.currentViewController = MainCoordinator.shared.navigationController.topViewController
     }
-    
+
     final class func dismissPresentedViewController(_ animated: Bool? = nil) {
-        if let viewController = MainCoordinator.shared.presentedViewController  {
+        if let viewController = MainCoordinator.shared.presentedViewController {
             if viewController.isModal {
                 viewController.dismiss(animated: animated ?? true, completion: nil)
                 MainCoordinator.shared.presentedViewController = nil
@@ -96,33 +97,33 @@ public extension MainCoordinator {
             }
         }
     }
-    
+
     final class func enableLargeTitles() {
         MainCoordinator.shared.navigationController.navigationBar.prefersLargeTitles = true
     }
-    
+
     final class func disableLargeTitles() {
         MainCoordinator.shared.navigationController.navigationBar.prefersLargeTitles = true
     }
-    
+
     final class func setLargeTitleDisplayMode(_ mode: UINavigationItem.LargeTitleDisplayMode) {
         MainCoordinator.shared.navigationController.navigationItem.largeTitleDisplayMode = mode
     }
-    
+
     final class func setNavigationTintColor(_ color: UIColor) {
         MainCoordinator.shared.navigationController.navigationBar.tintColor = color
     }
 }
 
 // MARK: - Navigation
+
 extension MainCoordinator {
     // MARK: Start
+
     public func start() {
         MainCoordinator.start()
     }
-    
+
     // 🌿 Display landing page
-    class func start() {
-    }
-    
+    class func start() {}
 }
