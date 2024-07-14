@@ -4,7 +4,7 @@ import UIKit
 public extension UISheetPresentationController.Detent {
 	
 	// Convenience method for creating a detent with a fixed height
-	static func custom(_ height: CGFloat) -> UISheetPresentationController.Detent {
+	static func height(_ height: CGFloat) -> UISheetPresentationController.Detent {
 		return self.custom { _ in
 			return height
 		}
