@@ -59,6 +59,64 @@ public extension UIView {
 
         return ringLayer
     }
+	
+	var isVisible: Bool {
+		var result = false
+		let semaphore = DispatchSemaphore(value: 0)
+		
+		mainThread(isSynchronous: true) { [weak self] in
+			guard let self = self else { return }
+			
+			defer { semaphore.signal() }
+			
+			if self.isHidden {
+				result = false
+				return
+			}
+			
+			if self.window == nil {
+				result = false
+				return
+			}
+			
+			if self.alpha <= 0 {
+				result = false
+				return
+			}
+			
+			if self.superview == nil {
+				result = false
+				return
+			}
+			
+			if self.superview?.frame.intersects(self.frame) == false {
+				result = false
+				return
+			}
+			
+			result = true
+		}
+		
+		semaphore.wait()
+		return result
+	}
+	
+	var zPosition: CGFloat {
+		get {
+			self.layer.zPosition
+		}
+		set {
+			self.layer.zPosition = newValue
+		}
+	}
+	
+	func bringToFront() {
+		self.superview?.bringSubviewToFront(self)
+	}
+	
+	func sendToBack() {
+		self.superview?.sendSubviewToBack(self)
+	}
 }
 
 // constaint
@@ -272,4 +330,22 @@ public extension UIView {
             addSubview(view)
         }
     }
+	
+	func removeAllSubviews() {
+		for subview in self.subviews {
+			subview.removeFromSuperview()
+		}
+	}
+	
+	func hasSubviewWithTag(_ tag: Int) -> Bool {
+		for subview in subviews {
+			if subview.tag == tag {
+				return true
+			}
+			if subview.hasSubviewWithTag(tag) {
+				return true
+			}
+		}
+		return false
+	}
 }
