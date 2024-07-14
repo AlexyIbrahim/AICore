@@ -250,3 +250,14 @@ public extension UIView {
         }
     }
 }
+
+// subviews
+public extension UIView {
+	/// Add multiple Auto Layout subviews at the same time.
+	func add(views: UIView...) {
+		views.forEach { view in
+			view.translatesAutoresizingMaskIntoConstraints = false
+			addSubview(view)
+		}
+	}
+}
