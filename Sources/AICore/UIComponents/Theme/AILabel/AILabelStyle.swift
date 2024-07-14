@@ -16,4 +16,9 @@ public struct AILabelStyle {
         self.textColor = textColor
         self.font = font
     }
+	
+    public init(textColor: AIColor, font: UIFont) {
+        self.textColor = textColor
+		self.font = AIFont.init(font)
+    }
 }
