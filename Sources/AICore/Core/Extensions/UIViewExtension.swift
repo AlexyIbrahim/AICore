@@ -19,28 +19,49 @@ public extension UIView {
         layer.cornerRadius = cornerRadius ?? 8
     }
 
-	func setCornerRadii(topLeft: CGFloat, topRight: CGFloat, bottomLeft: CGFloat, bottomRight: CGFloat) {
+	func setCornerRadii(
+		topLeft: CGFloat? = nil,
+		topRight: CGFloat? = nil,
+		bottomLeft: CGFloat? = nil,
+		bottomRight: CGFloat? = nil
+	) {
 		let path = UIBezierPath()
 		let bounds = self.bounds
 		
 		// Start from the top left corner
-		path.move(to: CGPoint(x: bounds.minX + topLeft, y: bounds.minY))
+		path.move(to: CGPoint(x: bounds.minX + (topLeft ?? 0), y: bounds.minY))
 		
 		// Top edge to the top right corner
-		path.addLine(to: CGPoint(x: bounds.maxX - topRight, y: bounds.minY))
-		path.addArc(withCenter: CGPoint(x: bounds.maxX - topRight, y: bounds.minY + topRight), radius: topRight, startAngle: CGFloat(3 * Double.pi / 2), endAngle: 0, clockwise: true)
+		if let topRightRadius = topRight {
+			path.addLine(to: CGPoint(x: bounds.maxX - topRightRadius, y: bounds.minY))
+			path.addArc(withCenter: CGPoint(x: bounds.maxX - topRightRadius, y: bounds.minY + topRightRadius), radius: topRightRadius, startAngle: CGFloat(3 * Double.pi / 2), endAngle: 0, clockwise: true)
+		} else {
+			path.addLine(to: CGPoint(x: bounds.maxX, y: bounds.minY))
+		}
 		
 		// Right edge to the bottom right corner
-		path.addLine(to: CGPoint(x: bounds.maxX, y: bounds.maxY - bottomRight))
-		path.addArc(withCenter: CGPoint(x: bounds.maxX - bottomRight, y: bounds.maxY - bottomRight), radius: bottomRight, startAngle: 0, endAngle: CGFloat(Double.pi / 2), clockwise: true)
+		if let bottomRightRadius = bottomRight {
+			path.addLine(to: CGPoint(x: bounds.maxX, y: bounds.maxY - bottomRightRadius))
+			path.addArc(withCenter: CGPoint(x: bounds.maxX - bottomRightRadius, y: bounds.maxY - bottomRightRadius), radius: bottomRightRadius, startAngle: 0, endAngle: CGFloat(Double.pi / 2), clockwise: true)
+		} else {
+			path.addLine(to: CGPoint(x: bounds.maxX, y: bounds.maxY))
+		}
 		
 		// Bottom edge to the bottom left corner
-		path.addLine(to: CGPoint(x: bounds.minX + bottomLeft, y: bounds.maxY))
-		path.addArc(withCenter: CGPoint(x: bounds.minX + bottomLeft, y: bounds.maxY - bottomLeft), radius: bottomLeft, startAngle: CGFloat(Double.pi / 2), endAngle: CGFloat(Double.pi), clockwise: true)
+		if let bottomLeftRadius = bottomLeft {
+			path.addLine(to: CGPoint(x: bounds.minX + bottomLeftRadius, y: bounds.maxY))
+			path.addArc(withCenter: CGPoint(x: bounds.minX + bottomLeftRadius, y: bounds.maxY - bottomLeftRadius), radius: bottomLeftRadius, startAngle: CGFloat(Double.pi / 2), endAngle: CGFloat(Double.pi), clockwise: true)
+		} else {
+			path.addLine(to: CGPoint(x: bounds.minX, y: bounds.maxY))
+		}
 		
 		// Left edge back to the top left corner
-		path.addLine(to: CGPoint(x: bounds.minX, y: bounds.minY + topLeft))
-		path.addArc(withCenter: CGPoint(x: bounds.minX + topLeft, y: bounds.minY + topLeft), radius: topLeft, startAngle: CGFloat(Double.pi), endAngle: CGFloat(3 * Double.pi / 2), clockwise: true)
+		if let topLeftRadius = topLeft {
+			path.addLine(to: CGPoint(x: bounds.minX, y: bounds.minY + topLeftRadius))
+			path.addArc(withCenter: CGPoint(x: bounds.minX + topLeftRadius, y: bounds.minY + topLeftRadius), radius: topLeftRadius, startAngle: CGFloat(Double.pi), endAngle: CGFloat(3 * Double.pi / 2), clockwise: true)
+		} else {
+			path.addLine(to: CGPoint(x: bounds.minX, y: bounds.minY))
+		}
 		
 		// Close the path
 		path.close()
