@@ -1,5 +1,5 @@
-import XCTest
 @testable import AICore
+import XCTest
 
 final class AICoreTests: XCTestCase {
     func testExample() throws {
