@@ -261,7 +261,14 @@ public extension UIView {
 		}
 	}
 	
-	func add(views: UIView...) {
-		addSubviews(views)
+	func add(views: [UIView]) {
+		addSubviews(views: views)
+	}
+	
+	private func addSubviews(views: [UIView]) {
+		views.forEach { view in
+			view.translatesAutoresizingMaskIntoConstraints = false
+			addSubview(view)
+		}
 	}
 }
