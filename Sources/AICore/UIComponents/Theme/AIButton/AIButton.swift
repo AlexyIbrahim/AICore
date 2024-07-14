@@ -168,18 +168,20 @@ public class AIButton: UIButton {
 
         backgroundColor = style.backgroundColor.color
 
-        switch style.cornerStyle {
-        case .roundCorner:
-            layer.cornerRadius = bounds.height / 2.0
-        case .zeroRadius:
-            layer.cornerRadius = 0
-        case let .customRoundCorner(corners, radius):
-            layer.cornerRadius = radius
-        case let .other(radius):
-            layer.cornerRadius = radius
-        default:
-            layer.cornerRadius = 0
-        }
+		if let cornerStyle = style.cornerStyle {
+			switch cornerStyle {
+			case .roundCorner:
+				layer.cornerRadius = bounds.height / 2.0
+			case .zeroRadius:
+				layer.cornerRadius = 0
+			case let .customRoundCorner(corners, radius):
+				layer.cornerRadius = radius
+			case let .other(radius):
+				layer.cornerRadius = radius
+			}
+		} else {
+			layer.cornerRadius = 0
+		}
 
         if #available(iOS 15.0, *) {
             if let font = style.font?.font {

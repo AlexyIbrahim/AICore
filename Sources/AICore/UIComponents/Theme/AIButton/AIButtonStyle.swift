@@ -28,7 +28,7 @@ public struct AIButtonStyle {
     public var borderColor: AIColor?
     public var highlightedBorderColor: AIColor?
     public var heightType: AIButtonStyleHeight = .custom
-    public var cornerStyle: AIButtonStyleCorner = .other(radius: 5)
+    public var cornerStyle: AIButtonStyleCorner?
     public var borderWidth: CGFloat?
     public var loadingIndicatorStyle: UIActivityIndicatorView.Style = .medium
     public var font: AIFont?
@@ -41,7 +41,7 @@ public struct AIButtonStyle {
                 highlightedBackgroundColor: AIColor? = nil,
                 highlightedBorderColor: AIColor? = nil,
                 heightType: AIButtonStyleHeight = .custom,
-                cornerStyle: AIButtonStyleCorner = .other(radius: 5),
+                cornerStyle: AIButtonStyleCorner? = nil,
                 borderWidth: CGFloat? = nil,
                 borderColor: AIColor? = nil,
                 loadingIndicatorStyle: UIActivityIndicatorView.Style = .medium,
