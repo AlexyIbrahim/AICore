@@ -30,7 +30,7 @@ public struct AIButtonStyle {
     public var heightType: AIButtonStyleHeight = .custom
     public var cornerStyle: AIButtonStyleCorner?
     public var borderWidth: CGFloat?
-    public var loadingIndicatorStyle: UIActivityIndicatorView.Style = .medium
+    public var loadingIndicatorStyle: UIActivityIndicatorView.Style?
     public var font: AIFont?
     public var contentInset: UIEdgeInsets?
     public var titleEdgeInset: UIEdgeInsets?
@@ -44,7 +44,7 @@ public struct AIButtonStyle {
                 cornerStyle: AIButtonStyleCorner? = nil,
                 borderWidth: CGFloat? = nil,
                 borderColor: AIColor? = nil,
-                loadingIndicatorStyle: UIActivityIndicatorView.Style = .medium,
+                loadingIndicatorStyle: UIActivityIndicatorView.Style? = nil,
                 font: AIFont? = nil,
                 contentInset: UIEdgeInsets? = nil,
                 titleEdgeInset: UIEdgeInsets? = nil,
