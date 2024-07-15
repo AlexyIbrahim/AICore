@@ -11,8 +11,9 @@ import ProgressHUD
 import UIKit
 
 open class RootViewController: UIViewController {
-    public var observers: [AnyCancellable] = []
-
+	
+    public var cancellables = Set<AnyCancellable>()
+	
     override open func viewDidLoad() {
         super.viewDidLoad()
 
