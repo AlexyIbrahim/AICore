@@ -773,6 +773,11 @@ public class Utils {
             return nil
         }
     }
+	
+	func getCurrentDeviceCountryISOCode() -> String? {
+		let locale = Locale.current
+		return locale.regionCode
+	}
 }
 
 extension URL {
