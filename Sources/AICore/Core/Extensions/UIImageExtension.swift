@@ -9,6 +9,16 @@ import Foundation
 import UIKit
 
 public extension UIImage {
+	var mimeType: String? {
+		if let _ = self.jpegData(compressionQuality: 1.0) {
+			return "image/jpeg"
+		} else if let _ = self.pngData() {
+			return "image/png"
+		} else {
+			return nil
+		}
+	}
+	
 	static func fromText(_ text: String, font: UIFont? = nil, size: CGSize, textColor: UIColor = .black, backgroundColor: UIColor = .clear) -> UIImage? {
 		let renderer = UIGraphicsImageRenderer(size: size)
 		
