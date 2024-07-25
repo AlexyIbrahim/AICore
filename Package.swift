@@ -1,7 +1,7 @@
 // swift-tools-version: 5.7
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
-// Package version: 2.4.74
+// Package version: 2.4.75
 
 import PackageDescription
 
@@ -20,7 +20,7 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
-        .package(url: "https://gitlab.com/alexyib/ainetworkcalls.git", from: "1.5.13"),
+        .package(url: "https://gitlab.com/alexyib/ainetworkcalls.git", from: "1.5.14"),
         .package(url: "https://github.com/relatedcode/ProgressHUD.git", from: "13.0.0"),
         .package(url: "https://github.com/SnapKit/SnapKit.git", from: "5.6.0"),
         .package(url: "https://gitlab.com/alexyib/aienvironmentkit.git", from: "1.0.0"),
