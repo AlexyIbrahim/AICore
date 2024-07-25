@@ -1,5 +1,8 @@
 ---
 - hosts: localhost
+  vars:
+    repo_url: "git@gitlab.com:alexyib/aicore.git"
+
   tasks:
     - name: Check the status of the working tree
       shell: git status --porcelain
@@ -55,7 +58,7 @@
         var: version
 
     - name: Generate changelog
-      shell: git-changelog -n {{ version }} -f changelog.md --repo_url git@gitlab.com:alexyib/aicore.git
+      shell: git-changelog -n {{ version }} -f changelog.md --repo_url {{ repo_url }}
       register: changelog_output
       ignore_errors: yes
 
