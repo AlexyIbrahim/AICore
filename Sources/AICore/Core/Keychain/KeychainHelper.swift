@@ -51,6 +51,7 @@ public class KeychainService {
         self.key = key
     }
 
+	@discardableResult
     public func save(text: String) -> Bool {
         delete()
         let textData = text.data(using: .utf8)!
@@ -89,7 +90,8 @@ public class KeychainService {
         }
     }
 
-    @discardableResult public func delete() -> Bool {
+	@discardableResult
+    public func delete() -> Bool {
         let query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
                                     kSecAttrAccount as String: key]
         let status = SecItemDelete(query as CFDictionary)
