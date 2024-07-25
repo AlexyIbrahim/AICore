@@ -1,12 +1,12 @@
 import Foundation
 
-protocol HotlineCancellable {
+public protocol HotlineCancellable {
 	func cancel()
 	func store(in array: inout [HotlineCancellable])
 	func store(in set: inout Set<HotlineSubscription>)
 }
 
-extension HotlineCancellable {
+public extension HotlineCancellable {
 	func store(in array: inout [HotlineCancellable]) {
 		array.append(self)
 	}
@@ -16,22 +16,22 @@ extension HotlineCancellable {
 	}
 }
 
-class HotlineSubscription: HotlineCancellable, Hashable {
+public class HotlineSubscription: HotlineCancellable, Hashable {
 	private let cancelCallback: () -> Void
 
-	init(cancel: @escaping () -> Void) {
+	public init(cancel: @escaping () -> Void) {
 		self.cancelCallback = cancel
 	}
 
-	func cancel() {
+	public func cancel() {
 		cancelCallback()
 	}
 
-	static func == (lhs: HotlineSubscription, rhs: HotlineSubscription) -> Bool {
+	public static func == (lhs: HotlineSubscription, rhs: HotlineSubscription) -> Bool {
 		return ObjectIdentifier(lhs) == ObjectIdentifier(rhs)
 	}
 
-	func hash(into hasher: inout Hasher) {
+	public func hash(into hasher: inout Hasher) {
 		hasher.combine(ObjectIdentifier(self))
 	}
 }

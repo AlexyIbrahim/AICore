@@ -1,45 +1,46 @@
 import Foundation
 
 @propertyWrapper
-internal class Announced<Value> {
+public class Announced<Value> {
 	private class CallbackWrapper {
 		let callback: (Value) -> Void
-
+		
 		init(callback: @escaping (Value) -> Void) {
 			self.callback = callback
 		}
 	}
-
+	
 	private var value: Value
 	private var callbacks: [CallbackWrapper] = []
 	private let queue = DispatchQueue(label: "com.announced", attributes: .concurrent)
 	private var debounceWorkItem: DispatchWorkItem?
 	private var debounceDelay: DispatchTimeInterval?
-
-	var wrappedValue: Value {
+	
+	// Make wrappedValue public to match the class' access level
+	public var wrappedValue: Value {
 		get {
 			return value
 		}
 		set {
 			self.value = newValue
 			self.notifySubscribersDebounced()
-//			queue.async(flags: .barrier) {
-//				self.value = newValue
-//				self.notifySubscribersDebounced()
-//			}
+			//			queue.async(flags: .barrier) {
+			//				self.value = newValue
+			//				self.notifySubscribersDebounced()
+			//			}
 		}
 	}
-
-	init(wrappedValue: Value) {
+	
+	public init(wrappedValue: Value) {
 		self.value = wrappedValue
 	}
-
+	
 	private func notifySubscribers() {
 		for wrapper in callbacks {
 			wrapper.callback(value)
 		}
 	}
-
+	
 	private func notifySubscribersDebounced() {
 		debounceWorkItem?.cancel()
 		let workItem = DispatchWorkItem { [weak self] in
@@ -52,12 +53,12 @@ internal class Announced<Value> {
 			workItem.perform()
 		}
 	}
-
-	var projectedValue: Announced<Value> {
+	
+	public var projectedValue: Announced<Value> {
 		return self
 	}
-
-	func subscribe(on queue: DispatchQueue = .main, _ callback: @escaping (Value) -> Void) -> HotlineCancellable {
+	
+	public func subscribe(on queue: DispatchQueue = .main, _ callback: @escaping (Value) -> Void) -> HotlineCancellable {
 		let wrapper = CallbackWrapper(callback: { value in
 			queue.async(flags: .barrier) {
 				callback(value)
@@ -72,7 +73,7 @@ internal class Announced<Value> {
 			self.unsubscribe(wrapper)
 		}
 	}
-
+	
 	private func unsubscribe(_ wrapper: CallbackWrapper) {
 		self.queue.async(flags: .barrier) {
 			if let index = self.callbacks.firstIndex(where: { $0 === wrapper }) {
@@ -80,8 +81,8 @@ internal class Announced<Value> {
 			}
 		}
 	}
-
-	func debounce(for delay: DispatchTimeInterval) -> Announced<Value> {
+	
+	public func debounce(for delay: DispatchTimeInterval) -> Announced<Value> {
 		debounceDelay = delay
 		return self
 	}
