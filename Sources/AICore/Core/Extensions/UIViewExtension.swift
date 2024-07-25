@@ -73,6 +73,33 @@ public extension UIView {
 		}
 	}
 	
+	enum Corner {
+		case topLeft, topRight, bottomLeft, bottomRight
+	}
+	func roundCorners(_ corners: [Corner], radius: CGFloat) {
+		var cornerRadii: (topLeft: CGFloat?, topRight: CGFloat?, bottomLeft: CGFloat?, bottomRight: CGFloat?) = (nil, nil, nil, nil)
+		
+		for corner in corners {
+			switch corner {
+			case .topLeft:
+				cornerRadii.topLeft = radius
+			case .topRight:
+				cornerRadii.topRight = radius
+			case .bottomLeft:
+				cornerRadii.bottomLeft = radius
+			case .bottomRight:
+				cornerRadii.bottomRight = radius
+			}
+		}
+		
+		setCornerRadii(
+			topLeft: cornerRadii.topLeft,
+			topRight: cornerRadii.topRight,
+			bottomLeft: cornerRadii.bottomLeft,
+			bottomRight: cornerRadii.bottomRight
+		)
+	}
+
 	var isAnimating: Bool {
 		return (layer.animationKeys()?.count ?? 0) > 0
 	}
