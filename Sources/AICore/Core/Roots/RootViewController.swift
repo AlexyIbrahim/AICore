@@ -14,6 +14,15 @@ open class RootViewController: UIViewController {
 	
     public var cancellables = Set<AnyCancellable>()
 	
+	public init() {
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	// Required initializer when instantiating from storyboard
+	public required init?(coder aDecoder: NSCoder) {
+		super.init(coder: aDecoder)
+	}
+	
     override open func viewDidLoad() {
         super.viewDidLoad()
 
