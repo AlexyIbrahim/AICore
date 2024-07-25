@@ -661,9 +661,9 @@ public class Utils {
 	}
 	
 	public struct ImageResult {
-		let image: UIImage
-		let data: Data
-		let result: ImageLoadingResult
+		public let image: UIImage
+		public let data: Data
+		public let result: ImageLoadingResult
 		
 	}
 	public final class func downloadImage(imagePath: String) -> Promise<ImageResult> {
