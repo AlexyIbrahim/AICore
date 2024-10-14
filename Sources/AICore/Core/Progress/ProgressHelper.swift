@@ -10,7 +10,7 @@ import ProgressHUD
 
 public enum ProgressHelper {
     public static func showProgress(_ msg: String? = nil) {
-        ProgressHUD.show(msg, interaction: false)
+		ProgressHUD.animate(msg, interaction: false)
     }
 
     public static func hideProgress() {
@@ -18,10 +18,10 @@ public enum ProgressHelper {
     }
 
     public static func showProgressSuccess(_ msg: String? = nil) {
-        ProgressHUD.showSucceed(msg)
+        ProgressHUD.succeed(msg)
     }
 
     public static func showProgressError(_ msg: String? = nil) {
-        ProgressHUD.showFailed(msg, interaction: false)
+        ProgressHUD.error(msg, interaction: false)
     }
 }

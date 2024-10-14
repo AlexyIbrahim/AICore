@@ -6,7 +6,6 @@
 //
 
 import FirebaseRemoteConfig
-import FirebaseRemoteConfigSwift
 import Foundation
 
 public class FirebaseRemoteConfigHelper: RawRepresentable, Equatable {
