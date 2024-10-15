@@ -8,7 +8,7 @@
 import Foundation
 
 public extension Encodable {
-    func asDictionary<T>() -> [String: T] {
+    func aiAsDictionary<T>() -> [String: T] {
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
         guard let data = try? encoder.encode(self),
@@ -17,7 +17,7 @@ public extension Encodable {
         return dictionary
     }
 
-    func asDictionary() -> [String: Any] {
+    func aiAsDictionary() -> [String: Any] {
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
         guard let data = try? encoder.encode(self),
@@ -26,14 +26,14 @@ public extension Encodable {
         return dictionary
     }
 
-    var dictionary: [String: Any]? {
+    var aiDictionary: [String: Any]? {
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
         guard let data = try? encoder.encode(self) else { return nil }
         return (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)).flatMap { $0 as? [String: Any] }
     }
 
-    func asJsonString() -> String? {
+    func aiAsJsonString() -> String? {
         let encoder = JSONEncoder()
         encoder.outputFormatting = .sortedKeys
         guard let json = try? encoder.encode(self) else { return nil }
