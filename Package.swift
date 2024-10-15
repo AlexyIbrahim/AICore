@@ -1,7 +1,7 @@
 // swift-tools-version: 5.7
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
-// Package version: 2.4.83
+// Package version: 2.4.84
 
 import PackageDescription
 
@@ -26,7 +26,7 @@ let package = Package(
         .package(url: "https://gitlab.com/alexyib/aienvironmentkit.git", from: "1.0.0"),
         .package(url: "https://github.com/airbnb/lottie-ios.git", from: "4.5.0"),
         .package(url: "https://github.com/getsentry/sentry-cocoa.git", from: "8.37.0"),
-        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "11.3.0"),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "11.3.0"),
         .package(url: "https://github.com/malcommac/SwiftDate.git", from: "7.0.0"),
         .package(url: "https://github.com/onevcat/Kingfisher.git", from: "8.1.0"),
         .package(url: "https://github.com/google/promises.git", from: "2.3.1"),
@@ -45,6 +45,7 @@ let package = Package(
                 .product(name: "ProgressHUD", package: "ProgressHUD"),
                 .product(name: "Lottie", package: "lottie-ios"),
                 .product(name: "Sentry", package: "sentry-cocoa"),
+				.product(name: "FirebaseCore", package: "firebase-ios-sdk"),
                 .product(name: "FirebaseAnalytics", package: "firebase-ios-sdk"),
                 .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
                 .product(name: "FirebaseCrashlytics", package: "firebase-ios-sdk"),
