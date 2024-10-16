@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://gitlab.com/alexyib/ainetworkcalls.git",
       "state" : {
-        "revision" : "23bb31a78c688f46a962196229838b78ef639453",
-        "version" : "1.5.19"
+        "revision" : "c7f3992ec4c44630025d2df939c6337c9d1b2a28",
+        "version" : "1.5.20"
       }
     },
     {
