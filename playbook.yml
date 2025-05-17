@@ -12,46 +12,137 @@
       meta: end_play
       when: git_status.stdout == ""
 
-    - name: Check if bump2version is installed
-      command: pip3 show bump2version
-      register: bump2version_installed
+    - name: Create scripts directory if it doesn't exist
+      file:
+        path: scripts
+        state: directory
+        mode: '0755'
+
+    - name: Copy bump_version.sh script
+      copy:
+        dest: scripts/bump_version.sh
+        mode: '0755'
+        content: |
+          #!/usr/bin/env bash
+          # Usage: ./bump_version.sh [--dry-run] [--commit] [--tag]
+
+          DRY_RUN=false
+          DO_COMMIT=false
+          DO_TAG=false
+
+          # Parse arguments
+          for arg in "$@"; do
+            case $arg in
+              --dry-run)
+                DRY_RUN=true
+                ;;
+              --commit)
+                DO_COMMIT=true
+                ;;
+              --tag)
+                DO_TAG=true
+                ;;
+            esac
+          done
+
+          # Directory paths
+          SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+          BUMPVERSION_CFG="$SCRIPT_DIR/.bumpversion.cfg"
+          PROJECT_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
+
+          # Read the current version from .bumpversion.cfg
+          current_version=$(grep "^current_version" "$BUMPVERSION_CFG" | cut -d'=' -f2 | tr -d ' ')
+          IFS='.' read -r major minor patch <<< "$current_version"
+          new_patch=$((patch + 1))
+          new_version="${major}.${minor}.${new_patch}"
+
+          commit_msg="Bump version to ${new_version}"
+          tag="${new_version}"
+
+          # Start a YAML document and output only YAML content
+          echo "---"
+          if [ "$DRY_RUN" = true ]; then
+            echo "dry_run: true"
+            echo "current_version: ${current_version}"
+            echo "new_version: ${new_version}"
+            if [ "$DO_COMMIT" = true ]; then
+              echo "commit: ${commit_msg}"
+            fi
+            if [ "$DO_TAG" = true ]; then
+              echo "tag: ${tag}"
+            fi
+            exit 0
+          fi
+
+          # Execute changes if not a dry run
+          echo "dry_run: false"
+          echo "current_version: ${current_version}"
+          echo "new_version: ${new_version}"
+
+          # Update .bumpversion.cfg
+          sed -i '' "s/^current_version *= *.*/current_version = ${new_version}/" "$BUMPVERSION_CFG"
+          echo "Updated .bumpversion.cfg to version ${new_version}"
+
+          if [ "$DO_COMMIT" = true ]; then
+            # Change to project root directory
+            cd "$PROJECT_ROOT"
+            
+            git add "$BUMPVERSION_CFG"
+            
+            git commit -m "${commit_msg}"
+            echo "commit: ${commit_msg}"
+          fi
+
+          if [ "$DO_TAG" = true ]; then
+            # Ensure we're in the project root
+            cd "$PROJECT_ROOT" 
+            
+            git tag "${tag}"
+            echo "tag: ${tag}"
+          fi
+
+    - name: Create .bumpversion.cfg if it doesn't exist
+      copy:
+        dest: scripts/.bumpversion.cfg
+        content: |
+          [bumpversion]
+          current_version = 0.1.0
+          commit = True
+          tag = True
+          tag_name = {new_version}
+      when: git_status.stdout != ""
+
+    - name: Ensure scripts/.bumpversion.cfg exists
+      stat:
+        path: scripts/.bumpversion.cfg
+      register: bumpversion_cfg_stat
+
+    - name: Create .bumpversion.cfg if it doesn't exist
+      copy:
+        dest: scripts/.bumpversion.cfg
+        content: |
+          [bumpversion]
+          current_version = 0.1.0
+          commit = True
+          tag = True
+          tag_name = {new_version}
+      when: not bumpversion_cfg_stat.stat.exists
+
+    - name: Ensure scripts directory and .bumpversion.cfg are added to git
+      shell: git add scripts/
       ignore_errors: yes
 
-    - name: Install bump2version
-      command: pip3 install bump2version
-      when: bump2version_installed.rc != 0
-
-    - name: Check if git-changelog is installed
-      command: git-changelog --version
-      register: changelog_installed
+    - name: Commit scripts directory and .bumpversion.cfg if not already committed
+      shell: git commit -m "Add version management scripts"
       ignore_errors: yes
 
-    - name: Install git-changelog
-      npm:
-        name: git-changelog
-        global: yes
-      when: changelog_installed.rc != 0
+    - name: Run custom version bump script
+      shell: scripts/bump_version.sh
+      register: bump_version_output
 
-    - name: Ensure .bumpversion.cfg is added to git
-      command: git add .bumpversion.cfg
-      register: add_bumpversion_cfg
-      ignore_errors: yes
-
-    - name: Commit .bumpversion.cfg if not already committed
-      shell: >
-        if git diff --name-only --cached | grep .bumpversion.cfg; then
-          git commit -m "Add .bumpversion.cfg";
-        fi
-      when: add_bumpversion_cfg is changed
-      ignore_errors: yes
-
-    - name: Increment the patch version
-      command: bump2version --allow-dirty --list patch # allow uncommitted changes
-      register: bump2version_output
-
-    - name: Extract the new version
+    - name: Extract the new version from bump script output
       set_fact:
-        version: "{{ bump2version_output.stdout_lines | select('match', '^new_version=.*') | map('replace', 'new_version=', '') | first }}"
+        version: "{{ bump_version_output.stdout | regex_search('new_version: ([0-9]+\\.[0-9]+\\.[0-9]+)', '\\1') | first }}"
 
     - name: Log version
       debug:
