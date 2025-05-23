@@ -13,141 +13,33 @@
       meta: end_play
       when: git_status.stdout == "" and stop_if_no_changes
 
-    - name: Create scripts directory if it doesn't exist
-      file:
-        path: scripts
-        state: directory
-        mode: '0755'
+    - name: Get current version from .bumpversion.cfg
+      shell: grep "^current_version" .bumpversion.cfg | cut -d'=' -f2 | tr -d ' '
+      register: current_version_output
 
-    - name: Copy bump_version.sh script
-      copy:
-        dest: scripts/bump_version.sh
-        mode: '0755'
-        content: |
-          #!/usr/bin/env bash
-          # Usage: ./bump_version.sh [--dry-run] [--commit] [--tag]
-
-          DRY_RUN=false
-          DO_COMMIT=false
-          DO_TAG=false
-
-          # Parse arguments
-          for arg in "$@"; do
-            case $arg in
-              --dry-run)
-                DRY_RUN=true
-                ;;
-              --commit)
-                DO_COMMIT=true
-                ;;
-              --tag)
-                DO_TAG=true
-                ;;
-            esac
-          done
-
-          # Directory paths
-          SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-          BUMPVERSION_CFG="$SCRIPT_DIR/.bumpversion.cfg"
-          PROJECT_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
-
-          # Read the current version from .bumpversion.cfg
-          current_version=$(grep "^current_version" "$BUMPVERSION_CFG" | cut -d'=' -f2 | tr -d ' ')
-          IFS='.' read -r major minor patch <<< "$current_version"
-          new_patch=$((patch + 1))
-          new_version="${major}.${minor}.${new_patch}"
-
-          commit_msg="Bump version to ${new_version}"
-          tag="${new_version}"
-
-          # Start a YAML document and output only YAML content
-          echo "---"
-          if [ "$DRY_RUN" = true ]; then
-            echo "dry_run: true"
-            echo "current_version: ${current_version}"
-            echo "new_version: ${new_version}"
-            if [ "$DO_COMMIT" = true ]; then
-              echo "commit: ${commit_msg}"
-            fi
-            if [ "$DO_TAG" = true ]; then
-              echo "tag: ${tag}"
-            fi
-            exit 0
-          fi
-
-          # Execute changes if not a dry run
-          echo "dry_run: false"
-          echo "current_version: ${current_version}"
-          echo "new_version: ${new_version}"
-
-          # Update .bumpversion.cfg
-          sed -i '' "s/^current_version *= *.*/current_version = ${new_version}/" "$BUMPVERSION_CFG"
-          echo "Updated .bumpversion.cfg to version ${new_version}"
-
-          if [ "$DO_COMMIT" = true ]; then
-            # Change to project root directory
-            cd "$PROJECT_ROOT"
-            
-            git add "$BUMPVERSION_CFG"
-            
-            git commit -m "${commit_msg}"
-            echo "commit: ${commit_msg}"
-          fi
-
-          if [ "$DO_TAG" = true ]; then
-            # Ensure we're in the project root
-            cd "$PROJECT_ROOT" 
-            
-            git tag "${tag}"
-            echo "tag: ${tag}"
-          fi
-
-    - name: Create .bumpversion.cfg if it doesn't exist
-      copy:
-        dest: scripts/.bumpversion.cfg
-        content: |
-          [bumpversion]
-          current_version = 0.1.0
-          commit = True
-          tag = True
-          tag_name = {new_version}
-      when: git_status.stdout != "" or not stop_if_no_changes
-
-    - name: Ensure scripts/.bumpversion.cfg exists
-      stat:
-        path: scripts/.bumpversion.cfg
-      register: bumpversion_cfg_stat
-
-    - name: Create .bumpversion.cfg if it doesn't exist
-      copy:
-        dest: scripts/.bumpversion.cfg
-        content: |
-          [bumpversion]
-          current_version = 0.1.0
-          commit = True
-          tag = True
-          tag_name = {new_version}
-      when: not bumpversion_cfg_stat.stat.exists
-
-    - name: Ensure scripts directory and .bumpversion.cfg are added to git
-      shell: git add scripts/
-      ignore_errors: yes
-
-    - name: Commit scripts directory and .bumpversion.cfg if not already committed
-      shell: git commit -m "Add version management scripts"
-      ignore_errors: yes
-
-    - name: Run custom version bump script
-      shell: scripts/bump_version.sh
-      register: bump_version_output
-
-    - name: Extract the new version from bump script output
+    - name: Set current version
       set_fact:
-        version: "{{ bump_version_output.stdout | regex_search('new_version: ([0-9]+\\.[0-9]+\\.[0-9]+)', '\\1') | first }}"
+        current_version: "{{ current_version_output.stdout }}"
 
-    - name: Log version
+    - name: Log current version
       debug:
-        var: version
+        msg: "Current version: {{ current_version }}"
+
+    - name: Run bumpversion patch
+      shell: bumpversion patch
+      register: bumpversion_output
+
+    - name: Get new version from .bumpversion.cfg
+      shell: grep "^current_version" .bumpversion.cfg | cut -d'=' -f2 | tr -d ' '
+      register: new_version_output
+
+    - name: Set new version
+      set_fact:
+        version: "{{ new_version_output.stdout }}"
+
+    - name: Log new version
+      debug:
+        msg: "New version: {{ version }}"
 
     - name: Generate changelog
       shell: git-changelog -n {{ version }} -f changelog.md --repo_url {{ repo_url }}
@@ -158,22 +50,11 @@
       shell: git add changelog.md
       when: changelog_output.rc == 0
 
-    - name: Stage all changes, including untracked files
-      shell: git add -A
-
-    - name: Commit all changes if any
-      shell: git commit -m "Bump version to {{ version }} and update changelog"
-      when: git_status.stdout != "" or not stop_if_no_changes
-      ignore_errors: yes
-
-    - name: Tag the commit with the new version
-      shell: git tag -a "{{ version }}" -m "Version {{ version }}"
-
     - name: Check if tag already exists
       shell: git tag -l "{{ version }}"
       register: tag_exists
 
-    - name : Check if tag already exists
+    - name: Check if tag already exists
       debug:
         var: tag_exists.stdout
 
@@ -185,14 +66,6 @@
     - name: Push the commit to origin-gh
       shell: git push origin-gh main
       when: git_status.stdout != "" or not stop_if_no_changes
-      ignore_errors: yes
-
-    - name: Push the tag to origin-glab
-      shell: git push origin-glab "{{ version }}"
-      ignore_errors: yes
-
-    - name: Push the tag to origin-gh
-      shell: git push origin-gh "{{ version }}"
       ignore_errors: yes
 
     - name: Check if glab is installed
