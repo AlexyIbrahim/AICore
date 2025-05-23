@@ -9,8 +9,16 @@ import Foundation
 import ProgressHUD
 
 public enum ProgressHelper {
-    public static func showProgress(_ msg: String? = nil) {
-		ProgressHUD.animate(msg, interaction: false)
+    public static func showProgress(_ text: String? = nil, interaction: Bool = false) {
+		ProgressHUD.animate(text, interaction: interaction)
+    }
+
+    public static func showProgress(_ text: String? = nil, _ type: AnimationType, interaction: Bool = false) {
+        ProgressHUD.animate(text, type, interaction: interaction)
+    }
+
+    public static func showProgress(_ text: String? = nil, symbol: String, interaction: Bool = false) {
+        ProgressHUD.animate(text, symbol: symbol, interaction: interaction)
     }
 
     public static func hideProgress() {
